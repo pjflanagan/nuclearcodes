@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from "prop-types";
 
-import { Slide } from '../index';
+import { SlideComponent } from '../../slide_component';
 
 import Style from './style.module.css';
 
 const SPEED = 12;
 
-class PromptWidget extends React.Component {
+class MessageWidget extends React.Component {
   constructor(props) {
     super(props);
 
@@ -29,11 +28,11 @@ class PromptWidget extends React.Component {
   type(nextCharIndex) {
     clearTimeout(this.timeoutID);
     const typed = nextCharIndex === 0 ? "" : this.state.typed;
-    const { children } = this.props;
+    const { text } = this.props.data;
     this.setState({
-      typed: typed + children[nextCharIndex],
+      typed: typed + text[nextCharIndex],
     });
-    if (nextCharIndex !== children.length - 1) {
+    if (nextCharIndex !== text.length - 1) {
       this.timeoutID = setTimeout(() => this.type(nextCharIndex + 1), SPEED);
     } else {
       this.done();
@@ -48,18 +47,13 @@ class PromptWidget extends React.Component {
   render() {
     const { typed } = this.state;
     return (
-      <Slide done={this.setState}>
-        <p className={Style.prompt}>
+      <SlideComponent>
+        <p className={Style.message}>
           {typed}
         </p>
-      </Slide>
+      </SlideComponent>
     );
   }
 }
 
-PromptWidget.propTypes = {
-  children: PropTypes.string,
-  doneCallback: PropTypes.func
-};
-
-export { PromptWidget };
+export { MessageWidget };

@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { Socket } from '../../helpers';
-
 import Style from './style.module.css';
-import { PromptWidget } from './widgets'
-import { SLIDES } from './slides';
+
+import { SLIDES, getNextSlide } from './slides';
 
 class Game extends React.Component {
   constructor(props) {
@@ -19,36 +17,37 @@ class Game extends React.Component {
     this.doneCallback = this.doneCallback.bind(this);
   }
 
-  doneCallback() {
+  doneCallback(next) {
     // TODO: in done callback there will be other prompts
     // send SLIDE id to the server so we know what they entered
     const { slides } = this.state;
-    // this.setState({
-    //   slides: [...slides, {
-    //     type: 'prompt',
-    //     text: "and hello here too"
-    //   }]
-    // });
+
+    if (!!next && !!next.slide) {
+      this.setState({
+        slides: [...slides, getNextSlide(next.slide)]
+      });
+    }
   }
 
   getComponentForSlide(slide, key) {
     return (
-      <PromptWidget
+      <slide.widget
         key={key}
-        doneCallback={this.doneCallback}
-      >
-        {slide.text}
-      </PromptWidget>
-    )
+        data={slide.data}
+        doneCallback={() => this.doneCallback(slide.next)}
+      />
+    );
   }
 
   render() {
     const { slides } = this.state;
     return (
-      <div className={Style.app}>
-        {
-          slides.map((slide, i) => this.getComponentForSlide(slide, i))
-        }
+      <div className={Style.gameContainer}>
+        <div className={Style.slidesHolder}>
+          {
+            slides.map((slide, i) => this.getComponentForSlide(slide, i))
+          }
+        </div>
       </div>
     );
   }
