@@ -1,1 +1,2 @@
-web: node ./server/src/index.js
+socket: node ./server/src/index.js
+web: cd client && npm run start
