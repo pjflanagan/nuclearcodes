@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SlideComponent } from '../../slide_component';
+import { parseTextForInserts } from '../parse-text-for-inserts';
 
 import Style from './style.module.css';
 
@@ -15,6 +16,7 @@ class MessageWidget extends React.Component {
       typed: "",
     };
 
+
     this.timeoutID = 0;
 
     this.type = this.type.bind(this);
@@ -22,17 +24,17 @@ class MessageWidget extends React.Component {
   }
 
   componentDidMount() {
+    this.text = parseTextForInserts(this.props.data.text, this.props.prevData);
     this.type(0);
   }
 
   type(nextCharIndex) {
     clearTimeout(this.timeoutID);
     const typed = nextCharIndex === 0 ? "" : this.state.typed;
-    const { text } = this.props.data;
     this.setState({
-      typed: typed + text[nextCharIndex],
+      typed: typed + this.text[nextCharIndex],
     });
-    if (nextCharIndex !== text.length - 1) {
+    if (nextCharIndex !== this.text.length - 1) {
       this.timeoutID = setTimeout(() => this.type(nextCharIndex + 1), SPEED);
     } else {
       this.done();

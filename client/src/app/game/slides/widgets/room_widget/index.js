@@ -10,7 +10,7 @@ class RoomWidget extends React.Component {
 
     this.state = {
       done: false,
-      roomName: "",
+      playerName: "",
     };
 
     this.onChange = this.onChange.bind(this);
@@ -24,7 +24,7 @@ class RoomWidget extends React.Component {
 
   onChange(e) {
     this.setState({
-      roomName: e.target.value,
+      playerName: e.target.value,
     });
   }
 
@@ -35,7 +35,10 @@ class RoomWidget extends React.Component {
   }
 
   onSubmit() {
-    this.props.doneCallback();
+    this.props.doneCallback({
+
+      playerName: this.state.playerName
+    });
     this.setState({ done: true });
   }
 

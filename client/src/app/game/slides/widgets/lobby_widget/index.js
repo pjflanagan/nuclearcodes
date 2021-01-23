@@ -17,6 +17,7 @@ class LobbyWidget extends React.Component {
       done: false,
       createNewRoom: false,
       roomName: "",
+      errors: []
     };
 
     this.onChange = this.onChange.bind(this);
@@ -48,13 +49,29 @@ class LobbyWidget extends React.Component {
   }
 
   onSubmit() {
-    this.props.doneCallback();
-    this.setState({ done: true });
+    const errors = this.validate();
+    if (errors.length === 0) {
+      this.props.doneCallback({
+        roomName: this.state.roomName
+      });
+      // TODO: on submit call the socket and 
+      this.setState({ done: true });
+    }
+    this.setState({
+      errors
+    });
+  }
+
+  validate() {
+    const { roomName } = this.state;
+    if (roomName.length < 3) {
+      return ["Room name must contain at least 3 characters."];
+    }
+    return [];
   }
 
   render() {
-    const { done, createNewRoom } = this.state;
-    // TODO: auto tab into it when it shows up
+    const { done, createNewRoom, errors } = this.state;
     return (
       <SlideComponent done={done}>
         <div className={Style.toggle}>
@@ -83,6 +100,11 @@ class LobbyWidget extends React.Component {
           onKeyDown={e => this.onKeyDown(e)}
           disabled={done}
         />
+        <div className={Style.errors}>
+          {
+            errors.map(error => (<p>{error}</p>))
+          }
+        </div>
       </SlideComponent>
     );
   }

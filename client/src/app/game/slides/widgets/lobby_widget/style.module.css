@@ -45,3 +45,8 @@
 .input:disabled {
   color: #fff8;
 }
+
+.errors {
+  min-height: 24px;
+  color: #d55252;
+}

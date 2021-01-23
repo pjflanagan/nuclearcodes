@@ -17,4 +17,7 @@ class Socket {
   }
 };
 
+// TODO: export socket
+// const socket = new Socket();
+
 export { Socket };

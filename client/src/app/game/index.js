@@ -20,14 +20,19 @@ class Game extends React.Component {
     this.doneCallback = this.doneCallback.bind(this);
   }
 
-  doneCallback(next) {
+  doneCallback(next, prevData) {
     // TODO: in done callback there will be other prompts
     // send SLIDE id to the server so we know what they entered
     const { slides } = this.state;
 
+    // TODO: next might have to be async and run out here
+    // next().then(([nextSlide, prevData]) => )
+
+    // TODO: maybe here on the callback we pull data from the callback
+
     if (!!next) {
       setTimeout(() => this.setState({
-        slides: [...slides, getNextSlide(next())]
+        slides: [...slides, getNextSlide(next(), prevData)]
       }), NEXT_SLIDE_DELAY);
     }
   }
@@ -37,7 +42,8 @@ class Game extends React.Component {
       <slide.widget
         key={key}
         data={slide.data}
-        doneCallback={() => this.doneCallback(slide.next)}
+        prevData={slide.prevData}
+        doneCallback={(prevData) => this.doneCallback(slide.next, prevData)}
       />
     );
   }

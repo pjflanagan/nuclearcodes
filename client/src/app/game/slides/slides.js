@@ -8,7 +8,7 @@ import {
 } from './widgets';
 
 import {
-  checkInRoom
+  checkIfAlreadyInRoom
 } from './actions';
 
 // A slides object is complicated, it needs to 
@@ -27,7 +27,7 @@ const SLIDES = [
     id: 'logo',
     widget: LogoWidget,
     data: { text: 'Nuclear Codes' },
-    next: checkInRoom
+    next: checkIfAlreadyInRoom
   },
   {
     id: 'lobby-prompt',
@@ -38,6 +38,12 @@ const SLIDES = [
   {
     id: 'lobby-form',
     widget: LobbyWidget,
+    next: () => 'game-room-welcome'
+  },
+  {
+    id: 'game-room-welcome',
+    widget: MessageWidget,
+    data: { text: 'Welcome to <roomName>' },
     next: () => 'name-prompt'
   },
   {
@@ -49,6 +55,12 @@ const SLIDES = [
   {
     id: 'name-form',
     widget: RoomWidget,
+    next: () => 'welcome-agent'
+  },
+  {
+    id: 'welcome-agent',
+    widget: MessageWidget,
+    data: { text: 'Welcome agent <playerName>' },
     next: () => 'end'
   },
   {
