@@ -4,6 +4,8 @@ import Style from './style.module.css';
 
 import { SLIDES, getNextSlide } from './slides';
 
+const NEXT_SLIDE_DELAY = 360;
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -23,9 +25,9 @@ class Game extends React.Component {
     const { slides } = this.state;
 
     if (!!next && !!next.slide) {
-      this.setState({
+      setTimeout(() => this.setState({
         slides: [...slides, getNextSlide(next.slide)]
-      });
+      }), NEXT_SLIDE_DELAY);
     }
   }
 

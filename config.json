@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "client-port": 5100,
+    "server-port": 5000,
+    "server-url": "//localhost"
+  },
+  "prd": {
+    "client-port": 5100,
+    "server-port": 5000,
+    "server-url": "//nuclear-codes.herokuapp.com"
+  }
+}

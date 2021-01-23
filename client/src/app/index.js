@@ -4,6 +4,7 @@ import { Socket } from '../helpers';
 
 import Style from './style.module.css';
 import { Game } from './game';
+import { Cover } from '../elements';
 
 class App extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class App extends React.Component {
   render() {
     return (
       <div className={Style.app}>
+        <Cover />
         {/* Menu */}
         <Game />
       </div>

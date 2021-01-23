@@ -4,7 +4,7 @@ import { SlideComponent } from '../../slide_component';
 
 import Style from './style.module.css';
 
-const SPEED = 12;
+const SPEED = 26;
 
 class MessageWidget extends React.Component {
   constructor(props) {
@@ -45,9 +45,9 @@ class MessageWidget extends React.Component {
   }
 
   render() {
-    const { typed } = this.state;
+    const { typed, done } = this.state;
     return (
-      <SlideComponent>
+      <SlideComponent done={done}>
         <p className={Style.message}>
           {typed}
         </p>

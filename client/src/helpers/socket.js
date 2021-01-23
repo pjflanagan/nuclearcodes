@@ -8,9 +8,6 @@ class Socket {
   constructor() {
     this.socket = io(ENDPOINT, {
       withCredentials: true,
-      extraHeaders: {
-        "x-nuclear-codes": "x"
-      }
     });
     this.user = {};
   }

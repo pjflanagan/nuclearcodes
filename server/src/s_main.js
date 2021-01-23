@@ -19,9 +19,9 @@ const server = http.Server(app);
 
 const io = SocketIO(server, {
   cors: {
-    origin: "//localhost:3000",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
-    allowedHeaders: ["Access-Control-Allow-Origin", "x-nuclear-codes"],
+    allowedHeaders: [],
     credentials: true
   }
 });;
