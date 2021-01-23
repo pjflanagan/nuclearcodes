@@ -4,6 +4,7 @@ import Style from './style.module.css';
 
 import { SLIDES, getNextSlide } from './slides';
 
+// TODO: make this delay vary by slide
 const NEXT_SLIDE_DELAY = 360;
 
 class Game extends React.Component {
@@ -24,9 +25,9 @@ class Game extends React.Component {
     // send SLIDE id to the server so we know what they entered
     const { slides } = this.state;
 
-    if (!!next && !!next.slide) {
+    if (!!next) {
       setTimeout(() => this.setState({
-        slides: [...slides, getNextSlide(next.slide)]
+        slides: [...slides, getNextSlide(next())]
       }), NEXT_SLIDE_DELAY);
     }
   }

@@ -2,8 +2,14 @@
 
 import {
   MessageWidget,
-  EnterTextWidget
+  LogoWidget,
+  RoomWidget,
+  LobbyWidget
 } from './widgets';
+
+import {
+  checkInRoom
+} from './actions';
 
 // A slides object is complicated, it needs to 
 // 1 hold the widget that this slide will be
@@ -14,59 +20,36 @@ const SLIDES = [
   {
     id: 'welcome',
     widget: MessageWidget,
-    data: {
-      text: 'Welcome to Nuclear Codes',
-    },
-    next: {
-      action: {
-        name: 'check_already_in_room',
-        // TODO: figure out what this should be shaped like
-        // the nex slide will either be "what room" or "welcome to room"
-      },
-      slide: 'what_room'
-    }
+    data: { text: 'Welcome to' },
+    next: () => 'logo'
   },
   {
-    id: 'what_room',
+    id: 'logo',
+    widget: LogoWidget,
+    data: { text: 'Nuclear Codes' },
+    next: checkInRoom
+  },
+  {
+    id: 'lobby-prompt',
     widget: MessageWidget,
-    data: {
-      text: 'What room would you like to join?',
-    },
-    next: {
-      slide: 'what_room_entry'
-    }
+    data: { text: 'What room would you like to join?' },
+    next: () => 'lobby-form'
   },
   {
-    id: 'what_room_entry',
-    widget: EnterTextWidget,
-    data: {
-      placeholder: 'Room Name',
-    },
-    next: {
-      action: 'none for now',
-      slide: 'what_name'
-    }
+    id: 'lobby-form',
+    widget: LobbyWidget,
+    next: () => 'name-prompt'
   },
   {
-    id: 'what_name',
+    id: 'name-prompt',
     widget: MessageWidget,
-    data: {
-      text: 'And what is your name?',
-    },
-    next: {
-      slide: 'what_name_entry'
-    }
+    data: { text: 'What is your alias?' },
+    next: () => 'name-form'
   },
   {
-    id: 'what_name_entry',
-    widget: EnterTextWidget,
-    data: {
-      placeholder: 'Your Name',
-    },
-    next: {
-      action: 'none for now',
-      slide: 'end'
-    }
+    id: 'name-form',
+    widget: RoomWidget,
+    next: () => 'end'
   },
   {
     id: 'end',

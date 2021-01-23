@@ -4,7 +4,7 @@ import { SlideComponent } from '../../slide_component';
 
 import Style from './style.module.css';
 
-class EnterTextWidget extends React.Component {
+class RoomWidget extends React.Component {
   constructor(props) {
     super(props);
 
@@ -41,14 +41,13 @@ class EnterTextWidget extends React.Component {
 
   render() {
     const { done } = this.state;
-    const { data } = this.props;
     // TODO: auto tab into it when it shows up
     return (
       <SlideComponent done={done}>
         <input
           ref={(input) => { this.input = input; }}
           type="text"
-          placeholder={data.placeholder}
+          placeholder="Your Secret Agent Name"
           tabIndex={0}
           className={Style.input}
           onChange={e => this.onChange(e)}
@@ -60,4 +59,4 @@ class EnterTextWidget extends React.Component {
   }
 }
 
-export { EnterTextWidget };
+export { RoomWidget };
