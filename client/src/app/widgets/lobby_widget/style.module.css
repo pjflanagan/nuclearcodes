@@ -1,5 +1,6 @@
 .toggle {
   width: 100%;
+  margin: 4px 0;
 }
 
 .toggle.disabled {
@@ -31,6 +32,7 @@
 }
 
 .input {
+  margin: 4px 0;
   font-size: 32px;
   border-bottom: 1px solid #FFF8;
   border-top: none;
@@ -55,5 +57,7 @@
 
 .errors {
   min-height: 24px;
+  margin: 12px 12px;
+  font-size: 16px;
   color: #d55252;
 }

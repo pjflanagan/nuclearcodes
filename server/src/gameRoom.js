@@ -1,8 +1,7 @@
 
-import { defaultUserState, GAME_PROPS } from '../helpers'
 
 
-class Game {
+class GameRoom {
   constructor(socket) {
     this.socket = socket;
     this.users = {};
@@ -54,4 +53,4 @@ class Game {
   }
 }
 
-export { Game };
+export { GameRoom };

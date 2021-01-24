@@ -1,21 +1,19 @@
-const express = require("express");
+
+import express from 'express';
+
+import { serverSocket } from '../index.js';
+
 const router = express.Router();
 
-// TODO: this should serve the react build index page
-router.get("/", (req, res) => {
-  res.send({ response: "I am alive" }).status(200);
-});
+// this could serve the react build index page
+// but right now I want host the game on Netlify
+// and this server on Heroku
 
-router.get("/gameInfo", (req, res) => {
+router.get("/", (req, res) => {
   res.send({
-    game: {
-      id: "something",
-      roomName: "name",
-      players: [
-        {}
-      ]
-    }
+    status: "alive",
+    players: serverSocket.roomAssignments.length
   }).status(200);
 });
 
-module.exports = router;
+export { router }

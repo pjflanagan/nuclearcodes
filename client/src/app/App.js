@@ -1,30 +1,33 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+import { GameReducer } from '../reducers';
+import { SocketService } from '../services';
 
 import Style from './style.module.css';
 import { Game } from './game';
 import { Cover } from './elements';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
-    // socket will hold user and isHost
-    // user in state is for display
-    this.socket = {};
-
-    this.state = {
-      user: {},
-      gameState: {}
-    }
+    this.store = createStore(GameReducer, composeWithDevTools(applyMiddleware(thunk)));
+    this.store.dispatch(SocketService.startService());
   }
 
   render() {
     return (
-      <div className={Style.app}>
-        <Cover />
-        {/* Menu */}
-        <Game />
-      </div>
+      <Provider store={this.store}>
+        <div className={Style.app}>
+          <Cover />
+          {/* Menu */}
+          <Game socketService={SocketService} />
+        </div>
+      </Provider>
     );
   }
 }
