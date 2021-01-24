@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Style from './style.module.css';
 
 
-const GameComponent = ({ slides, changeSlide }) => (
+const GameComponent = ({ slides, doneCallback }) => (
   < div className={Style.gameContainer} >
     <div className={Style.slidesHolder}>
       {
@@ -13,7 +13,7 @@ const GameComponent = ({ slides, changeSlide }) => (
             key={i}
             data={slide.data}
             prevData={slide.prevData}
-            doneCallback={(prevData) => changeSlide(slide.next, prevData)}
+            doneCallback={(prevData) => doneCallback(slide.next, prevData)}
           />
         ))
       }
@@ -29,7 +29,7 @@ GameComponent.propTypes = {
       PropTypes.func
     ]).isRequired
   }).isRequired).isRequired,
-  changeSlide: PropTypes.func.isRequired
+  doneCallback: PropTypes.func.isRequired
 }
 
 export { GameComponent };

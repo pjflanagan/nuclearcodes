@@ -1,5 +1,5 @@
 import {
-  ADD_PLAYER, CHANGE_SLIDE
+  ADD_PLAYER, NEXT_SLIDE
 } from './actionTypes';
 
 export const addPlayer = (player) => ({
@@ -7,7 +7,7 @@ export const addPlayer = (player) => ({
   player
 });
 
-export const changeSlide = (slide) => ({
-  type: CHANGE_SLIDE,
+export const nextSlide = (slide) => ({
+  type: NEXT_SLIDE,
   slide
 })
