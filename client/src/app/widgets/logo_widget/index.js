@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Slide } from '../../elements';
+
 import Style from './style.module.css';
 
 class LogoWidget extends React.Component {
@@ -10,7 +12,9 @@ class LogoWidget extends React.Component {
 
   render() {
     return (
-      <div className={Style.logo}>Nuclear Codes</div>
+      <Slide>
+        <div className={Style.logo}>Nuclear Codes</div>
+      </Slide>
     );
   }
 }

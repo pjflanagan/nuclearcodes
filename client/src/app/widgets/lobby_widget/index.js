@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import { SlideComponent } from '../../slide_component';
+import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -54,7 +54,7 @@ class LobbyWidget extends React.Component {
       this.props.doneCallback({
         roomName: this.state.roomName
       });
-      // TODO: on submit call the socket and 
+      // TODO: on submit call the socket and set the url to be room name
       this.setState({ done: true });
     }
     this.setState({
@@ -73,7 +73,7 @@ class LobbyWidget extends React.Component {
   render() {
     const { done, createNewRoom, errors } = this.state;
     return (
-      <SlideComponent done={done}>
+      <Slide done={done}>
         <div className={Style.toggle}>
           <div className={Style.optionsHolder}>
             <div
@@ -105,7 +105,7 @@ class LobbyWidget extends React.Component {
             errors.map(error => (<p>{error}</p>))
           }
         </div>
-      </SlideComponent>
+      </Slide>
     );
   }
 }

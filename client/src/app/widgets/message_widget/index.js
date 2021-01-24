@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SlideComponent } from '../../slide_component';
+import { Slide } from '../../elements';
 import { parseTextForInserts } from '../parse-text-for-inserts';
 
 import Style from './style.module.css';
@@ -49,11 +49,11 @@ class MessageWidget extends React.Component {
   render() {
     const { typed, done } = this.state;
     return (
-      <SlideComponent done={done}>
+      <Slide done={done}>
         <p className={Style.message}>
           {typed}
         </p>
-      </SlideComponent>
+      </Slide>
     );
   }
 }

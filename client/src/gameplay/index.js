@@ -5,18 +5,18 @@ import {
   LogoWidget,
   RoomWidget,
   LobbyWidget
-} from './widgets';
+} from '../app/widgets';
 
-import {
-  checkIfAlreadyInRoom
-} from './actions';
+// import {
+//   addPlayer
+// } from '../actions';
 
 // A slides object is complicated, it needs to 
 // 1 hold the widget that this slide will be
 // 2 hold the data this widget needs
 // 3 point to which action or slide will come next
 
-const SLIDES = [
+const GAMEPLAY = [
   {
     id: 'welcome',
     widget: MessageWidget,
@@ -27,7 +27,7 @@ const SLIDES = [
     id: 'logo',
     widget: LogoWidget,
     data: { text: 'Nuclear Codes' },
-    next: checkIfAlreadyInRoom
+    next: () => 'lobby-prompt'
   },
   {
     id: 'lobby-prompt',
@@ -72,4 +72,10 @@ const SLIDES = [
   }
 ];
 
-export { SLIDES };
+const getNextPlay = (nextPlayID, prevData) => {
+  const play = GAMEPLAY.find(play => play.id === nextPlayID);
+  play.prevData = prevData;
+  return play;
+};
+
+export { GAMEPLAY, getNextPlay };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SlideComponent } from '../../slide_component';
+import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -46,7 +46,7 @@ class RoomWidget extends React.Component {
     const { done } = this.state;
     // TODO: auto tab into it when it shows up
     return (
-      <SlideComponent done={done}>
+      <Slide done={done}>
         <input
           ref={(input) => { this.input = input; }}
           type="text"
@@ -57,7 +57,7 @@ class RoomWidget extends React.Component {
           onKeyDown={e => this.onKeyDown(e)}
           disabled={done}
         />
-      </SlideComponent>
+      </Slide>
     );
   }
 }
