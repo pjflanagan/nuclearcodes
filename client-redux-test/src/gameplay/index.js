@@ -16,10 +16,10 @@ import {
 // 2 hold the data this widget needs
 // 3 point to which action or slide will come next
 
-const SLIDES = [
+const GAMEPLAY = [
   {
     id: 'welcome',
-    widget: MessageWidget,
+    action: MessageWidget,
     data: { text: 'Welcome to' },
     next: () => 'logo'
   },
@@ -72,4 +72,10 @@ const SLIDES = [
   }
 ];
 
-export { SLIDES };
+const getNextPlay = (nextPlayID, prevData) => {
+  const play = GAMEPLAY.find(play => play.id === nextPlayID);
+  play.prevData = prevData;
+  return play;
+};
+
+export { GAMEPLAY, getNextPlay };

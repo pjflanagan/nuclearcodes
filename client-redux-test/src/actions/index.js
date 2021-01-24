@@ -1,8 +1,2 @@
-
-
-
-
-export const addUser = (user) => ({
-  type: 'ADD_USER',
-  user
-});
+export * from './actionTypes';
+export * from './actions';

@@ -5,7 +5,7 @@ import React from 'react';
 
 import Style from './style.module.css';
 
-class SlideComponent extends React.Component {
+class Slide extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -25,4 +25,4 @@ class SlideComponent extends React.Component {
   }
 }
 
-export { SlideComponent };
+export { Slide };
