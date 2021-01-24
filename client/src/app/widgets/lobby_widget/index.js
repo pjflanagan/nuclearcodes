@@ -50,11 +50,11 @@ class LobbyWidget extends React.Component {
 
   onSubmit() {
     const errors = this.validate();
+    const { roomName } = this.state;
     if (errors.length === 0) {
-      this.props.doneCallback({
-        roomName: this.state.roomName
-      });
+      this.props.doneCallback({ roomName });
       // TODO: on submit call the socket and set the url to be room name
+      // this might require react router and this.props.history.push(`/${roomName}`)
       this.setState({ done: true });
     }
     this.setState({

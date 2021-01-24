@@ -1,6 +1,27 @@
+@keyframes swipe {
+  from {
+    width: 1%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.logoHolder {
+  max-height: 160px;
+  height: 160px;
+  width: 1%;
+  animation: swipe 2s forwards;
+  overflow: hidden;
+  padding: 16px 0 32px 0;
+}
+
 .logo {
   font-family: 'Portia';
   font-size: 92px;
+  white-space: nowrap;
   width: 100%;
-  padding: 20px 0 20px 0;
+  transform: skew(-5deg, -5deg);
+  text-shadow: 10px 10px #0004;
 }

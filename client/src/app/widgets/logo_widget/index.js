@@ -7,13 +7,15 @@ import Style from './style.module.css';
 class LogoWidget extends React.Component {
   // TODO: wipe to reveal component
   componentDidMount() {
-    this.props.doneCallback();
+    setTimeout(() => this.props.doneCallback(), 1200);
   }
 
   render() {
     return (
       <Slide>
-        <div className={Style.logo}>Nuclear Codes</div>
+        <div className={Style.logoHolder}>
+          <div className={Style.logo}>Nuclear Codes</div>
+        </div>
       </Slide>
     );
   }
