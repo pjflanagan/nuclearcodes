@@ -1,0 +1,7 @@
+.slide {
+  min-width: 100%;
+}
+
+.slide.done {
+  filter: opacity(0.8);
+}

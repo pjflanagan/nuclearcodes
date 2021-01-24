@@ -1,0 +1,10 @@
+.cover {
+  pointer-events: none;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100;
+  opacity: 0.6;
+  background: url(./noise.png);
+}

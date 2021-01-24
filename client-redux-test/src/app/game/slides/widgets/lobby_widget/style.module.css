@@ -1,0 +1,52 @@
+.toggle {
+  width: 100%;
+}
+
+.toggle .optionsHolder {
+  width: 50%;
+  margin-left: 25%;
+  display: flex;
+}
+
+.toggle .optionsHolder .option {
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 1px solid #FFF0;
+  font-size: 16px;
+  padding: 12px;
+  margin: 12px;
+}
+
+.toggle .optionsHolder .option.selected {
+  border-bottom: 1px solid #FFF;
+}
+
+
+.input {
+  font-size: 32px;
+  border-bottom: 1px solid #FFF8;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+  padding: 18px;
+  background: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  font-family: inherit;
+}
+
+.input:focus {
+  border-bottom: 1px solid #FFFD;
+}
+
+.input:disabled {
+  color: #fff8;
+}
+
+.errors {
+  min-height: 24px;
+  color: #d55252;
+}
