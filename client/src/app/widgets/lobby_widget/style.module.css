@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.toggle.disabled {
+  pointer-events: none;
+}
+
 .toggle .optionsHolder {
   width: 50%;
   margin-left: 25%;
@@ -18,10 +22,13 @@
   margin: 12px;
 }
 
+.toggle .optionsHolder .option:hover {
+  border-bottom: 1px solid #FFF8;
+}
+
 .toggle .optionsHolder .option.selected {
   border-bottom: 1px solid #FFF;
 }
-
 
 .input {
   font-size: 32px;

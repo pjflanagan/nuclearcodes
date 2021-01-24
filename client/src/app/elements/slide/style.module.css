@@ -17,7 +17,8 @@
   animation: slide-in 1.2s forwards;
   min-width: 100%;
   height: auto;
-
+  /* padding: 20px 0; */
+  margin: 20px 0 20px 0;
 }
 
 .slide.done {

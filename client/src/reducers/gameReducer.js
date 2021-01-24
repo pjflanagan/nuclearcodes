@@ -7,7 +7,9 @@ const initState = {
   me: {
     isHost: false
   },
-  players: []
+  players: [],
+  gameState: 'LOBBY',
+  round: 0,
 };
 
 const GameReducer = (state = initState, action) => {

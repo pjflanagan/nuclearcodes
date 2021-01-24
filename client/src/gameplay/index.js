@@ -43,7 +43,7 @@ const GAMEPLAY = [
   {
     id: 'game-room-welcome',
     widget: MessageWidget,
-    data: { text: 'Welcome to <roomName>' },
+    data: { text: 'Welcome to the <roomName> room.' },
     next: () => 'name-prompt'
   },
   {
@@ -60,7 +60,7 @@ const GAMEPLAY = [
   {
     id: 'welcome-agent',
     widget: MessageWidget,
-    data: { text: 'Welcome agent <playerName>' },
+    data: { text: 'Welcome agent <playerName>.' },
     next: () => 'end'
   },
   {

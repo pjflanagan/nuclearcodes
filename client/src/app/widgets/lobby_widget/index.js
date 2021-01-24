@@ -53,6 +53,7 @@ class LobbyWidget extends React.Component {
     const { roomName } = this.state;
     if (errors.length === 0) {
       this.props.doneCallback({ roomName });
+      // TODO: const roomURLEncode = urlEncode(roomName);
       // TODO: on submit call the socket and set the url to be room name
       // this might require react router and this.props.history.push(`/${roomName}`)
       this.setState({ done: true });
@@ -67,6 +68,7 @@ class LobbyWidget extends React.Component {
     if (roomName.length < 3) {
       return ["Room name must contain at least 3 characters."];
     }
+    // TODO: if joining but room doesn't exist, prompt them to create a new room
     return [];
   }
 
@@ -74,7 +76,7 @@ class LobbyWidget extends React.Component {
     const { done, createNewRoom, errors } = this.state;
     return (
       <Slide done={done}>
-        <div className={Style.toggle}>
+        <div className={`${Style.toggle} ${done ? Style.disabled : ''}`}>
           <div className={Style.optionsHolder}>
             <div
               className={`${Style.option} ${createNewRoom ? '' : Style.selected}`}
