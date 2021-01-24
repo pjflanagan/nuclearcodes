@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Portia';
-  src: url(./fonts/Portia-Oblique.otf);
+  src: url(./assets/fonts/Portia-Oblique.otf);
 }
 
 @font-face {
   font-family: 'Abel';
-  src: url(./fonts/Abel-Regular.ttf);
+  src: url(./assets/fonts/Abel-Regular.ttf);
 }
 
 body {

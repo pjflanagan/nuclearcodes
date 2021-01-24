@@ -6,7 +6,7 @@ import { createStore } from 'redux';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import { App } from './app/index';
+import { App } from './app';
 import { GameReducer } from './reducers';
 
 const store = createStore(GameReducer);
