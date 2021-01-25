@@ -20,6 +20,7 @@ const {
   CLIENT_ENDPOINT,
   CLIENT_PORT
 } = process.env;
+const ENDPOINT = (!!CLIENT_PORT) ? `${CLIENT_ENDPOINT}:${CLIENT_PORT}` : CLIENT_ENDPOINT;
 
 const app = express();
 app.use(router);
@@ -27,7 +28,7 @@ const server = http.Server(app);
 
 const io = new SocketIOServer(server, {
   cors: {
-    origin: `${CLIENT_ENDPOINT}:${CLIENT_PORT}`,
+    origin: ENDPOINT,
     methods: ["GET", "POST"],
     allowedHeaders: [],
     credentials: true
