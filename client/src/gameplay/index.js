@@ -78,12 +78,20 @@ const GAMEPLAY = [
     widget: MessageWidget,
     data: {
       text: `Someone has hacked into the Pentagon and has stolen our nuclear codes! 
-      The only way to recover them through these rooms. Two agents can enter a room
-      at a time, each will be shown that room's letter. But there are spies in this group.
+      The only way to recover them is through these rooms. Each round all agents will enter
+      rooms in pairs, each pair will be shown that room's letter. But there are spies in our midst.
       If a spy enters a room with you, they can choose to show you a false letter.
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
-    next: () => 'ready-up'
+    next: () => 'room-picker-prompt'
+  },
+  {
+    id: 'room-picker-prompt',
+    widget: MessageWidget,
+    data: {
+      text: `Talk amongst yourselves, and decide who will enter which room.`
+    },
+    // next: () => 'room-picker'
   }
 ];
 

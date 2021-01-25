@@ -11,7 +11,6 @@ class RoomWidget extends React.Component {
     super(props);
 
     this.state = {
-      done: false,
       playerName: "",
       errors: []
     };
@@ -43,7 +42,6 @@ class RoomWidget extends React.Component {
     if (errors.length === 0) {
       this.props.socketService.setPlayerName({ playerName });
       this.props.doneCallback({ playerName });
-      this.setState({ done: true });
     }
     this.setState({
       errors
@@ -64,9 +62,10 @@ class RoomWidget extends React.Component {
 
 
   render() {
-    const { done, errors } = this.state;
+    const { errors } = this.state;
+    const { isCurrent } = this.props;
     return (
-      <Slide done={done}>
+      <Slide>
         <input
           ref={(input) => { this.input = input; }}
           type="text"
@@ -75,7 +74,7 @@ class RoomWidget extends React.Component {
           className={Style.input}
           onChange={e => this.onChange(e)}
           onKeyDown={e => this.onKeyDown(e)}
-          disabled={done}
+          disabled={!isCurrent}
         />
         <div className={Style.errors}>
           {

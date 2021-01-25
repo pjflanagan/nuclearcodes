@@ -107,6 +107,10 @@ class ServerSocket {
     this.io.to(roomName).emit('NEXT_SLIDE', data);
   }
 
+  updateGameState(roomName, gameState) {
+    this.io.to(roomName).emit('GAME_STATE', gameState);
+  }
+
 
   // Helpers
 

@@ -52,6 +52,8 @@ class GameRoom {
 
     }
 
+    this.socketServer.updateGameState(this.name, this.getState());
+
     // TODO: somethere here with logging the response
     // and validating it
     // TODO: how will we do room picking, is it a free for all
@@ -100,6 +102,11 @@ class GameRoom {
   isPollOver() {
     // TODO: change this
     // return this.responses.length >= this.players.length;
+    return true;
+  }
+
+  clearResponses() {
+
   }
 
   findPlayer(socket) {

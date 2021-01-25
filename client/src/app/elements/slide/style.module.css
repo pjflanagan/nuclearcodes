@@ -20,7 +20,3 @@
   /* padding: 20px 0; */
   margin: 20px 0 20px 0;
 }
-
-.slide.done {
-  filter: opacity(0.8);
-}

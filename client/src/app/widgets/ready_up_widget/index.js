@@ -11,7 +11,6 @@ class ReadyUpWidget extends React.Component {
     super(props);
 
     this.state = {
-      done: false,
       ready: false
     };
 
@@ -24,10 +23,13 @@ class ReadyUpWidget extends React.Component {
 
   getPrompt() {
     const { ready } = this.state;
-    const { gameState } = this.props;
+    const { gameState, isCurrent } = this.props;
 
     if (gameState.players.length >= MIN_PLAYERS) {
       if (ready) {
+        if (!isCurrent) {
+          return `Mission is a go.`
+        }
         return `Waiting for other agents to ready up...`;
       }
       return `Ready Up!`;
@@ -52,19 +54,21 @@ class ReadyUpWidget extends React.Component {
   }
 
   render() {
-    const { done } = this.state;
+    const { ready } = this.state;
     const { gameState } = this.props;
     // TODO: ready up is for everyone, majority vote
     // ready up option becomes avaialable when everyone is here
     // also I should show which agent's have not readied up
     return (
-      <Slide done={done}>
+      <Slide>
         <div className={Style.players}>
           {
             gameState.players.map((p, i) => (
-              <div className={Style.playerHolder}>
+              <div
+                className={Style.playerHolder}
+                key={i}
+              >
                 <Player
-                  key={i}
                   index={i}
                   id={p.id}
                   name={p.name} />
@@ -78,6 +82,7 @@ class ReadyUpWidget extends React.Component {
             ref={(input) => { this.input = input; }}
             tabIndex={0}
             onClick={() => this.readyUp()}
+            disabled={ready}
           >
             {this.getPrompt()}
           </button>

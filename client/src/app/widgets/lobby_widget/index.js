@@ -5,6 +5,7 @@ import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
+// TODO: should game rooms be lowercase?
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
 class LobbyWidget extends React.Component {
@@ -12,7 +13,6 @@ class LobbyWidget extends React.Component {
     super(props);
 
     this.state = {
-      done: false,
       // createNewRoom: false,
       roomName: "",
       errors: []
@@ -55,8 +55,6 @@ class LobbyWidget extends React.Component {
       // TODO: const roomURLEncode = urlEncode(roomName);
       // TODO: on submit call the socket and set the url to be room name
       // this might require react router and this.props.history.push(`/${roomName}`)
-
-      this.setState({ done: true });
     }
     this.setState({
       errors
@@ -77,10 +75,11 @@ class LobbyWidget extends React.Component {
   }
 
   render() {
-    const { done, errors } = this.state; // createNewRoom
+    const { errors } = this.state; // createNewRoom
+    const { isCurrent } = this.props;
     return (
-      <Slide done={done}>
-        {/* <div className={`${Style.toggle} ${done ? Style.disabled : ''}`}>
+      <Slide>
+        {/* <div className={`${Style.toggle} ${!isCurrent ? Style.disabled : ''}`}>
           <div className={Style.optionsHolder}>
             <div
               className={`${Style.option} ${createNewRoom ? '' : Style.selected}`}
@@ -104,11 +103,13 @@ class LobbyWidget extends React.Component {
           className={Style.input}
           onChange={e => this.onChange(e)}
           onKeyDown={e => this.onKeyDown(e)}
-          disabled={done}
+          disabled={!isCurrent}
         />
         <div className={Style.errors}>
           {
-            errors.map(error => (<p>{error}</p>))
+            errors.map((error, i) => (
+              <p key={i}>{error}</p>
+            ))
           }
         </div>
       </Slide>

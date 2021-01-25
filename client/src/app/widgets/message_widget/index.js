@@ -11,14 +11,12 @@ class MessageWidget extends React.Component {
     super(props);
 
     this.state = {
-      done: false,
       typed: "",
     };
 
     this.timeoutID = 0;
 
     this.type = this.type.bind(this);
-    this.done = this.done.bind(this);
   }
 
   componentDidMount() {
@@ -36,19 +34,14 @@ class MessageWidget extends React.Component {
     if (nextCharIndex !== this.text.length - 1) {
       this.timeoutID = setTimeout(() => this.type(nextCharIndex + 1), SPEED);
     } else {
-      this.done();
+      this.props.doneCallback();
     }
   }
 
-  done() {
-    this.setState({ done: true });
-    this.props.doneCallback();
-  }
-
   render() {
-    const { typed, done } = this.state;
+    const { typed } = this.state;
     return (
-      <Slide done={done}>
+      <Slide>
         <p className={Style.message}>
           {typed}
         </p>
@@ -65,14 +58,14 @@ class MessageWidgetLobby extends MessageWidget {
   }
 
   render() {
-    const { typed, done } = this.state;
+    const { typed } = this.state;
     const { roomName } = this.props.data;
     return (
-      <Slide done={done}>
+      <Slide>
         <p className={Style.message}>
           {typed}
         </p>
-        { done && <p className={Style.url}>
+        { typed === this.text && <p className={Style.url}>
           {`nuclear-codes.com/${roomName}`}
         </p>}
       </Slide>
