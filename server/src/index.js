@@ -16,7 +16,7 @@ import { router } from './routes/index.js';
 
 dotenv.config();
 const {
-  SOCKET_PORT,
+  PORT,
   CLIENT_ENDPOINT,
   CLIENT_PORT
 } = process.env;
@@ -40,7 +40,7 @@ const serverSocket = new ServerSocket(io);
 
 // TODO: make a debug option so you can test on multiple computers
 // https://stackoverflow.com/questions/30712141/connect-to-localhost3000-from-another-computer-expressjs-nodejs
-server.listen(SOCKET_PORT, () => {
+server.listen(PORT, () => {
   console.log('[INFO] Listening on *:' + SOCKET_PORT);
 });
 
