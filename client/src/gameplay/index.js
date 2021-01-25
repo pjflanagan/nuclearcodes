@@ -7,7 +7,8 @@ import {
   LobbyWidget,
   MessageWidgetLobby,
   MessageWidgetName,
-  ReadyUpWidget
+  ReadyUpWidget,
+  AssignRolesWidget
 } from '../app/widgets';
 
 // import {
@@ -83,6 +84,11 @@ const GAMEPLAY = [
       If a spy enters a room with you, they can choose to show you a false letter.
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
+    next: () => 'assign-roles'
+  },
+  {
+    id: 'assign-roles',
+    widget: AssignRolesWidget,
     next: () => 'room-picker-prompt'
   },
   {
@@ -92,11 +98,20 @@ const GAMEPLAY = [
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
     // next: () => 'room-picker'
+  },
+  {
+    id: 'error',
+    widget: () => (<div />)
   }
 ];
 
 const getNextPlay = (nextPlayID, prevData = {}) => {
   const play = GAMEPLAY.find(play => play.id === nextPlayID);
+
+  if (!play) {
+    console.error(`Cannot find ${nextPlayID} in GAMEPLAY`);
+    return GAMEPLAY.find(play => play.id === 'error')
+  }
 
   if (!!play.data) {
     Object.assign(play.data, prevData);

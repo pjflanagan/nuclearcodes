@@ -5,12 +5,11 @@
 // not sure what the host will do anymore
 
 const GAME_STATES = {
-  LOBBY: 0,
-  INTRODUCTION: 1, // here we will set spies and game code, introduce the rules, ask to confirm at the end before starting vote round "Does everyone know what they are?"
-  ROUND_VOTE: 2, // vote on which room to go into
-  ROUND_TURN_KEY: 3, // vote on which key to turn
-  ROUND_ENTER_CODE: 4, // enter a code into the game
-  GAME_OVER: 5 // ask if they'd like to play again
+  LOBBY: 0, // after here we will set spies and game code, introduce the rules
+  ROUND_VOTE: 1, // vote on which room to go into
+  ROUND_TURN_KEY: 2, // vote on which key to turn
+  ROUND_ENTER_CODE: 3, // enter a code into the game
+  GAME_OVER: 4 // ask if they'd like to play again
 };
 
 class GameRoom {
@@ -68,27 +67,33 @@ class GameRoom {
     this.clearResponses();
     switch (this.gameState) {
       case GAME_STATES.LOBBY:
-        this.gameState = GAME_STATES.INTRODUCTION;
+        this.gameState = GAME_STATES.ROUND_VOTE;
+        this.setupGame();
         this.socketServer.nextSlide(this.name, {
-          slideID: 'introduction'
+          slideID: 'introduction' // leads to vote
         });
         break;
-      case GAME_STATES.INTRODUCTION:
+      case GAME_STATES.ROUND_ENTER_CODE:
+        // TODO: switch here if they are correct
+        // might be vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.socketServer.nextSlide(this.name, {
-          slideID: 'defcon', // show the defcon before each round for fun
+          slideID: 'defcon', // show the defcon before each round for fun, leads to vote
           data: {
             round: this.round
           }
         });
         break;
-      case GAME_STATES.ROUND_ENTER_CODE:
-        // TODO: this will change based on which round it is, might be GAME_OVER
-        // might be vote to KILL?
-        break;
       default:
         break;
     }
+  }
+
+  setupGame() {
+    // this.player
+    // TODO: set spies
+    // this.code
+    // this.fakeCode
   }
 
   getState() {
