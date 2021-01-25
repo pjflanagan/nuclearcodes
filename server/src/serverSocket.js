@@ -27,7 +27,7 @@ class ServerSocket {
   // ADMIN
 
   connection(socket) {
-    console.log('[INFO] New connection:', socket.id);
+    console.log('[INFO] connection:', socket.id);
   }
 
   disconnect(socket) {
