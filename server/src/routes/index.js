@@ -12,7 +12,8 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send({
     status: "alive",
-    players: serverSocket.roomAssignments.length
+    players: serverSocket.roomAssignments.length,
+    games: serverSocket.gameRooms.length
   }).status(200);
 });
 

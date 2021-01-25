@@ -1,55 +1,39 @@
 
 
+// TODO: gameplay could be on the server?
+
+// The rooms host is just user[0]
 
 class GameRoom {
-  constructor(socket) {
-    this.socket = socket;
-    this.users = {};
+  constructor(roomName) {
+    this.name = roomName;
+    this.users = [];
+    // 
   }
 
-  connection(socket, name) {
-    const userState = defaultUserState(socket.id, name, this.selectTeam());
-    this.users[userState.userID] = {
-      score: 0,
-      team: userState.team
+  joinRoom(socket) {
+    this.users.push(socket.id) = {
+      id: socket.id
     };
-    this.socket.sendConnection(socket, userState);
   }
 
   disconnect(socket) {
-    if (!!this.users[socket.id]) {
-      delete this.users[socket.id];
-      this.socket.sendRemoveUser(socket.id);
-    }
+    this.users = this.users.filter(u => u.id === socket.id);
   }
 
-  hit(data) {
-    const originUser = this.users[data.origin.userID];
-    const targetUser = this.users[data.target.userID]
-    if (!!originUser && !!targetUser) {
-      // calc score
-      let pointsAwarded = Math.floor(targetUser.score / 2);
-      data.origin.newScore = (pointsAwarded > 1) ? originUser.score + pointsAwarded : originUser.score + 1;
-
-      // remove the user from here
-      delete this.users[data.target.userID];
-      this.users[data.origin.userID].score = data.origin.newScore;
-
-      this.socket.sendHit(data);
-    }
+  updateUserName(socket, playerName) {
+    const user = this.users.find(u => u.id === socket.id);
+    user.name = playerName;
   }
 
-  selectTeam() {
-    let blue = 0;
-    let red = 0;
-    for (const [key, value] of Object.entries(this.users)) {
-      if (value.team === GAME_PROPS.TEAM.RED) {
-        ++red;
-      } else {
-        ++blue;
-      }
+  getState() {
+    return {
+      users: this.users
     };
-    return (red <= blue) ? GAME_PROPS.TEAM.RED : GAME_PROPS.TEAM.BLUE;
+  }
+
+  isEmpty() {
+    return this.users.length === 0;
   }
 }
 
