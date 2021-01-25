@@ -8,7 +8,13 @@ import {
 } from '../actions';
 import { getNextPlay } from "../gameplay";
 
-const ENDPOINT = '//localhost:5000';
+const {
+  REACT_APP_SOCKET_ENDPOINT,
+  REACT_APP_SOCKET_PORT
+} = process.env;
+
+const ENDPOINT = (!!REACT_APP_SOCKET_PORT) ? `${REACT_APP_SOCKET_ENDPOINT}:${REACT_APP_SOCKET_PORT}` : REACT_APP_SOCKET_ENDPOINT;
+
 const socket = io(ENDPOINT, {
   withCredentials: true,
 });
