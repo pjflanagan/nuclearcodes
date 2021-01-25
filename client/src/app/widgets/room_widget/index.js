@@ -4,6 +4,8 @@ import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
+const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
+
 class RoomWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +13,7 @@ class RoomWidget extends React.Component {
     this.state = {
       done: false,
       playerName: "",
+      errors: []
     };
 
     this.onChange = this.onChange.bind(this);
@@ -35,15 +38,33 @@ class RoomWidget extends React.Component {
   }
 
   onSubmit() {
+    const errors = this.validate();
     const { playerName } = this.state;
-    this.props.doneCallback({ playerName });
-    this.props.socketService.setPlayerName({ playerName });
-    this.setState({ done: true });
+    if (errors.length === 0) {
+      this.props.socketService.setPlayerName({ playerName });
+      this.props.doneCallback({ playerName });
+      this.setState({ done: true });
+    }
+    this.setState({
+      errors
+    });
   }
 
+
+  validate() {
+    const { playerName } = this.state;
+    if (playerName.length === 0) {
+      return ["Your name must contain at least 1 character."];
+    }
+    if (!playerName.match(ALPHANUMERIC_REGEX)) {
+      return ["Your name must be alphanumeric and not contain spaces."];
+    }
+    return [];
+  }
+
+
   render() {
-    const { done } = this.state;
-    // TODO: auto tab into it when it shows up
+    const { done, errors } = this.state;
     return (
       <Slide done={done}>
         <input
@@ -56,6 +77,11 @@ class RoomWidget extends React.Component {
           onKeyDown={e => this.onKeyDown(e)}
           disabled={done}
         />
+        <div className={Style.errors}>
+          {
+            errors.map(error => (<p>{error}</p>))
+          }
+        </div>
       </Slide>
     );
   }

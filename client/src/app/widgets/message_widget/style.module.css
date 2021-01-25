@@ -1,3 +1,10 @@
 .message {
   font-size: 18px;
 }
+
+.url {
+  padding: 20px;
+  font-size: 26px;
+  color: #62b7e0;
+  text-decoration: underline;
+}

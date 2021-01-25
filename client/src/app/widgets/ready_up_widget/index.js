@@ -4,7 +4,7 @@ import { Slide, Player } from '../../elements';
 
 import Style from './style.module.css';
 
-const MIN_PLAYERS = 6;
+const MIN_PLAYERS = 1;
 
 class ReadyUpWidget extends React.Component {
   constructor(props) {
@@ -36,22 +36,27 @@ class ReadyUpWidget extends React.Component {
   }
 
   readyUp() {
-    const { gameState } = this.props;
+    const { gameState, socketService } = this.props;
     if (gameState.players.length < MIN_PLAYERS) {
       // if not ready then do nothing
       return;
     }
     // TODO: send a ready up to the server
+    socketService.pollResponse({
+      type: 'ready-up',
+      ready: true
+    });
     this.setState({
       ready: true
     });
   }
 
   render() {
-    const { done, ready } = this.state;
+    const { done } = this.state;
     const { gameState } = this.props;
     // TODO: ready up is for everyone, majority vote
     // ready up option becomes avaialable when everyone is here
+    // also I should show which agent's have not readied up
     return (
       <Slide done={done}>
         <div className={Style.players}>

@@ -60,8 +60,23 @@ class MessageWidget extends React.Component {
 class MessageWidgetLobby extends MessageWidget {
   componentDidMount() {
     const { roomName } = this.props.data;
-    this.text = `Welcome to Briefing Room ${roomName}.`
+    this.text = `Welcome to Briefing Room ${roomName}. You can invite friends to this game by sharing the url:`
     this.type(0);
+  }
+
+  render() {
+    const { typed, done } = this.state;
+    const { roomName } = this.props.data;
+    return (
+      <Slide done={done}>
+        <p className={Style.message}>
+          {typed}
+        </p>
+        { done && <p className={Style.url}>
+          {`nuclear-codes.com/${roomName}`}
+        </p>}
+      </Slide>
+    );
   }
 }
 

@@ -8,7 +8,7 @@ const Player = ({
 }) => (
   <div className={Style.player}>
     <div className={Style.playerName}>
-      {!!name ? name : index}
+      {!!name ? name : `00${index}`}
     </div>
   </div>
 );

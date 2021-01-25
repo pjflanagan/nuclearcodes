@@ -6,6 +6,7 @@ import {
   nextSlide,
   updateGameState,
 } from '../actions';
+import { getNextPlay } from "../gameplay";
 
 const ENDPOINT = '//localhost:5000';
 const socket = io(ENDPOINT, {
@@ -19,7 +20,8 @@ class SocketServiceClass {
         dispatch(addPlayer(data));
       });
       socket.on('NEXT_SLIDE', (data) => {
-        dispatch(nextSlide(data));
+        const slide = getNextPlay(data.slideID, data.data)
+        dispatch(nextSlide(slide));
       });
       socket.on('GAME_STATE', data => {
         dispatch(updateGameState(data));
@@ -33,6 +35,10 @@ class SocketServiceClass {
 
   setPlayerName(data) {
     socket.emit('SET_PLAYER_NAME', data);
+  }
+
+  pollResponse(data) {
+    socket.emit('POLL_RESPONSE', data);
   }
 }
 

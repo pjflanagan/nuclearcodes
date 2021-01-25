@@ -6,8 +6,7 @@ const initState = {
   slides: [GAMEPLAY[0]],
   gameState: {
     players: [],
-    current: 'LOBBY', // TODO: this might not be necessary either, only server needs to know
-    round: 0,
+    // gameState and round might be unncessary for the player to know
   },
 
   // TODO: these might not be necessary

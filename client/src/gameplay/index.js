@@ -40,8 +40,7 @@ const GAMEPLAY = [
   },
   {
     id: 'lobby-form',
-    widget: LobbyWidget,
-    next: () => 'game-room-welcome'
+    widget: LobbyWidget
   },
   {
     id: 'game-room-welcome',
@@ -56,8 +55,7 @@ const GAMEPLAY = [
   },
   {
     id: 'name-form',
-    widget: RoomWidget,
-    next: () => 'welcome-agent'
+    widget: RoomWidget
   },
   {
     id: 'welcome-agent',

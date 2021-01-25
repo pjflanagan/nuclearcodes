@@ -18,7 +18,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatchDoneCallback: (next, prevData) => {
-    // TODO: TODO: TODO: 
     // sometimes this will just send data to the server and not set next slide
     // server will be the one to tell us to move to the next slide
     if (!!next) {
