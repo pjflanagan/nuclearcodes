@@ -1,6 +1,6 @@
 
 import { GAMEPLAY } from '../gameplay';
-import { NEXT_SLIDE, JOIN_ROOM } from '../actions';
+import { NEXT_SLIDE, UPDATE_GAME_STATE } from '../actions';
 
 const initState = {
   slides: [GAMEPLAY[0]],
@@ -8,17 +8,20 @@ const initState = {
   me: {
     isHost: false
   },
-  players: [],
-  gameState: 'LOBBY',
-  round: 0,
+  gameState: {
+    players: [],
+    current: 'LOBBY',
+    round: 0,
+  }
 };
 
 const GameReducer = (state = initState, action) => {
+  console.log(action);
   switch (action.type) {
     case NEXT_SLIDE:
       return { ...state, ...{ slides: [...state.slides, action.slide] } };
-    // case JOIN_ROOM:
-    //   return { ...state, roomName}
+    case UPDATE_GAME_STATE:
+      return { ...state, ...{ gameState: action.gameState } };
     default:
       return state;
   }

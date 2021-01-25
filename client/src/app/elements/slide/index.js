@@ -6,10 +6,6 @@ import React from 'react';
 import Style from './style.module.css';
 
 class Slide extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       done,

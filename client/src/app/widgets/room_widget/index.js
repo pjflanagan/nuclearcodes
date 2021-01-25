@@ -35,10 +35,9 @@ class RoomWidget extends React.Component {
   }
 
   onSubmit() {
-    this.props.doneCallback({
-
-      playerName: this.state.playerName
-    });
+    const { playerName } = this.state;
+    this.props.doneCallback({ playerName });
+    this.props.socketService.setPlayerName({ playerName });
     this.setState({ done: true });
   }
 

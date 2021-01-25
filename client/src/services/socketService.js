@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import {
   addPlayer,
   nextSlide,
-  // joinRoom,
+  updateGameState,
 } from '../actions';
 
 const ENDPOINT = '//localhost:5000';
@@ -21,6 +21,9 @@ class SocketServiceClass {
       socket.on('NEXT_SLIDE', (data) => {
         dispatch(nextSlide(data));
       });
+      socket.on('GAME_STATE', data => {
+        dispatch(updateGameState(data));
+      });
     }
   }
 
@@ -29,7 +32,7 @@ class SocketServiceClass {
   }
 
   setPlayerName(data) {
-    socket.emit('SHARE_PLAYER_NAME', data);
+    socket.emit('SET_PLAYER_NAME', data);
   }
 }
 

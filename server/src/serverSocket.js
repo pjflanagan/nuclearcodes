@@ -18,7 +18,7 @@ class ServerSocket {
     this.io.on('connection', (socket) => {
       this.connection(socket);
       socket.on('JOIN_ROOM', (data) => this.joinRoom(socket, data));
-      socket.on('SHARE_NAME', (data) => this.shareName(socket, data));
+      socket.on('SET_PLAYER_NAME', (data) => this.shareName(socket, data));
       socket.on('disconnect', () => this.disconnect(socket));
     });
   }
@@ -72,10 +72,12 @@ class ServerSocket {
       // and send a new room state to the user
       const newGameRoom = new GameRoom(roomName)
       this.gameRooms.push(newGameRoom);
+      newGameRoom.joinRoom(socket);
       this.io.to(socket.id).emit('GAME_STATE', newGameRoom.getState());
     } else {
       // otherwise send the room info to the user
       // and send the new user to the other players
+      gameRoom.joinRoom(socket);
       this.io.to(roomName).emit('ADD_NEW_USER', socket.id);
       this.io.to(socket.id).emit('GAME_STATE', gameRoom.getState());
     }
@@ -83,7 +85,7 @@ class ServerSocket {
 
   shareName(socket, { playerName }) {
     const gameRoom = this.getUserRoom(socket);
-    gameRoom.updateUserName(socket.id, playerName);
+    gameRoom.setPlayerName(socket, playerName);
     this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
   }
 
@@ -91,7 +93,6 @@ class ServerSocket {
   // Helpers
 
   getRoomAssignment(socket) {
-    console.log(this.roomAssignments);
     const roomAssignment = this.roomAssignments.find(ra => socket.id === ra.socketID);
     if (!!roomAssignment) {
       return roomAssignment.roomName;

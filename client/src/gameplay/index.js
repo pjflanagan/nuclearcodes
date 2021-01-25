@@ -4,7 +4,10 @@ import {
   MessageWidget,
   LogoWidget,
   RoomWidget,
-  LobbyWidget
+  LobbyWidget,
+  MessageWidgetLobby,
+  MessageWidgetName,
+  ReadyUpWidget
 } from '../app/widgets';
 
 // import {
@@ -42,8 +45,7 @@ const GAMEPLAY = [
   },
   {
     id: 'game-room-welcome',
-    widget: MessageWidget,
-    data: { text: 'Welcome to the <roomName> room.' },
+    widget: MessageWidgetLobby,
     next: () => 'name-prompt'
   },
   {
@@ -59,22 +61,25 @@ const GAMEPLAY = [
   },
   {
     id: 'welcome-agent',
-    widget: MessageWidget,
-    data: { text: 'Welcome agent <playerName>.' },
-    next: () => 'end'
+    widget: MessageWidgetName,
+    next: () => 'ready_up'
   },
   {
-    id: 'end',
-    widget: MessageWidget,
-    data: {
-      text: 'Game over, congradulations to whoever won. Would you like to play again?'
-    }
+    id: 'ready_up',
+    widget: ReadyUpWidget,
+    next: () => 'ready_up' // this one will have a switch based on state
   }
 ];
 
-const getNextPlay = (nextPlayID, prevData) => {
+const getNextPlay = (nextPlayID, prevData = {}) => {
   const play = GAMEPLAY.find(play => play.id === nextPlayID);
-  play.prevData = prevData;
+
+  if (!!play.data) {
+    Object.assign(play.data, prevData);
+  } else {
+    play.data = prevData;
+  }
+
   return play;
 };
 

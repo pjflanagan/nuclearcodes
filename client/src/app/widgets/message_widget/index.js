@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Slide } from '../../elements';
-import { parseTextForInserts } from '../parse-text-for-inserts';
 
 import Style from './style.module.css';
 
@@ -16,7 +15,6 @@ class MessageWidget extends React.Component {
       typed: "",
     };
 
-
     this.timeoutID = 0;
 
     this.type = this.type.bind(this);
@@ -24,7 +22,8 @@ class MessageWidget extends React.Component {
   }
 
   componentDidMount() {
-    this.text = parseTextForInserts(this.props.data.text, this.props.prevData);
+    // TODO: don't do this, extend the component with other components
+    this.text = this.props.data.text
     this.type(0);
   }
 
@@ -58,4 +57,20 @@ class MessageWidget extends React.Component {
   }
 }
 
-export { MessageWidget };
+class MessageWidgetLobby extends MessageWidget {
+  componentDidMount() {
+    const { roomName } = this.props.data;
+    this.text = `Welcome to Briefing Room ${roomName}.`
+    this.type(0);
+  }
+}
+
+class MessageWidgetName extends MessageWidget {
+  componentDidMount() {
+    const { playerName } = this.props.data;
+    this.text = `Welcome Agent ${playerName}.`
+    this.type(0);
+  }
+}
+
+export { MessageWidget, MessageWidgetLobby, MessageWidgetName };

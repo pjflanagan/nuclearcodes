@@ -7,33 +7,34 @@
 class GameRoom {
   constructor(roomName) {
     this.name = roomName;
-    this.users = [];
+    this.players = [];
     // 
   }
 
   joinRoom(socket) {
-    this.users.push(socket.id) = {
+    this.players.push({
       id: socket.id
-    };
+    });
   }
 
   disconnect(socket) {
-    this.users = this.users.filter(u => u.id === socket.id);
+    this.players = this.players.filter(u => u.id === socket.id);
   }
 
-  updateUserName(socket, playerName) {
-    const user = this.users.find(u => u.id === socket.id);
-    user.name = playerName;
+  setPlayerName(socket, playerName) {
+    const player = this.players.find(p => p.id === socket.id);
+    player.name = playerName;
   }
 
   getState() {
-    return {
-      users: this.users
+    const gameState = {
+      players: this.players
     };
+    return gameState;
   }
 
   isEmpty() {
-    return this.users.length === 0;
+    return this.players.length === 0;
   }
 }
 

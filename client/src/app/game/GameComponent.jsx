@@ -4,16 +4,16 @@ import PropTypes from 'prop-types'
 import Style from './style.module.css';
 
 
-const GameComponent = ({ slides, doneCallback, socketService }) => (
+const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService }) => (
   <div className={Style.gameContainer}>
     <div className={Style.slidesHolder}>
       {
         slides.map((slide, i) => (
           <slide.widget
             key={i}
+            gameState={gameState}
             data={slide.data}
-            prevData={slide.prevData}
-            doneCallback={(prevData) => doneCallback(slide.next, prevData)}
+            doneCallback={(prevData) => dispatchDoneCallback(slide.next, prevData)}
             socketService={socketService}
           />
         ))
@@ -30,7 +30,7 @@ GameComponent.propTypes = {
     //   PropTypes.func
     // ]).isRequired
   }).isRequired).isRequired,
-  doneCallback: PropTypes.func.isRequired
+  dispatchDoneCallback: PropTypes.func.isRequired
 }
 
 export { GameComponent };
