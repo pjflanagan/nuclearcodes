@@ -4,7 +4,7 @@ import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
-const SPEED = 26;
+const SPEED = 8;
 
 class MessageWidget extends React.Component {
   constructor(props) {

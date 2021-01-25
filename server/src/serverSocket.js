@@ -26,18 +26,18 @@ class ServerSocket {
   // ADMIN
 
   connection(socket) {
-    console.log('connection:', socket.id);
+    console.log('[INFO] New connection:', socket.id);
   }
 
   disconnect(socket) {
-    console.log('disconnect:', socket.id);
+    console.log('[INFO] disconnect:', socket.id);
 
     const gameRoom = this.getUserRoom(socket);
 
     if (!!gameRoom) {
       // if there is a room, disconnect them from it
       this.roomAssignments = this.roomAssignments.filter(ra => socket.id !== ra.socketID);
-      gameRoom.disconnect();
+      gameRoom.disconnect(socket);
 
       if (gameRoom.isEmpty()) {
         // if the room is empty, delete the room

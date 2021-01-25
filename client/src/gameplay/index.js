@@ -62,12 +62,30 @@ const GAMEPLAY = [
   {
     id: 'welcome-agent',
     widget: MessageWidgetName,
-    next: () => 'ready_up'
+    next: () => 'ready-up-prompt'
   },
   {
-    id: 'ready_up',
+    id: 'ready-up-prompt',
+    widget: MessageWidget,
+    data: { text: "Let's wait for the team to assemble." },
+    next: () => 'ready-up'
+  },
+  {
+    id: 'ready-up',
     widget: ReadyUpWidget,
-    next: () => 'ready_up' // this one will have a switch based on state
+    // no next here because we will instead wait for server response
+  },
+  {
+    id: 'introduction',
+    widget: MessageWidget,
+    data: {
+      text: `Someone has hacked into the Pentagon and has stolen our nuclear codes! 
+      The only way to recover them through these rooms. Two agents can enter a room
+      at a time, each will be shown that room's letter. But there are spies in this group.
+      If a spy enters a room with you, they can choose to show you a false letter.
+      We only have five guesses to recover our nuclear codes, failure is not an option!`
+    },
+    next: () => 'ready-up'
   }
 ];
 

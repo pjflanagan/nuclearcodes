@@ -3,11 +3,13 @@ import React from 'react';
 import Style from './style.module.css';
 
 const Player = ({
-  id,
+  index,
   name,
 }) => (
   <div className={Style.player}>
-    { !!name ? name : ''}
+    <div className={Style.playerName}>
+      {!!name ? name : index}
+    </div>
   </div>
 );
 
