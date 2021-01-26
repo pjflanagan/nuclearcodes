@@ -1,0 +1,19 @@
+.typeable {
+  line-height: 28px;
+}
+
+.text {
+  font-size: 18px;
+  font-weight: normal;
+  color: #FFF;
+}
+
+.pill {
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 18px;
+  color: #1c1c1c;
+  background: #dbdbdb;
+  margin: 0 4px;
+  font-weight: bold;
+}

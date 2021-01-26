@@ -65,9 +65,12 @@ class ServerSocket {
       gameRoom = new GameRoom(this, roomName)
       this.gameRooms.push(gameRoom);
     } else if (gameRoom.isFull()) {
-      // TODO: instead add them as viewer
-      // also have an error for gameRoom.isStarted() ?
+      // TODO: handle ERROR emits
       this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} is full.` });
+      return;
+    } else if (gameRoom.isStarted()) {
+      // TODO: add them as a viewer?
+      this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} has started, you may join next round.` });
       return;
     }
     this.roomAssignments.push({

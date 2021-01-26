@@ -1,12 +1,10 @@
 import React from 'react';
 
-import { Slide } from '../../elements';
-
-import Style from './style.module.css';
+import { Slide, Input } from '../../elements';
 
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
-class RoomWidget extends React.Component {
+class PlayerNameWidget extends React.Component {
   constructor(props) {
     super(props);
 
@@ -18,10 +16,6 @@ class RoomWidget extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    this.input.focus();
   }
 
   onChange(e) {
@@ -66,24 +60,17 @@ class RoomWidget extends React.Component {
     const { isCurrent } = this.props;
     return (
       <Slide>
-        <input
-          ref={(input) => { this.input = input; }}
-          type="text"
+        <Input
           placeholder="Your Secret Agent Name"
           tabIndex={0}
-          className={Style.input}
           onChange={e => this.onChange(e)}
           onKeyDown={e => this.onKeyDown(e)}
           disabled={!isCurrent}
+          errors={errors}
         />
-        <div className={Style.errors}>
-          {
-            errors.map(error => (<p>{error}</p>))
-          }
-        </div>
       </Slide>
     );
   }
 }
 
-export { RoomWidget };
+export { PlayerNameWidget };

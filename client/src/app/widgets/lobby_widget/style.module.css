@@ -30,34 +30,3 @@
 .toggle .optionsHolder .option.selected {
   border-bottom: 1px solid #FFF;
 }
-
-.input {
-  margin: 4px 0;
-  font-size: 32px;
-  border-bottom: 1px solid #FFF8;
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-radius: 0px;
-  padding: 18px;
-  background: none;
-  outline: none;
-  color: #fff;
-  width: 100%;
-  font-family: inherit;
-}
-
-.input:focus {
-  border-bottom: 1px solid #FFFD;
-}
-
-.input:disabled {
-  color: #fff8;
-}
-
-.errors {
-  min-height: 24px;
-  margin: 12px 12px;
-  font-size: 16px;
-  color: #d55252;
-}

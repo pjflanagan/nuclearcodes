@@ -6,7 +6,7 @@ import Style from './style.module.css';
 
 const CHANGE_DELAY = 1000;
 
-class AssignRolesWidget extends React.Component {
+class DefconWidget extends React.Component {
 
   componentDidMount() {
     setTimeout(
@@ -32,4 +32,4 @@ class AssignRolesWidget extends React.Component {
   }
 }
 
-export { AssignRolesWidget };
+export { DefconWidget };

@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { Slide } from '../../elements';
+import { Slide, Input } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -34,10 +34,6 @@ class LobbyWidget extends React.Component {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     // this.toggleCreateJoin = this.toggleCreateJoin.bind(this);
-  }
-
-  componentDidMount() {
-    this.input.focus();
   }
 
   // toggleCreateJoin(createNewRoom) {
@@ -98,23 +94,14 @@ class LobbyWidget extends React.Component {
             </div>
           </div>
         </div> */}
-        <input
-          ref={(input) => { this.input = input; }}
+        <Input
           type="text"
           placeholder="Enter Room Name"
-          tabIndex={0}
-          className={Style.input}
           onChange={e => this.onChange(e)}
           onKeyDown={e => this.onKeyDown(e)}
           disabled={!isCurrent}
+          errors={errors}
         />
-        <div className={Style.errors}>
-          {
-            errors.map((error, i) => (
-              <p key={i}>{error}</p>
-            ))
-          }
-        </div>
       </Slide>
     );
   }

@@ -41,3 +41,8 @@
 .readyUpButtonHolder .readyUpButton:active {
   background: #FFF2;
 }
+
+.readyUpButtonHolder .readyUpButton:disabled {
+  pointer-events: none;
+  filter: opacity(0.6);
+}

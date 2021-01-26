@@ -3,7 +3,7 @@
 import {
   MessageWidget,
   LogoWidget,
-  RoomWidget,
+  PlayerNameWidget,
   LobbyWidget,
   MessageWidgetLobby,
   MessageWidgetName,
@@ -56,7 +56,7 @@ const GAMEPLAY = [
   },
   {
     id: 'name-form',
-    widget: RoomWidget
+    widget: PlayerNameWidget
   },
   {
     id: 'welcome-agent',

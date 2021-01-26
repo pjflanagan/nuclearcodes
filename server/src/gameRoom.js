@@ -51,6 +51,8 @@ class GameRoom {
     this.setupGame = this.setupGame.bind(this);
   }
 
+  // ADMIN
+
   joinRoom(socket) {
     this.players.push({
       id: socket.id,
@@ -62,11 +64,28 @@ class GameRoom {
 
   disconnect(socket) {
     this.players = this.players.filter(u => u.id !== socket.id);
+    if (this.isPollOver()) {
+      this.moveGameState();
+    }
   }
 
   setPlayerName(socket, playerName) {
     const player = this.findPlayer(socket);
     player.name = playerName;
+  }
+
+  // GAMEPLAY
+
+  setupGame() {
+    const arr = makeRandomArray(2, MAX_PLAYERS);
+    arr.forEach(i => {
+      if (!!this.players[i]) {
+        this.players[i].isSpy = true;
+      }
+    });
+    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
+    this.code = makeCode(6);
+    this.fakeCode = makeFakeCode(this.code, 6);
   }
 
   pollResponse(socket, response) {
@@ -88,6 +107,12 @@ class GameRoom {
     if (this.isPollOver()) {
       this.moveGameState();
     }
+  }
+
+  isPollOver() {
+    // TODO: change this
+    // return this.responses.length >= this.players.length;
+    return true;
   }
 
   moveGameState() {
@@ -114,21 +139,10 @@ class GameRoom {
       default:
         break;
     }
-    console.log(this.getState());
     this.socketServer.updateGameState(this.name, this.getState());
   }
 
-  setupGame() {
-    const arr = makeRandomArray(2, MAX_PLAYERS);
-    arr.forEach(i => {
-      if (!!this.players[i]) {
-        this.players[i].isSpy = true;
-      }
-    });
-    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
-    this.code = makeCode(6);
-    this.fakeCode = makeFakeCode(this.code, 6);
-  }
+  // HELPERS
 
   getState() {
     const gameState = {
@@ -137,14 +151,8 @@ class GameRoom {
     return gameState;
   }
 
-  isPollOver() {
-    // TODO: change this
-    // return this.responses.length >= this.players.length;
-    return true;
-  }
-
   clearResponses() {
-
+    this.players.forEach(p => p.response = {});
   }
 
   findPlayer(socket) {
