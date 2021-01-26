@@ -17,12 +17,7 @@ class App extends React.Component {
     super();
 
     this.store = createStore(GameReducer, composeWithDevTools(applyMiddleware(thunk)));
-    this.store.dispatch(SocketService.startService()); // TODO: do this after server has been woken up
-  }
-
-  componentDidMount() {
-    // fetch(); TODO: fetch backend to wake it up
-    // TODO: maybe do this in the LOGO slide
+    this.store.dispatch(SocketService.startService());
   }
 
   render() {
