@@ -8,6 +8,18 @@ import Style from './style.module.css';
 // TODO: should game rooms be lowercase?
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
+const validate = (roomName) => {
+  if (roomName.length < 3) {
+    return ["Room name must contain at least 3 characters."];
+  }
+  if (!roomName.match(ALPHANUMERIC_REGEX)) {
+    return ["Room name must be alphanumeric and not contain spaces."];
+  }
+  // TODO: if joining but room doesn't exist, prompt them to create a new room
+  // if creating room already exists, prompt them to joing
+  return [];
+}
+
 class LobbyWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -47,8 +59,8 @@ class LobbyWidget extends React.Component {
   }
 
   onSubmit() {
-    const errors = this.validate();
-    const { roomName } = this.state;
+    const roomName = this.getSanitizedRoomName();
+    const errors = validate(roomName);
     if (errors.length === 0) {
       this.props.socketService.joinRoom({ roomName });
       this.props.doneCallback({ roomName });
@@ -61,17 +73,8 @@ class LobbyWidget extends React.Component {
     });
   }
 
-  validate() {
-    const { roomName } = this.state;
-    if (roomName.length < 3) {
-      return ["Room name must contain at least 3 characters."];
-    }
-    if (!roomName.match(ALPHANUMERIC_REGEX)) {
-      return ["Room name must be alphanumeric and not contain spaces."];
-    }
-    // TODO: if joining but room doesn't exist, prompt them to create a new room
-    // if creating room already exists, prompt them to joing
-    return [];
+  getSanitizedRoomName() {
+    return this.state.roomName.trim().toLowerCase();
   }
 
   render() {

@@ -12,6 +12,28 @@ const GAME_STATES = {
   GAME_OVER: 4 // ask if they'd like to play again
 };
 
+const MAX_PLAYERS = 6;
+const CHARSET = 'BCDFGHJKLMNPQRSTVWXYZ';
+
+const makeRandomArray = (length, range) => {
+  var arr = [];
+  while (arr.length < length) {
+    let c = Math.floor(Math.random() * range);
+    if (arr.indexOf(c) === -1) arr.push(c);
+  }
+  return arr;
+}
+
+const makeCode = (codeLength, charset = CHARSET) => {
+  const arr = makeRandomArray(codeLength, charset.length);
+  return arr.map(c => charset[c]).join('');
+}
+
+const makeFakeCode = (realCode) => {
+  const fakeCharset = CHARSET.split(realCode).join('')
+  return makeCode(realCode.length, fakeCharset);
+}
+
 class GameRoom {
   constructor(socketServer, roomName) {
     this.socketServer = socketServer;
@@ -25,11 +47,16 @@ class GameRoom {
     // server side
     this.code = [];
     this.fakeCode = [];
+
+    this.setupGame = this.setupGame.bind(this);
   }
 
   joinRoom(socket) {
     this.players.push({
-      id: socket.id
+      id: socket.id,
+      response: {},
+      isSpy: false
+      // name: ''
     });
   }
 
@@ -87,19 +114,25 @@ class GameRoom {
       default:
         break;
     }
+    console.log(this.getState());
+    this.socketServer.updateGameState(this.name, this.getState());
   }
 
   setupGame() {
-    // this.player
-    // TODO: set spies
-    // this.code
-    // this.fakeCode
+    const arr = makeRandomArray(2, MAX_PLAYERS);
+    arr.forEach(i => {
+      if (!!this.players[i]) {
+        this.players[i].isSpy = true;
+      }
+    });
+    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
+    this.code = makeCode(6);
+    this.fakeCode = makeFakeCode(this.code, 6);
   }
 
   getState() {
     const gameState = {
       players: this.players,
-      responses: this.responses
     };
     return gameState;
   }

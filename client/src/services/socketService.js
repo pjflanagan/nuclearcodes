@@ -16,6 +16,9 @@ const socket = io(REACT_APP_SOCKET_ENDPOINT, {
 });
 
 class SocketServiceClass {
+
+  // recievers
+
   startService() {
     return (dispatch) => {
       socket.on('ADD_PLAYER', (data) => {
@@ -31,6 +34,8 @@ class SocketServiceClass {
     }
   }
 
+  // senders
+
   joinRoom(data) {
     socket.emit('JOIN_ROOM', data);
   }
@@ -42,8 +47,14 @@ class SocketServiceClass {
   pollResponse(data) {
     socket.emit('POLL_RESPONSE', data);
   }
+
+  // helpers
+
+  getID() {
+    return socket.id;
+  }
 }
 
 const SocketService = new SocketServiceClass();
 
-export { SocketService, socket };
+export { SocketService };

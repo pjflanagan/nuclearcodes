@@ -78,7 +78,7 @@ const GAMEPLAY = [
     id: 'introduction',
     widget: MessageWidget,
     data: {
-      text: `Someone has hacked into the Pentagon and has stolen our nuclear codes! 
+      text: `Someone has hacked into the Pentagon and stolen our nuclear codes! 
       The only way to recover them is through these rooms. Each round all agents will enter
       rooms in pairs, each pair will be shown that room's letter. But there are spies in our midst.
       If a spy enters a room with you, they can choose to show you a false letter.

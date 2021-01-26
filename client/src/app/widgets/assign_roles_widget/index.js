@@ -15,15 +15,29 @@ class AssignRolesWidget extends React.Component {
     );
   }
 
+  spyContent() {
+    return (
+      <div>
+        You are a <span>Spy</span> along with:
+      </div>
+    );
+  }
+
+  agentContent() {
+    return (
+      <div>
+        You are an <span>Agent</span>, be on the lookout for spies.
+      </div>
+    );
+  }
+
   render() {
+    const { me } = this.props;
+    console.log({ me });
+    const content = me.isSpy ? this.spyContent() : this.agentContent();
     return (
       <Slide>
-        <div>
-          You are a <span>Spy</span> along with:
-        </div>
-        <div>
-          You are an <span>Agent</span>, be on the lookout for spies.
-        </div>
+        { content}
       </Slide>
     );
   }

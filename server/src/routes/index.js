@@ -10,7 +10,6 @@ const router = express.Router();
 // and this server on Heroku
 
 router.get("/", (req, res) => {
-  console.log("GET REQUEST");
   res.send({
     status: "alive",
     players: serverSocket.roomAssignments.length,
