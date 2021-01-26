@@ -6,6 +6,7 @@ import express from 'express';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // import path from 'path';
 // import bodyParser from 'body-parser';
@@ -15,12 +16,14 @@ import { ServerSocket } from './serverSocket.js';
 import { router } from './routes/index.js';
 
 dotenv.config();
-const {
-  PORT,
-  CLIENT_ENDPOINT
-} = process.env;
+const { PORT, CLIENT_ENDPOINT } = process.env;
+const corsOptions = {
+  origin: CLIENT_ENDPOINT,
+  optionsSuccessStatus: 200
+}
 
 const app = express();
+app.use(cors(corsOptions));
 app.use(router);
 const server = http.Server(app);
 
