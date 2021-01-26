@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { Slide } from '../../elements';
-
-import Style from './style.module.css';
+import { Slide, Typeable, Text, Pill } from '../../elements';
 
 const CHANGE_DELAY = 1000;
 
 class AssignRolesWidget extends React.Component {
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
+    this.doneTypingCallback = this.doneTypingCallback.bind(this);
+  }
+
+  doneTypingCallback() {
     setTimeout(
       () => this.props.doneCallback(),
       CHANGE_DELAY
@@ -17,23 +20,31 @@ class AssignRolesWidget extends React.Component {
 
   spyContent() {
     return (
-      <div>
-        You are a <span>Spy</span> along with:
-      </div>
+      <Typeable doneTypingCallback={this.doneTypingCallback}>
+        <Text>You are a</Text>
+        <Pill color="red">SPY</Pill>
+        <Text>along with:</Text>
+        {
+          this.props.gameState.players.filter(p => p.isSpy).map((p, i) => {
+            <Pill key={i} color="red">{p.name}</Pill>
+          })
+        }
+      </Typeable>
     );
   }
 
   agentContent() {
     return (
-      <div>
-        You are an <span>Agent</span>, be on the lookout for spies.
-      </div>
+      <Typeable doneTypingCallback={this.doneTypingCallback}>
+        <Text>You are an</Text>
+        <Pill>AGENT</Pill>
+        <Text>, be on the lookout for spies.</Text>
+      </Typeable>
     );
   }
 
   render() {
     const { me } = this.props;
-    console.log({ me });
     const content = me.isSpy ? this.spyContent() : this.agentContent();
     return (
       <Slide>

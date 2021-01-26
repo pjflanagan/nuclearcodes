@@ -69,7 +69,6 @@ class ServerSocket {
       this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} is full.` });
       return;
     } else if (gameRoom.isStarted()) {
-      // TODO: add them as a viewer?
       this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} has started, you may join next round.` });
       return;
     }

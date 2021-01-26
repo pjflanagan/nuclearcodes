@@ -15,6 +15,7 @@ class Input extends React.Component {
         <input
           ref={(input) => { this.input = input; }}
           type="text"
+          value={this.props.value}
           placeholder={placeholder}
           tabIndex={0}
           className={Style.input}

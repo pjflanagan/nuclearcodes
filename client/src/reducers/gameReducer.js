@@ -8,10 +8,7 @@ const initState = {
     players: [],
     // gameState and round might be unncessary for the player to know
   },
-
-  // TODO: these might not be necessary
-  roomName: '',
-  id: '', // user's socket id
+  errors: []
 };
 
 const GameReducer = (state = initState, action) => {

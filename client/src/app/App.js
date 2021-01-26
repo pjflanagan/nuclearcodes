@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-// import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { GameReducer } from '../reducers';
 import { SocketService } from '../services';
@@ -22,17 +22,22 @@ class App extends React.Component {
 
   render() {
     return (
-      // <Router>
-      <Provider store={this.store}>
-        <div className={Style.app}>
-          <Cover />
-          {/* Menu */}
-          {/* TODO: <Route path="/:roomName"> */}
-          <Game socketService={SocketService} />
-          {/* </Route> */}
-        </div>
-      </Provider>
-      // </Router>
+      <Router>
+        <Provider store={this.store}>
+          <div className={Style.app}>
+            <Route path={["/:roomName", "/"]}>
+              {/* 
+                TODO: just auto enter this into the room name slide
+                and submit, that way we can error check,
+                also maybe the logo slide could have a switch based on this
+               */}
+              <Cover />
+              {/* Menu */}
+              <Game socketService={SocketService} />
+            </Route>
+          </div>
+        </Provider>
+      </Router>
     );
   }
 }

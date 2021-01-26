@@ -159,6 +159,10 @@ class GameRoom {
     return this.players.find(p => p.id === socket.id)
   }
 
+  isStarted() {
+    return this.gameState !== GAME_STATES.LOBBY;
+  }
+
   isFull() {
     return this.players.length >= 6;
   }

@@ -19,14 +19,14 @@ class LogoWidget extends React.Component {
   }
 
   wakeServer() {
-    console.log(`Waking server at ${REACT_APP_SOCKET_ENDPOINT}.`);
+    console.info(`Waking server at ${REACT_APP_SOCKET_ENDPOINT}.`);
     fetch(REACT_APP_SOCKET_ENDPOINT)
       .then(() => {
-        console.log('Server is awake.');
+        console.info('Server is awake.');
         this.props.doneCallback({ success: true });
       }
       ).catch(() => {
-        console.log('Failed to wake server.');
+        console.error('Failed to wake server.');
         // this.props.doneCallback({ success: false });
       });
   }

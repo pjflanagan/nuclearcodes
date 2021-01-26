@@ -1,9 +1,10 @@
 
 import React from 'react';
+import { withRouter } from "react-router-dom";
 
 import { Slide, Input } from '../../elements';
 
-import Style from './style.module.css';
+// import Style from './style.module.css'; TODO: toggle is in here
 
 // TODO: should game rooms be lowercase?
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
@@ -20,7 +21,7 @@ const validate = (roomName) => {
   return [];
 }
 
-class LobbyWidget extends React.Component {
+class LobbyWidgetComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -41,6 +42,13 @@ class LobbyWidget extends React.Component {
   //     createNewRoom: createNewRoom
   //   });
   // }
+
+  componentDidMount() {
+    const { roomName } = this.props.match.params;
+    if (!!roomName) {
+      this.setState({ roomName }, this.onSubmit);
+    }
+  }
 
   onChange(e) {
     this.setState({
@@ -74,7 +82,7 @@ class LobbyWidget extends React.Component {
   }
 
   render() {
-    const { errors } = this.state; // createNewRoom
+    const { errors, roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (
       <Slide>
@@ -96,6 +104,7 @@ class LobbyWidget extends React.Component {
         </div> */}
         <Input
           type="text"
+          value={roomName}
           placeholder="Enter Room Name"
           onChange={e => this.onChange(e)}
           onKeyDown={e => this.onKeyDown(e)}
@@ -106,5 +115,7 @@ class LobbyWidget extends React.Component {
     );
   }
 }
+
+const LobbyWidget = withRouter(LobbyWidgetComponent);
 
 export { LobbyWidget };

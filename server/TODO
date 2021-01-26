@@ -1,0 +1,3 @@
+In the server here, create a simple page where I can start a few different sockets
+I'll have buttons on it for kicking off different tests, like
+creating multiple users in multiple rooms, playing the acutal game

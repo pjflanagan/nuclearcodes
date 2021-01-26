@@ -26,7 +26,6 @@ class Typeable extends React.Component {
 
     const nextChildTyping = childTyping + 1;
     if (nextChildTyping >= length) {
-      console.log("doneTypingCallback");
       this.props.doneTypingCallback();
     }
 
@@ -123,13 +122,13 @@ class Pill extends React.Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, color } = this.props;
     const { isTyped } = this.state;
     if (!isTyped) {
       return <span></span>
     }
     return (
-      <span className={Style.pill}>
+      <span className={`${Style.pill} ${Style[color]}`}>
         {children}
       </span>
     );

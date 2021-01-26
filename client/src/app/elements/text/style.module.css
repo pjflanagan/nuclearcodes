@@ -17,3 +17,8 @@
   margin: 0 4px;
   font-weight: bold;
 }
+
+.pill.red {
+  color: #dbdbdb;
+  background: #a71111;
+}
