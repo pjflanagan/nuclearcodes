@@ -63,15 +63,15 @@ class ReadyUpWidget extends React.Component {
       <Slide>
         <div className={Style.players}>
           {
-            gameState.players.map((p, i) => (
+            gameState.players.map((player, i) => (
               <div
                 className={Style.playerHolder}
                 key={i}
               >
                 <Player
                   index={i}
-                  id={p.id}
-                  name={p.name} />
+                  player={player}
+                />
               </div>
             ))
           }

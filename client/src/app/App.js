@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+// import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { GameReducer } from '../reducers';
 import { SocketService } from '../services';
@@ -26,13 +27,17 @@ class App extends React.Component {
 
   render() {
     return (
+      // <Router>
       <Provider store={this.store}>
         <div className={Style.app}>
           <Cover />
           {/* Menu */}
+          {/* TODO: <Route path="/:roomName"> */}
           <Game socketService={SocketService} />
+          {/* </Route> */}
         </div>
       </Provider>
+      // </Router>
     );
   }
 }

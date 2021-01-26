@@ -41,6 +41,7 @@ class ServerSocket {
       gameRoom.disconnect(socket);
 
       if (gameRoom.isEmpty()) {
+        console.log('[INFO] close room:', gameRoom.name);
         // if the room is empty, delete the room
         this.gameRooms = this.gameRooms.filter(gr => gr.name !== gameRoom.name);
       } else {
@@ -59,6 +60,7 @@ class ServerSocket {
 
     let gameRoom = this.getRoomByName(roomName);
     if (!gameRoom) {
+      console.log('[INFO] open room:', roomName);
       // if this room does not exist then create it
       // and send a new room state to the user
       gameRoom = new GameRoom(this, roomName)

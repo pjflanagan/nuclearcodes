@@ -24,12 +24,13 @@ const corsOptions = {
   optionsSuccessStatus: 200
 }
 
-// server app
+// app
 const app = express();
 app.use(cors(corsOptions));
 app.use(router);
-const server = http.Server(app);
 
+// server
+const server = http.Server(app);
 server.listen(PORT, () => {
   console.log(`[INFO] Listening for ${CLIENT_ENDPOINT} on *:${PORT}`);
 });
@@ -43,7 +44,6 @@ const io = new SocketIOServer(server, {
     credentials: true
   }
 });
-
 const serverSocket = new ServerSocket(io);
 
 export { serverSocket };
