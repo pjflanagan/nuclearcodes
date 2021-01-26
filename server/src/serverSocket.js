@@ -47,8 +47,7 @@ class ServerSocket {
         // otherwise alert the room
         this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
       }
-    } else {
-
+      // TODO: if the game is going while they are in the room then idk
     }
     // if they aren't in a room then do nothing
   }
