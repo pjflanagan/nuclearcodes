@@ -1,6 +1,10 @@
 
 import { TestModel } from './models/test.js';
 
+// test model
+const test = new TestModel();
+
+
 $(() => {
 
   // TODO: if production: add , and open test in new window
@@ -9,9 +13,6 @@ $(() => {
   const defaultRoomName = (ENV === "PRD") ? `test-${Date.now()}` : 'test';
   $('#roomName').val(defaultRoomName);
   $('#playerCount').val(5);
-
-  // test model
-  const test = new TestModel();
 
   // actions
   $("#startRoomForm").submit(function (event) {
@@ -26,6 +27,25 @@ $(() => {
 
     // send it to the model
     test.startTest(roomName, playerCount);
+    createDisplay();
   });
 
 });
+
+function createDisplay() {
+  test.players.forEach((p, i) => {
+    $('#players').append(`
+      <div class="player" id="player-${i}">
+        <h2 id="player-${i}-name">${p.playerName}</h2>
+        isSpy, connectStatus, disconnect, sendResponse
+      </div>
+    `);
+  });
+  updateDisplay();
+}
+
+function updateDisplay() {
+  $('#players').children()
+}
+
+export { createDisplay, updateDisplay }

@@ -1,4 +1,6 @@
 
+import { updateDisplay } from '../script.js';
+
 class PlayerModel {
   constructor(roomName, playerName) {
     this.roomName = roomName;
@@ -17,11 +19,10 @@ class PlayerModel {
       // dispatch(addPlayer(data));
     });
     this.socket.on('NEXT_SLIDE', (data) => {
-      // const slide = getNextPlay(data.slideID, data.data)
-      // dispatch(nextSlide(slide));
+      this.slide = data;
     });
     this.socket.on('GAME_STATE', data => {
-      // dispatch(updateGameState(data));
+      this.gameState = data;
     });
   }
 
@@ -32,6 +33,10 @@ class PlayerModel {
     this.socket.emit('SET_PLAYER_NAME', {
       playerName: this.playerName
     });
+  }
+
+  disconnect() {
+    delete this.socket;
   }
 }
 
