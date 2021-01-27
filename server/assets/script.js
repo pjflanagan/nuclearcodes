@@ -1,51 +1,28 @@
 
-import { TestModel } from './models/test.js';
+import { RoomModel } from './models/room.js';
 
-// test model
-const test = new TestModel();
+angular.module('nuclear-codes-test', []).controller('testController', ['$scope', function ($scope) {
 
+  // initialize
+  $scope.init = () => {
+    console.log(`Test for environment: ${ENV}`);
+    const defaultRoomName = (ENV === "PRD") ? `test-${Date.now()}` : 'test';
+    $scope.state = {
+      roomName: defaultRoomName,
+      playerCount: 5,
+      rooms: []
+    };
+  }
 
-$(() => {
-
-  // TODO: if production: add , and open test in new window
-
-  // defaults
-  const defaultRoomName = (ENV === "PRD") ? `test-${Date.now()}` : 'test';
-  $('#roomName').val(defaultRoomName);
-  $('#playerCount').val(5);
-
-  // actions
-  $("#startRoomForm").submit(function (event) {
-    event.preventDefault();
-
-    // get the data then disable
-    const roomName = $('#roomName').val();
-    const playerCount = $('#playerCount').val();
-    $("#startRoomForm :input").prop("disabled", true);
-
+  $scope.addRoom = () => {
+    // TODO: if room exists, don't add room, just add more players to the existing room
+    const { roomName, playerCount } = $scope.state;
     console.log({ roomName, playerCount });
 
-    // send it to the model
-    test.startTest(roomName, playerCount);
-    createDisplay();
-  });
+    const newRoom = new RoomModel();
+    newRoom.startRoom(roomName, playerCount);
+    $scope.state.rooms.push(newRoom);
+    console.log($scope.state);
+  }
 
-});
-
-function createDisplay() {
-  test.players.forEach((p, i) => {
-    $('#players').append(`
-      <div class="player" id="player-${i}">
-        <h2 id="player-${i}-name">${p.playerName}</h2>
-        isSpy, connectStatus, disconnect, sendResponse
-      </div>
-    `);
-  });
-  updateDisplay();
-}
-
-function updateDisplay() {
-  $('#players').children()
-}
-
-export { createDisplay, updateDisplay }
+}]);

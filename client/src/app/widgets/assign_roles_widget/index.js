@@ -19,18 +19,17 @@ class AssignRolesWidget extends React.Component {
   }
 
   spyContent() {
-    const spyPlayers = this.props.gameState.players.filter(p => p.isSpy);
-    console.log(spyPlayers);
+    const { me } = this.props;
+    const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
     return (
       <Typeable doneTypingCallback={this.doneTypingCallback}>
         <Text>You are a</Text>
         <Pill color="red">SPY</Pill>
         <Text>along with:</Text>
         {
-          // TODO: this isn't typing this part
-          spyPlayers.map((p, i) => {
+          spyPlayers.map((p, i) => (
             <Pill key={i} color="red">{p.name}</Pill>
-          })
+          ))
         }
       </Typeable>
     );

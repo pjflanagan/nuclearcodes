@@ -34,22 +34,25 @@ class ServerSocket {
 
     const gameRoom = this.getUserRoom(socket);
 
-    if (!!gameRoom) {
-      // if there is a room, disconnect them from it
-      this.roomAssignments = this.roomAssignments.filter(ra => socket.id !== ra.socketID);
-      gameRoom.disconnect(socket);
-
-      if (gameRoom.isEmpty()) {
-        console.log('[INFO] close room:', gameRoom.name);
-        // if the room is empty, delete the room
-        this.gameRooms = this.gameRooms.filter(gr => gr.name !== gameRoom.name);
-      } else {
-        // otherwise alert the room
-        this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
-      }
-      // TODO: if the game is going while they are in the room then idk
+    if (!gameRoom) {
+      // if they aren't in a room then do nothing
+      return;
     }
-    // if they aren't in a room then do nothing
+
+    // if there is a room, disconnect them from it
+    this.roomAssignments = this.roomAssignments.filter(ra => socket.id !== ra.socketID);
+    gameRoom.disconnect(socket);
+
+    if (gameRoom.isEmpty()) {
+      console.log('[INFO] close room:', gameRoom.name);
+      // if the room is empty, delete the room
+      this.gameRooms = this.gameRooms.filter(gr => gr.name !== gameRoom.name);
+    } else {
+      // otherwise alert the room
+      this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
+    }
+    // TODO: if the game is going while they are in the room then idk
+
   }
 
   // ROOMS
@@ -87,6 +90,10 @@ class ServerSocket {
 
   shareName(socket, { playerName }) {
     const gameRoom = this.getUserRoom(socket);
+    if (!gameRoom) {
+      return;
+    }
+
     const playerSetName = gameRoom.setPlayerName(socket, playerName);
     this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
     this.io.to(socket.id).emit('NEXT_SLIDE', {
@@ -99,6 +106,9 @@ class ServerSocket {
 
   pollResponse(socket, response) {
     const gameRoom = this.getUserRoom(socket);
+    if (!!gameRoom) {
+      return;
+    }
     gameRoom.pollResponse(socket, response);
   }
 
@@ -130,13 +140,11 @@ class ServerSocket {
 
   getUserRoom(socket) {
     const gameRoomName = this.getRoomAssignment(socket);
-    if (!!gameRoomName) {
+    if (!gameRoomName) {
       return this.getRoomByName(gameRoomName);
     }
     return false;
   }
-
-
 
 }
 
