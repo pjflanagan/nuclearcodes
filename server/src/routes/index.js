@@ -5,11 +5,9 @@ import { serverSocket } from '../index.js';
 
 const router = express.Router();
 
-// this could serve the react build index page
-// but right now I want host the game on Netlify
-// and this server on Heroku
-
 // TODO: check alive route with no data?
+
+const { SERVER_ENDPOINT, CLIENT_ENDPOINT, ENV } = process.env;
 
 router.get("/", (req, res) => {
   res.send({
@@ -20,7 +18,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/test", (req, res) => {
-  res.render('test');
+  res.render('test', {
+    CLIENT_ENDPOINT,
+    SERVER_ENDPOINT,
+    ENV
+  });
 });
 
 export { router }

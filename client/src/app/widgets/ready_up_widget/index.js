@@ -4,7 +4,7 @@ import { Slide, Player } from '../../elements';
 
 import Style from './style.module.css';
 
-const MIN_PLAYERS = 1;
+const MIN_PLAYERS = 6;
 
 class ReadyUpWidget extends React.Component {
   constructor(props) {

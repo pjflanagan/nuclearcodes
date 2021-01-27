@@ -1,11 +1,10 @@
 
-import { updateDisplay } from '../script.js';
 
 class PlayerModel {
-  constructor(roomName, playerName) {
-    this.roomName = roomName;
+  constructor(room, playerName) {
+    this.room = room;
     this.playerName = playerName;
-    this.socket = io(SOCKET_ENDPOINT, {
+    this.socket = io(SERVER_ENDPOINT, {
       withCredentials: true,
     });
     // TODO: init a new socket

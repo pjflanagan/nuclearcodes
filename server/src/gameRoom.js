@@ -90,7 +90,7 @@ class GameRoom {
         this.players[i].isSpy = true;
       }
     });
-    // this.players[0].isSpy = true; // TODO: this is for DEBUGGING
+    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
     this.code = makeCode(6);
     this.fakeCode = makeFakeCode(this.code, 6);
   }
