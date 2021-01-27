@@ -9,12 +9,18 @@ const router = express.Router();
 // but right now I want host the game on Netlify
 // and this server on Heroku
 
+// TODO: check alive route with no data?
+
 router.get("/", (req, res) => {
   res.send({
     status: "alive",
     players: serverSocket.roomAssignments.length,
     games: serverSocket.gameRooms.length
   }).status(200);
+});
+
+router.get("/test", (req, res) => {
+  res.render('test');
 });
 
 export { router }

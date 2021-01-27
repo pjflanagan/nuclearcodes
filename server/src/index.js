@@ -9,9 +9,7 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// import path from 'path';
-// import bodyParser from 'body-parser';
-// import compression from 'compression';
+import path from 'path';
 
 import { ServerSocket } from './serverSocket.js';
 import { router } from './routes/index.js';
@@ -26,8 +24,11 @@ const corsOptions = {
 
 // app
 const app = express();
+app.set('view engine', 'ejs');
 app.use(cors(corsOptions));
 app.use(router);
+app.use('/assets', express.static('assets'));
+// app.use('/assets', express.static(path.resolve('../assets')));
 
 // server
 const server = http.Server(app);
