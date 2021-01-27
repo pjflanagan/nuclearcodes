@@ -4,9 +4,10 @@ class PlayerModel {
   constructor(room, playerName) {
     this.room = room;
     this.playerName = playerName;
-    this.socket = io(SERVER_ENDPOINT, {
+    this.socket = io('/', {
       withCredentials: true,
     });
+    this.isConnected = true;
     // TODO: init a new socket
     // sign in to a room
     // sign in with your name
@@ -27,15 +28,16 @@ class PlayerModel {
 
   login() {
     this.socket.emit('JOIN_ROOM', {
-      roomName: this.roomName
+      roomName: this.room.roomName
     });
     this.socket.emit('SET_PLAYER_NAME', {
       playerName: this.playerName
     });
   }
 
-  disconnect() {
-    delete this.socket;
+  disconnectPlayer() {
+    this.socket.disconnect();
+    this.isConnected = false;
   }
 }
 

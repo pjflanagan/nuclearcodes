@@ -26,7 +26,10 @@
         <button>Add Player To Room</button>
         <div class="player" ng-repeat="(j, player) in room.players">
           <h3>{{ player.playerName }}</h3>
-          <button>Disconnect</button>
+          <!-- TODO: depending on what the game state is, display an action? -->
+          <!-- TODO: or maybe just display all actions available -->
+          <!-- or maybe a json form field that can be default filled and then submitted -->
+          <button ng-click="player.disconnectPlayer()">Disconnect</button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 
 import express from 'express';
+import dotenv from 'dotenv';
 
 import { serverSocket } from '../index.js';
 
@@ -7,7 +8,8 @@ const router = express.Router();
 
 // TODO: check alive route with no data?
 
-const { SERVER_ENDPOINT, CLIENT_ENDPOINT, ENV } = process.env;
+dotenv.config();
+const { CLIENT_ENDPOINT, ENV } = process.env;
 
 router.get("/", (req, res) => {
   res.send({
@@ -20,7 +22,6 @@ router.get("/", (req, res) => {
 router.get("/test", (req, res) => {
   res.render('test', {
     CLIENT_ENDPOINT,
-    SERVER_ENDPOINT,
     ENV
   });
 });
