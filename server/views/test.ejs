@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+
+<head>
+  <%- include('partials/head.ejs') -%>
+</head>
+
+<body>
+  <div>
+    <h1>nuclear-codes</h1>
+    <form id="startRoomForm">
+      <label for="roomName">Room name:</label>
+      <input type="text" id="roomName" />
+      <label for="playerCount">Players:</label>
+      <input type="number" id="playerCount" />
+      <button>Start Test Room</button>
+    </form>
+    <div id="players"></div>
+  </div>
+  <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+  <script src="/assets/script.js" type="module"></script>
+</body>
+
+</html>
