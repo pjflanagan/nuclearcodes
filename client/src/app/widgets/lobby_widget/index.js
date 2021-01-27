@@ -67,10 +67,7 @@ class LobbyWidgetComponent extends React.Component {
     const errors = validate(roomName);
     if (errors.length === 0) {
       this.props.socketService.joinRoom({ roomName });
-      this.props.doneCallback({ roomName });
-      // TODO: const roomURLEncode = urlEncode(roomName);
-      // TODO: on submit call the socket and set the url to be room name
-      // this might require react router and this.props.history.push(`/${roomName}`)
+      this.props.history.push(`/${roomName}`);
     }
     this.setState({
       errors
@@ -82,6 +79,7 @@ class LobbyWidgetComponent extends React.Component {
   }
 
   render() {
+    // TODO: append game errors here too
     const { errors, roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (

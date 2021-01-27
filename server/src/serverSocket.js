@@ -87,11 +87,11 @@ class ServerSocket {
 
   shareName(socket, { playerName }) {
     const gameRoom = this.getUserRoom(socket);
-    gameRoom.setPlayerName(socket, playerName);
+    const playerSetName = gameRoom.setPlayerName(socket, playerName);
     this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
     this.io.to(socket.id).emit('NEXT_SLIDE', {
       slideID: 'welcome-agent',
-      data: { playerName }
+      data: { playerName: playerSetName }
     });
   }
 

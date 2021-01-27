@@ -69,9 +69,16 @@ class GameRoom {
     }
   }
 
-  setPlayerName(socket, playerName) {
+  setPlayerName(socket, playerName, num = 0) {
+    let playerSetName = (num > 0) ? `${playerName}${num}` : playerName;
     const player = this.findPlayer(socket);
-    player.name = playerName;
+    const existingPlayer = this.players.find(p => p.name === playerSetName);
+    if (!!existingPlayer) {
+      // if this player exists tack a number on
+      return this.setPlayerName(socket, playerName, num + 1);
+    }
+    player.name = playerSetName;
+    return playerSetName;
   }
 
   // GAMEPLAY
@@ -83,7 +90,7 @@ class GameRoom {
         this.players[i].isSpy = true;
       }
     });
-    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
+    // this.players[0].isSpy = true; // TODO: this is for DEBUGGING
     this.code = makeCode(6);
     this.fakeCode = makeFakeCode(this.code, 6);
   }
