@@ -65,10 +65,12 @@ class PlayerModel {
   }
 
   sendKeyChoice() {
-    const { isSpyKey } = this.response;
+    const { keyChoice } = this.response;
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_TURN_KEY',
-      data: isSpyKey
+      data: {
+        isSpyKey: keyChoice === 'spyKey'
+      }
     });
   }
 

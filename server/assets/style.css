@@ -71,4 +71,5 @@ h3 {
 
 .data {
   font-family: monospace;
+  overflow: scroll;
 }

@@ -116,9 +116,9 @@ class ServerSocket {
   // TODO: this is okay, but maybe I should decouple the slide logic from here?
   // the client will decide what slide to move to when the gamestate changes
   // login will have to be done some oth
-  nextSlide(roomName, data) {
+  nextSlide(id, data) {
     // data is { slideID, data: {} }
-    this.io.to(roomName).emit('NEXT_SLIDE', data);
+    this.io.to(id).emit('NEXT_SLIDE', data);
   }
 
   updateGameState(roomName, gameState) {
