@@ -10,6 +10,7 @@ class RoomModel {
     for (let i = 0; i < playerCount; ++i) {
       this.players.push(new PlayerModel(this.$scope, this, `player00${i}`));
     }
+    this.allCode = '';
   }
 
   sendReadyUp() {
@@ -30,6 +31,14 @@ class RoomModel {
       p.response.keyChoice = (Math.random() > 0.5) ? 'spyKey' : 'agentKey';
       p.sendKeyChoice();
     });
+  }
+
+  sendEnterCode() {
+    console.log(this.allCode);
+    this.players.forEach(p => {
+      p.response.code = this.allCode;
+      p.sendEnterCode();
+    })
   }
 }
 
