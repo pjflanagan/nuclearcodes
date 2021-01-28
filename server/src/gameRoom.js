@@ -1,18 +1,16 @@
-
-
-
-// The rooms host is just user[0]
-// not sure what the host will do anymore
+import { response } from "express";
 
 const GAME_STATES = {
-  LOBBY: 0, // after here we will set spies and game code, introduce the rules
-  ROUND_VOTE: 1, // vote on which room to go into
-  ROUND_TURN_KEY: 2, // vote on which key to turn
-  ROUND_ENTER_CODE: 3, // enter a code into the game
-  GAME_OVER: 4 // ask if they'd like to play again
+  LOBBY: 'LOBBY', // after here we will set spies and game code, introduce the rules
+  ROUND_VOTE: 'ROUND_VOTE', // vote on which room to go into
+  ROUND_TURN_KEY: 'ROUND_TURN_KEY', // vote on which key to turn
+  ROUND_ENTER_CODE: 'ROUND_ENTER_CODE', // enter a code into the game
+  // TODO: no round game over, just move them to a gameover slide -> credits -> play again prompt -> lobby
 };
 
-const MAX_PLAYERS = 6;
+const PLAYERS_PER_GAME = 8;
+const SPIES_PER_GAME = 2;
+const CODE_LENGTH = 5;
 const CHARSET = 'BCDFGHJKLMNPQRSTVWXYZ';
 
 const makeRandomArray = (length, range) => {
@@ -56,7 +54,7 @@ class GameRoom {
   joinRoom(socket) {
     this.players.push({
       id: socket.id,
-      response: {},
+      response: false,
       isSpy: false
       // name: ''
     });
@@ -64,6 +62,9 @@ class GameRoom {
 
   disconnect(socket) {
     this.players = this.players.filter(u => u.id !== socket.id);
+    // update the game state so people know they left
+    this.socketServer.updateGameState(this.name, this.getState());
+    // if this changes a poll response then re-check
     if (this.isPollOver()) {
       this.moveGameState();
     }
@@ -84,58 +85,125 @@ class GameRoom {
   // GAMEPLAY
 
   setupGame() {
-    const arr = makeRandomArray(2, MAX_PLAYERS);
+    const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
     arr.forEach(i => {
       if (!!this.players[i]) {
         this.players[i].isSpy = true;
       }
     });
-    this.players[0].isSpy = true; // TODO: this is for DEBUGGING
-    this.code = makeCode(6);
-    this.fakeCode = makeFakeCode(this.code, 6);
+    this.code = makeCode(CODE_LENGTH);
+    this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
   }
 
   pollResponse(socket, response) {
     const player = this.findPlayer(socket);
 
-    switch (response.type) {
-      case 'ready-up':
-        player.response = response.data;
+    console.log(player);
 
+    // if a player responds to a poll we are not polling, then ignore
+    if (response.type !== this.gameState) {
+      console.error(`gameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
+      // TODO: error for user
+      return;
+    }
+
+    switch (response.type) {
+      case GAME_STATES.LOBBY:
+      case GAME_STATES.ROUND_TURN_KEY:
+      case GAME_STATES.ROUND_ENTER_CODE:
+        // just record the response they give here
+        player.response = response.data;
+        break;
+      case GAME_STATES.ROUND_VOTE:
+        // TODO: validate room choice
+        // kick third player out of room if are also on the room
+        // base this off of response time, latest response gets kicked?
+        // or player that was clicked on gets kicked?
+        player.response = response.data;
+        break;
+      default:
+        console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
+        return false;
     }
 
     this.socketServer.updateGameState(this.name, this.getState());
-
-    // TODO: somethere here with logging the response
-    // and validating it
-    // TODO: how will we do room picking, is it a free for all
-    // or should one agent get voted on and then they do it?
 
     if (this.isPollOver()) {
       this.moveGameState();
     }
   }
 
+  // check if the poll is over
   isPollOver() {
-    // TODO: change this
-    // return this.responses.length >= this.players.length;
-    return true;
+
+    switch (this.gameState) {
+      // if they are readying up in the lobby
+      case GAME_STATES.LOBBY:
+        const responses = this.players.map(p => p.response);
+        if (this.players.length < PLAYERS_PER_GAME) {
+          return false;
+        } else if (responses.filter(r => r !== false).length < this.players.length) {
+          return false;
+        }
+        return true;
+
+      // if they are voting for rooms
+      case GAME_STATES.ROUND_VOTE:
+        // TODO: validate that everyone is in a room
+        break;
+
+      case GAME_STATES.ROUND_TURN_KEY:
+        // TODO: validate the spies have replied
+        break;
+
+      case GAME_STATES.ROUND_ENTER_CODE:
+        // TODO: validate all players have entered
+        break;
+
+      // otherwise something is wrong with the gamestate
+      default:
+        console.error(`gameRoom.isPollOver: gameState '${this.gameState}' not accounted for in isPollOver.`);
+        return false
+    }
   }
 
+  // move the gamestate forward
+  // this happens when we are done a poll
   moveGameState() {
-    this.clearResponses();
     switch (this.gameState) {
+      // if we are leaving the lobby
       case GAME_STATES.LOBBY:
         this.gameState = GAME_STATES.ROUND_VOTE;
+        this.clearResponses();
         this.setupGame();
+        // FIXME: was this necessary? this.socketServer.updateGameState(this.name, this.getState());
+        // I had it here so I could display who has not readied up
         this.socketServer.nextSlide(this.name, {
           slideID: 'introduction' // leads to vote
         });
         break;
+
+
+      case GAME_STATES.ROUND_VOTE:
+        this.gameState = GAME_STATES.ROUND_TURN_KEY;
+        // TODO: send each socket the data about which room they are in
+        // and who they are in with, make them wait for ALL the spies to turn keys
+        // do not clear data here as we will use it after the spies turn the keys
+        break;
+
+      case GAME_STATES.ROUND_TURN_KEY:
+        this.gameState = GAME_STATES.ROUND_ENTER_CODE;
+        // TODO: for each room, respond to the people in that room with the letter
+        // they are supposed to see
+        this.clearResponses();
+        break;
+
+      // if we are 
       case GAME_STATES.ROUND_ENTER_CODE:
         // TODO: switch here if they are correct
         // might be vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
+        this.clearResponses();
         this.socketServer.nextSlide(this.name, {
           slideID: 'defcon', // show the defcon before each round for fun, leads to vote
           data: {
@@ -143,10 +211,10 @@ class GameRoom {
           }
         });
         break;
+
       default:
         break;
     }
-    this.socketServer.updateGameState(this.name, this.getState());
   }
 
   // HELPERS
@@ -159,7 +227,7 @@ class GameRoom {
   }
 
   clearResponses() {
-    this.players.forEach(p => p.response = {});
+    this.players.forEach(p => p.response = false);
   }
 
   findPlayer(socket) {
@@ -171,7 +239,7 @@ class GameRoom {
   }
 
   isFull() {
-    return this.players.length >= 6;
+    return this.players.length >= PLAYERS_PER_GAME;
   }
 
   isEmpty() {

@@ -1,0 +1,8 @@
+
+const STANDARD_GAME = [
+  [
+    {
+
+    }
+  ]
+];

@@ -8,28 +8,61 @@
 <!-- TODO: password protect this page on PRD somehow -->
 
 <body ng-app="nuclear-codes-test">
-  <h1>nuclear-codes-test</h1>
-  <!-- TODO: have a link to CLIENT_ENDPOINT here Launch Game -->
-  <div class="container" ng-controller="testController" ng-init="init()">
-
-    <form ng-submit="addRoom()">
-      <label for="roomName">Room name:</label>
-      <input type="text" id="roomName" ng-model="state.roomName" />
-      <label for="playerCount">Players:</label>
-      <input type="number" id="playerCount" ng-model="state.playerCount" />
-      <button>Start Test Room</button>
-    </form>
-    <div id="rooms">
-      <div class="room" ng-repeat="(i, room) in state.rooms">
-        <h2>{{ room.roomName }}</h2>
-        <button>Submit All</button>
-        <button>Add Player To Room</button>
-        <div class="player" ng-repeat="(j, player) in room.players">
-          <h3>{{ player.playerName }}</h3>
-          <!-- TODO: depending on what the game state is, display an action? -->
-          <!-- TODO: or maybe just display all actions available -->
-          <!-- or maybe a json form field that can be default filled and then submitted -->
-          <button ng-click="player.disconnectPlayer()">Disconnect</button>
+  <div class="controller" ng-controller="testController" ng-init="init()">
+    <div class="header">
+      <h1>nuclear-codes-test</h1>
+      <form ng-submit="addRoom()" class="form-row">
+        <label>Game Room Name:</label>
+        <input type="text" ng-model="state.roomName" />
+        <label>Players:</label>
+        <input type="number" ng-model="state.playerCount" />
+        <button>Start Test Room</button>
+      </form>
+    </div>
+    <div class="container">
+      <div id="gamerooms">
+        <div class="room" ng-repeat="(i, room) in state.rooms">
+          <a href="{{room.roomURL}}" target="_blank">
+            <h2>{{ room.roomName }}</h2>
+          </a>
+          <div class="form-row">
+            <label>Add Player Name</label>
+            <input type="text" />
+            <button>Add Player To Game</button>
+          </div>
+          <div class="form-row">
+            <button ng-click="room.sendReadyUp()">Send Ready Up All</button>
+            <button>Send Room Choice All</button>
+            <button>Send Turn Key All</button>
+            <button>Send Code All</button>
+          </div>
+          <div class="players">
+            <div class="player" ng-repeat="(j, player) in room.players">
+              <h3>{{ player.playerName }}</h3>
+              <p class="data">{{ player.slide }}</p>
+              <div class="form-row">
+                <button ng-click="player.sendReadyUp()">Send Ready Up</button>
+              </div>
+              <div class="form-row">
+                <label>Room Number:</label>
+                <input type="number" min="0" max="5" ng-model="player.response.roomID" />
+                <button ng-click="player.sendRoomChoice()">Send Room Choice</button>
+              </div>
+              <div class="form-row">
+                <label>Key:</label>
+                <input type="text" ng-model="player.response.isSpyKey" />
+                <button ng-click="player.sendKeyChoice()">Send Code</button>
+              </div>
+              <div class="form-row">
+                <label>Code:</label>
+                <input type="text" ng-model="player.response.code" />
+                <button ng-click="player.sendEnterCode()">Send Code</button>
+              </div>
+              <div class="form-row">
+                <button ng-click="player.disconnectPlayer()">Disconnect</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

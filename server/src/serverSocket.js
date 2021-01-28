@@ -33,9 +33,8 @@ class ServerSocket {
     console.log('[INFO] disconnect:', socket.id);
 
     const gameRoom = this.getUserRoom(socket);
-
     if (!gameRoom) {
-      // if they aren't in a room then do nothing
+      // if they aren't in a room then do nothing, not considered error
       return;
     }
 
@@ -91,6 +90,7 @@ class ServerSocket {
   shareName(socket, { playerName }) {
     const gameRoom = this.getUserRoom(socket);
     if (!gameRoom) {
+      console.error(`serverSocket.shareName: No gameroom for socket ${socket.id}.`);
       return;
     }
 
@@ -106,16 +106,18 @@ class ServerSocket {
 
   pollResponse(socket, response) {
     const gameRoom = this.getUserRoom(socket);
-    if (!!gameRoom) {
+    if (!gameRoom) {
+      console.error(`serverSocket.pollResponse: No gameroom for socket ${socket.id}.`);
       return;
     }
     gameRoom.pollResponse(socket, response);
   }
 
+  // TODO: this is okay, but maybe I should decouple the slide logic from here?
+  // the client will decide what slide to move to when the gamestate changes
+  // login will have to be done some oth
   nextSlide(roomName, data) {
-    // TODO: data is
-    // slide id
-    // and data: { } for slide
+    // data is { slideID, data: {} }
     this.io.to(roomName).emit('NEXT_SLIDE', data);
   }
 
@@ -140,7 +142,7 @@ class ServerSocket {
 
   getUserRoom(socket) {
     const gameRoomName = this.getRoomAssignment(socket);
-    if (!gameRoomName) {
+    if (!!gameRoomName) {
       return this.getRoomByName(gameRoomName);
     }
     return false;
