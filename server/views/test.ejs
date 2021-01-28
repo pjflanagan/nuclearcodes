@@ -45,7 +45,7 @@
               </div>
               <div class="form-row">
                 <label>Room Number:</label>
-                <input type="number" min="0" max="5" ng-model="player.response.roomID" />
+                <input type="number" min="0" max="4" val="0" ng-model="player.response.roomID" />
                 <button ng-click="player.sendRoomChoice()">Send Room Choice</button>
               </div>
               <div class="form-row">
@@ -70,6 +70,7 @@
 
   <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
   <script src="/assets/script.js" type="module"></script>
+  <script src="/reload/reload.js"></script>
 </body>
 
 </html>

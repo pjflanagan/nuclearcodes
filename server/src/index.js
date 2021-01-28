@@ -9,6 +9,7 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import reload from 'reload';
 
 import { ServerSocket } from './serverSocket.js';
 import { router } from './routes/index.js';
@@ -27,6 +28,7 @@ app.set('view engine', 'ejs');
 app.use(cors(corsOptions));
 app.use(router);
 app.use('/assets', express.static('assets'));
+reload(app);
 
 // server
 const server = http.Server(app);

@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --exec babel-node ./src/index.js",
+    "start": "nodemon --exec babel-node ./src/index.js -e html,js,css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +19,7 @@
     "lodash": "^4.17.15",
     "msgpack-lite": "^0.1.26",
     "path": "^0.12.7",
+    "reload": "^3.1.1",
     "socket.io": "^3.1.0"
   },
   "devDependencies": {

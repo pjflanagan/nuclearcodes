@@ -22,7 +22,6 @@ class PlayerModel {
       this.$scope.$apply();
     });
     this.socket.on('GAME_STATE', data => {
-      console.log(data);
       this.gameState = data;
       this.$scope.$apply();
     });
@@ -58,7 +57,10 @@ class PlayerModel {
     const { roomID } = this.response;
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_VOTE',
-      data: { roomID }
+      data: {
+        roomID,
+        timestamp: Date.now() // TODO: should this happen on backend, eh
+      }
     });
   }
 

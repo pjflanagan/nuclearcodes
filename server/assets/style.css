@@ -29,7 +29,7 @@ h1 {
   position: relative;
   margin: 0 auto;
   width: 90%;
-  max-width: 800px;
+  max-width: 960px;
   background: #f0f0f0;
   padding: 10px;
   min-height: 100%;
@@ -52,14 +52,17 @@ h1 {
 }
 
 .player {
-  padding: 4px;
-  margin: 4px;
+  padding: 8px;
+  margin: 6px;
   background: #ffffff;
-  width: calc(50% - 16px);
+  width: calc(33.33333% - 30px);
+  border-radius: 6px;
+  border: 1px solid #0002;
 }
 
 .player.spy {
-  background: #ca7c7c;
+  background: #cc3737;
+  color: #fff;
 }
 
 h3 {

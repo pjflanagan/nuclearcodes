@@ -38,6 +38,7 @@ class GameRoom {
 
     // game state
     this.players = [];
+    this.roomPairs = [];
     this.gameState = GAME_STATES.LOBBY;
     this.round = 0;
 
@@ -90,7 +91,6 @@ class GameRoom {
         this.players[i].isSpy = true;
       }
     });
-    console.log(this.players);
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
   }
@@ -107,17 +107,25 @@ class GameRoom {
 
     switch (response.type) {
       case GAME_STATES.LOBBY:
-      case GAME_STATES.ROUND_TURN_KEY:
+      case GAME_STATES.ROUND_TURN_KEY: // TODO: validate that they are a spy?
       case GAME_STATES.ROUND_ENTER_CODE:
         // just record the response they give here
         player.response = response.data;
         break;
       case GAME_STATES.ROUND_VOTE:
-        // TODO: validate room choice
         // kick third player out of room if are also on the room
-        // base this off of response time, latest response gets kicked?
-        // or player that was clicked on gets kicked?
+        // based off of response time, latest response gets kicked
+        // TODO: Validate here, they can't enter same room as last time
+        const sameRoomPlayers = this.players.filter(p => p.response !== false && p.response.roomID === response.data.roomID);
+        if (sameRoomPlayers.length > 1) {
+          sameRoomPlayers.sort((a, b) => b.response.timestamp - a.response.timestamp);
+          // TODO: validate here, they can't enter room with same parter as before
+
+          sameRoomPlayers[0].response = false;
+        }
+        // or this could just happen on the front end
         player.response = response.data;
+        this.socketServer.updateGameState(this.name, this.getState());
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -148,11 +156,29 @@ class GameRoom {
 
       // if they are voting for rooms
       case GAME_STATES.ROUND_VOTE:
-        // TODO: validate that everyone is in a room
-        // everyone is in a pair they have not been in last round
-        // everyone is in a room they haven't been in last round
-        // TODO: what do I do if this fails validation
-        break;
+        // validate that everyone is paired off in a room
+        // TODO: everyone is in a pair they have not been in last round
+        // TODO: everyone is in a room they haven't been in last round
+        const roomCount = [...Array(CODE_LENGTH)].fill(0);
+        console.log(roomCount);
+        const roomVoteResponses = this.players.map(p => p.response);
+        roomVoteResponses.forEach(response => {
+          if (response.roomID !== undefined) {
+            roomCount[response.roomID]++;
+          }
+        });
+        console.log(roomCount);
+        let hasInvalidRoom = false;
+        let roomVoteResponseCount = 0;
+        roomCount.forEach((count) => {
+          roomVoteResponseCount += count;
+          if (count % 2 !== 0 || count > 2) {
+            // if not an even number (pair) or 0
+            hasInvalidRoom = true;
+          }
+        });
+        console.log({ hasInvalidRoom, roomVoteResponseCount })
+        return !hasInvalidRoom && roomVoteResponseCount >= this.players.length;
 
       // if they are turning keys, make sure all the spies have responded
       case GAME_STATES.ROUND_TURN_KEY:
@@ -195,12 +221,11 @@ class GameRoom {
         });
         break;
 
-
       case GAME_STATES.ROUND_VOTE:
         this.gameState = GAME_STATES.ROUND_TURN_KEY;
         // TODO: send each socket the data about which room they are in
         // and who they are in with, make them wait for ALL the spies to turn keys
-        // do not clear data here as we will use it after the spies turn the keys
+        // move the data from the responses into the this.roomPairs
         break;
 
       case GAME_STATES.ROUND_TURN_KEY:
