@@ -1,12 +1,6 @@
 import {
-  ADD_PLAYER, NEXT_SLIDE, JOIN_ROOM, UPDATE_GAME_STATE, SET_PLAYER_NAME
+  NEXT_SLIDE, JOIN_ROOM, UPDATE_GAME_STATE, SET_PLAYER_NAME
 } from './actionTypes';
-
-// TODO: am I using this one?
-export const addPlayer = (player) => ({
-  type: ADD_PLAYER,
-  player
-});
 
 export const nextSlide = (slide) => ({
   type: NEXT_SLIDE,

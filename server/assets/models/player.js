@@ -11,23 +11,27 @@ class PlayerModel {
     });
 
     this.slide = '';
-    // this.gameState = {};
+    this.gameState = {
+      players: []
+    };
     // this.isConnected = true;
 
     // listeners
-    // this.socket.on('ADD_PLAYER', (data) => {
-    // });
     this.socket.on('NEXT_SLIDE', (data) => {
       this.slide = data;
       this.$scope.$apply();
     });
-    // this.socket.on('GAME_STATE', data => {
-    //   this.gameState = data;
-    // });
+    this.socket.on('GAME_STATE', data => {
+      console.log(data);
+      this.gameState = data;
+      this.$scope.$apply();
+    });
 
     // login
     this.login();
   }
+
+  // socket
 
   login() {
     this.socket.emit('JOIN_ROOM', {
@@ -72,6 +76,18 @@ class PlayerModel {
       type: 'ROUND_ENTER_CODE',
       data: { code }
     });
+  }
+
+
+  // helpers 
+
+  isSpy() {
+    const socketID = this.socket.id;
+    const playerInfo = this.gameState.players.find(p => p.id === socketID);
+    if (!playerInfo) {
+      return false;
+    }
+    return !!playerInfo.isSpy;
   }
 }
 

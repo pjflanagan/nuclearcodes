@@ -1,4 +1,3 @@
-import { response } from "express";
 
 const GAME_STATES = {
   LOBBY: 'LOBBY', // after here we will set spies and game code, introduce the rules
@@ -9,7 +8,7 @@ const GAME_STATES = {
 };
 
 const PLAYERS_PER_GAME = 8;
-const SPIES_PER_GAME = 2;
+const SPIES_PER_GAME = 3;
 const CODE_LENGTH = 5;
 const CHARSET = 'BCDFGHJKLMNPQRSTVWXYZ';
 
@@ -91,14 +90,13 @@ class GameRoom {
         this.players[i].isSpy = true;
       }
     });
+    console.log(this.players);
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
   }
 
   pollResponse(socket, response) {
     const player = this.findPlayer(socket);
-
-    console.log(player);
 
     // if a player responds to a poll we are not polling, then ignore
     if (response.type !== this.gameState) {
@@ -138,11 +136,12 @@ class GameRoom {
 
     switch (this.gameState) {
       // if they are readying up in the lobby
+      // validate they have enough players and they are all ready
       case GAME_STATES.LOBBY:
-        const responses = this.players.map(p => p.response);
+        const lobbyResponses = this.players.map(p => p.response);
         if (this.players.length < PLAYERS_PER_GAME) {
           return false;
-        } else if (responses.filter(r => r !== false).length < this.players.length) {
+        } else if (lobbyResponses.filter(r => r !== false).length < this.players.length) {
           return false;
         }
         return true;
@@ -150,15 +149,28 @@ class GameRoom {
       // if they are voting for rooms
       case GAME_STATES.ROUND_VOTE:
         // TODO: validate that everyone is in a room
+        // everyone is in a pair they have not been in last round
+        // everyone is in a room they haven't been in last round
+        // TODO: what do I do if this fails validation
         break;
 
+      // if they are turning keys, make sure all the spies have responded
       case GAME_STATES.ROUND_TURN_KEY:
-        // TODO: validate the spies have replied
-        break;
+        const spies = this.players.filter(p => p.isSpy);
+        const spyResponses = spies.map(p => p.response);
+        if (spyResponses.filter(r => r !== false).length < spies.length) {
+          // if the spies have not all responded
+          return false;
+        }
+        return true;
 
+      // if they are entering codes, make sure they all have responded
       case GAME_STATES.ROUND_ENTER_CODE:
-        // TODO: validate all players have entered
-        break;
+        const codeResponses = this.players.map(p => p.response);
+        if (codeResponses.filter(r => r !== false).length < this.players.length) {
+          return false;
+        }
+        return true;
 
       // otherwise something is wrong with the gamestate
       default:
@@ -176,8 +188,8 @@ class GameRoom {
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.clearResponses();
         this.setupGame();
-        // FIXME: was this necessary? this.socketServer.updateGameState(this.name, this.getState());
-        // I had it here so I could display who has not readied up
+        // update the game state, it will name the spies
+        this.socketServer.updateGameState(this.name, this.getState());
         this.socketServer.nextSlide(this.name, {
           slideID: 'introduction' // leads to vote
         });
@@ -200,7 +212,10 @@ class GameRoom {
 
       // if we are 
       case GAME_STATES.ROUND_ENTER_CODE:
-        // TODO: switch here if they are correct
+        // TODO: switch here 
+        // if they are correct: ROUND_LOBBY, 'victory'
+        // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
+        // otherwise: ROUND_VOTE, 'defcon'
         // might be vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.clearResponses();
@@ -213,6 +228,7 @@ class GameRoom {
         break;
 
       default:
+        console.error(`gameRoom.moveGameState: gameState '${this.gameState}' not accounted for in moveGameState.`);
         break;
     }
   }

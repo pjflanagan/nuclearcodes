@@ -21,9 +21,6 @@ class SocketServiceClass {
 
   startService() {
     return (dispatch) => {
-      socket.on('ADD_PLAYER', (data) => {
-        dispatch(addPlayer(data));
-      });
       socket.on('NEXT_SLIDE', (data) => {
         const slide = getNextPlay(data.slideID, data.data)
         dispatch(nextSlide(slide));

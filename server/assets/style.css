@@ -58,6 +58,10 @@ h1 {
   width: calc(50% - 16px);
 }
 
+.player.spy {
+  background: #ca7c7c;
+}
+
 h3 {
   margin: 2px 4px;
 }

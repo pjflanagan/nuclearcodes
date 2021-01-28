@@ -37,7 +37,7 @@
             <button>Send Code All</button>
           </div>
           <div class="players">
-            <div class="player" ng-repeat="(j, player) in room.players">
+            <div class="player" ng-class="player.isSpy() ? 'spy' : ''" ng-repeat="(j, player) in room.players">
               <h3>{{ player.playerName }}</h3>
               <p class="data">{{ player.slide }}</p>
               <div class="form-row">
