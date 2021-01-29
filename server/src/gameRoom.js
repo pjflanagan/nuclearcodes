@@ -170,6 +170,7 @@ class GameRoom {
         rooms.forEach((playersInRoom) => {
           const count = playersInRoom.length;
           roomVoteResponseCount += count;
+          // TODO: if a player drops the game breaks because of this rule
           if (count % 2 !== 0 || count > 2) {
             // if not an even number (pair) or 0
             hasInvalidRoom = true;

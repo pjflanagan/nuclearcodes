@@ -1,3 +1,22 @@
+import React from 'react';
 
-// TODO: button for the middle of the page, important for ready up
-// input buttons for when people don't think to press enter
+import Style from './style.module.css';
+
+
+const Button = ({
+  children,
+  onClick,
+  disabled
+}) => (
+  <button
+    className={Style.button}
+    // TODO: this won't always be what we want to focus on ref={(input) => { this.input = input; }}
+    tabIndex={0}
+    onClick={() => onClick()}
+    disabled={disabled}
+  >
+    {children}
+  </button>
+);
+
+export { Button }

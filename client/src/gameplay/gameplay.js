@@ -7,7 +7,8 @@ import {
   PlayerNameWidget,
   LobbyWidget,
   ReadyUpWidget,
-  AssignRolesWidget
+  AssignRolesWidget,
+  ChooseRoomWidget
 } from '../app/widgets';
 
 // A slides object is complicated, it needs to 
@@ -87,12 +88,16 @@ const GAMEPLAY = [
     data: {
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
-    // next: () => 'room-picker'
+    next: () => 'room-picker'
   },
   {
-    id: 'error',
-    widget: () => (<div />)
-  }
+    id: 'room-picker',
+    widget: ChooseRoomWidget
+  },
+  // { TODO:
+  //   id: 'error',
+  //   widget: MessageWidgetError
+  // }
 ];
 
 export { GAMEPLAY };

@@ -1,3 +1,21 @@
+.inputRow {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.inputHolder {
+  width: calc(100% - 180px);
+  padding: 10px;
+}
+
+.buttonHolder {
+  width: 180px;
+  padding: 10px;
+  height: 78px;
+  margin-top: 20px;
+}
+
 .input {
   font-size: 32px;
   border-bottom: 1px solid #FFF8;
@@ -26,4 +44,5 @@
   margin: 12px 12px;
   font-size: 16px;
   color: #d55252;
+  width: 100%;
 }

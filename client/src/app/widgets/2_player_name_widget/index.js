@@ -14,7 +14,6 @@ class PlayerNameWidget extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -22,12 +21,6 @@ class PlayerNameWidget extends React.Component {
     this.setState({
       playerName: e.target.value,
     });
-  }
-
-  onKeyDown(e) {
-    if (e.key === 'Enter') {
-      this.onSubmit();
-    }
   }
 
   onSubmit() {
@@ -65,7 +58,7 @@ class PlayerNameWidget extends React.Component {
           placeholder="Your Secret Agent Name"
           tabIndex={0}
           onChange={e => this.onChange(e)}
-          onKeyDown={e => this.onKeyDown(e)}
+          onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
           errors={errors}
         />

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Slide, Player } from '../../elements';
+import { Slide, Player, Button } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -15,10 +15,6 @@ class ReadyUpWidget extends React.Component {
     };
 
     this.readyUp = this.readyUp.bind(this);
-  }
-
-  componentDidMount() {
-    this.input.focus();
   }
 
   getPrompt() {
@@ -43,7 +39,6 @@ class ReadyUpWidget extends React.Component {
       // if not ready then do nothing
       return;
     }
-    // TODO: send a ready up to the server
     socketService.pollResponse({
       type: 'LOBBY',
       data: true
@@ -77,15 +72,12 @@ class ReadyUpWidget extends React.Component {
           }
         </div>
         <div className={Style.readyUpButtonHolder}>
-          <button
-            className={Style.readyUpButton}
-            ref={(input) => { this.input = input; }}
-            tabIndex={0}
+          <Button
             onClick={() => this.readyUp()}
             disabled={ready}
           >
             {this.getPrompt()}
-          </button>
+          </Button>
         </div>
       </Slide>
     );

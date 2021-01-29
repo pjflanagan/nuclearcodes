@@ -29,7 +29,6 @@ class LobbyWidgetComponent extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -44,12 +43,6 @@ class LobbyWidgetComponent extends React.Component {
     this.setState({
       roomName: e.target.value,
     });
-  }
-
-  onKeyDown(e) {
-    if (e.key === 'Enter') {
-      this.onSubmit();
-    }
   }
 
   onSubmit() {
@@ -79,7 +72,7 @@ class LobbyWidgetComponent extends React.Component {
           value={roomName}
           placeholder="Enter Room Name"
           onChange={e => this.onChange(e)}
-          onKeyDown={e => this.onKeyDown(e)}
+          onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
           errors={errors}
         />
