@@ -1,5 +1,4 @@
 
-// TODO: a component just for the styles and animations mostly
 
 import React from 'react';
 

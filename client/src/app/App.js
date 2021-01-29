@@ -26,11 +26,6 @@ class App extends React.Component {
         <Provider store={this.store}>
           <div className={Style.app}>
             <Route path={["/:roomName", "/"]}>
-              {/* 
-                TODO: just auto enter this into the room name slide
-                and submit, that way we can error check,
-                also maybe the logo slide could have a switch based on this
-               */}
               <Cover />
               {/* Menu */}
               <Game socketService={SocketService} />

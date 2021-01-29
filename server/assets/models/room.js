@@ -34,7 +34,6 @@ class RoomModel {
   }
 
   sendEnterCode() {
-    console.log(this.allCode);
     this.players.forEach(p => {
       p.response.code = this.allCode;
       p.sendEnterCode();

@@ -13,7 +13,6 @@ class LogoWidget extends React.Component {
     this.wakeServer = this.wakeServer.bind(this);
   }
 
-  // TODO: wipe to reveal component
   componentDidMount() {
     setTimeout(() => this.wakeServer(), 600);
   }

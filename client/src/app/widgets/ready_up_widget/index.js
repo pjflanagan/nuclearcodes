@@ -34,7 +34,7 @@ class ReadyUpWidget extends React.Component {
       }
       return `Ready Up!`;
     }
-    return `Waiting for ${PLAYERS_PER_GAME} players to join...`;
+    return `Waiting for ${PLAYERS_PER_GAME - gameState.players.length} more players to join...`;
   }
 
   readyUp() {
@@ -56,7 +56,7 @@ class ReadyUpWidget extends React.Component {
   render() {
     const { ready } = this.state;
     const { gameState } = this.props;
-    // TODO: ready up is for everyone, majority vote
+    // ready up is for everyone, all need to be ready
     // ready up option becomes avaialable when everyone is here
     // also I should show which agent's have not readied up
     return (

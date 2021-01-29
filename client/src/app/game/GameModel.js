@@ -7,8 +7,6 @@ import { getNextPlay } from '../../gameplay';
 import { GameComponent } from './GameComponent';
 
 
-
-// TODO: make this delay vary by slide
 const NEXT_SLIDE_DELAY = 360;
 
 const mapStateToProps = (state) => ({

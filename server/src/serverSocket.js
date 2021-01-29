@@ -49,9 +49,11 @@ class ServerSocket {
     } else {
       // otherwise alert the room
       this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
+      // TODO: if the game is going while they are in the room
+      // prepare the room for them to come back, put thier player data into a
+      // gameRoom.ghosts array and if that playerName comes back then 
+      // re-add them
     }
-    // TODO: if the game is going while they are in the room then idk
-
   }
 
   // ROOMS
@@ -64,14 +66,16 @@ class ServerSocket {
       console.log('[INFO] open room:', roomName);
       // if this room does not exist then create it
       // and send a new room state to the user
-      gameRoom = new GameRoom(this, roomName)
+      gameRoom = new GameRoom(this, roomName);
       this.gameRooms.push(gameRoom);
     } else if (gameRoom.isFull()) {
       // TODO: handle ERROR emits
-      this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} is full.` });
+      console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
+      this.io.to(socket.id).emit('ERROR', { message: `Game room '${roomName}' is full.` });
       return;
     } else if (gameRoom.isStarted()) {
-      this.io.to(socket.id).emit('ERROR', { message: `Game room ${roomName} has started, you may join next round.` });
+      console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
+      this.io.to(socket.id).emit('ERROR', { message: `Game room '${roomName}' has started, you may join next round.` });
       return;
     }
     this.roomAssignments.push({
@@ -82,8 +86,7 @@ class ServerSocket {
     socket.join(roomName);
     this.io.to(roomName).emit('GAME_STATE', gameRoom.getState());
     this.io.to(socket.id).emit('NEXT_SLIDE', {
-      slideID: 'game-room-welcome',
-      data: { roomName }
+      slideID: 'name-prompt'
     });
   }
 
@@ -98,7 +101,10 @@ class ServerSocket {
     this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
     this.io.to(socket.id).emit('NEXT_SLIDE', {
       slideID: 'welcome-agent',
-      data: { playerName: playerSetName }
+      data: {
+        playerName: playerSetName,
+        roomName: gameRoom.name
+      }
     });
   }
 
@@ -113,9 +119,6 @@ class ServerSocket {
     gameRoom.pollResponse(socket, response);
   }
 
-  // TODO: this is okay, but maybe I should decouple the slide logic from here?
-  // the client will decide what slide to move to when the gamestate changes
-  // login will have to be done some oth
   nextSlide(id, data) {
     // data is { slideID, data: {} }
     this.io.to(id).emit('NEXT_SLIDE', data);

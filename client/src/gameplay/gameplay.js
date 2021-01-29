@@ -2,11 +2,10 @@
 
 import {
   MessageWidget,
+  MessageWidgetWelcome,
   LogoWidget,
   PlayerNameWidget,
   LobbyWidget,
-  MessageWidgetLobby,
-  MessageWidgetName,
   ReadyUpWidget,
   AssignRolesWidget
 } from '../app/widgets';
@@ -40,11 +39,6 @@ const GAMEPLAY = [
     widget: LobbyWidget
   },
   {
-    id: 'game-room-welcome',
-    widget: MessageWidgetLobby,
-    next: () => 'name-prompt'
-  },
-  {
     id: 'name-prompt',
     widget: MessageWidget,
     data: { text: 'What is your alias?' },
@@ -56,7 +50,7 @@ const GAMEPLAY = [
   },
   {
     id: 'welcome-agent',
-    widget: MessageWidgetName,
+    widget: MessageWidgetWelcome,
     next: () => 'ready-up-prompt'
   },
   {

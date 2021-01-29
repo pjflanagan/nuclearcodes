@@ -16,13 +16,17 @@ class MessageWidget extends React.Component {
   }
 }
 
-class MessageWidgetLobby extends React.Component {
+class MessageWidgetWelcome extends React.Component {
   render() {
-    const { roomName } = this.props.data;
+    const { playerName, roomName } = this.props.data;
     return (
       <Slide>
         <Typeable doneTypingCallback={this.props.doneCallback}>
-          <Text>{`Welcome to Briefing Room ${roomName}. You can invite friends to this game by sharing the url: `}</Text>
+          <Text>{'Welcome to Briefing Room '}</Text>
+          <Pill>{roomName}</Pill>
+          <Text>{' agent '}</Text>
+          <Pill>{playerName}</Pill>
+          <Text>{'. You can invite friends to this game by sharing the url: '}</Text>
           <Pill>{window.location.href}</Pill>
         </Typeable>
       </Slide>
@@ -30,18 +34,4 @@ class MessageWidgetLobby extends React.Component {
   }
 }
 
-class MessageWidgetName extends React.Component {
-  render() {
-    const { playerName } = this.props.data;
-    return (
-      <Slide>
-        <Typeable doneTypingCallback={this.props.doneCallback}>
-          <Text>{'Welcome Agent '}</Text>
-          <Pill>{playerName}</Pill>
-        </Typeable>
-      </Slide>
-    );
-  }
-}
-
-export { MessageWidget, MessageWidgetLobby, MessageWidgetName };
+export { MessageWidget, MessageWidgetWelcome };

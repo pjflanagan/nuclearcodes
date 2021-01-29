@@ -4,9 +4,6 @@ import { withRouter } from "react-router-dom";
 
 import { Slide, Input } from '../../elements';
 
-// import Style from './style.module.css'; TODO: toggle is in here
-
-// TODO: should game rooms be lowercase?
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
 const validate = (roomName) => {
@@ -14,7 +11,7 @@ const validate = (roomName) => {
     return ["Room name must contain at least 3 characters."];
   }
   if (!roomName.match(ALPHANUMERIC_REGEX)) {
-    return ["Room name must be alphanumeric and not contain spaces."];
+    return ["Room name must be alphanumeric, and not contain spaces."];
   }
   // TODO: if joining but room doesn't exist, prompt them to create a new room
   // if creating room already exists, prompt them to joing
@@ -34,14 +31,7 @@ class LobbyWidgetComponent extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    // this.toggleCreateJoin = this.toggleCreateJoin.bind(this);
   }
-
-  // toggleCreateJoin(createNewRoom) {
-  //   this.setState({
-  //     createNewRoom: createNewRoom
-  //   });
-  // }
 
   componentDidMount() {
     const { roomName } = this.props.match.params;
@@ -84,22 +74,6 @@ class LobbyWidgetComponent extends React.Component {
     const { isCurrent } = this.props;
     return (
       <Slide>
-        {/* <div className={`${Style.toggle} ${!isCurrent ? Style.disabled : ''}`}>
-          <div className={Style.optionsHolder}>
-            <div
-              className={`${Style.option} ${createNewRoom ? '' : Style.selected}`}
-              onClick={() => this.toggleCreateJoin(false)}
-            >
-              Join Room
-            </div>
-            <div
-              className={`${Style.option} ${createNewRoom ? Style.selected : ''}`}
-              onClick={() => this.toggleCreateJoin(true)}
-            >
-              Create New Room
-            </div>
-          </div>
-        </div> */}
         <Input
           type="text"
           value={roomName}

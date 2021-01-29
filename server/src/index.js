@@ -1,9 +1,5 @@
 'use strict';
 
-// TODO: make a debug option so you can test on multiple computers
-// https://stackoverflow.com/questions/30712141/connect-to-localhost3000-from-another-computer-expressjs-nodejs
-// https://github.com/riebel/socketio-es6-starter
-
 import express from 'express';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';

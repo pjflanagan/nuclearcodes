@@ -33,9 +33,10 @@ class PlayerNameWidget extends React.Component {
   onSubmit() {
     const errors = this.validate();
     const { playerName } = this.state;
+    const playerNameSanitized = playerName.trim();
     if (errors.length === 0) {
-      this.props.socketService.setPlayerName({ playerName });
-      this.props.doneCallback({ playerName });
+      this.props.socketService.setPlayerName({ playerName: playerNameSanitized });
+      this.props.doneCallback({ playerName: playerNameSanitized });
     }
     this.setState({
       errors

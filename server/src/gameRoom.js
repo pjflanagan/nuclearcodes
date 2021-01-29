@@ -4,6 +4,7 @@ import {
   PLAYERS_PER_GAME,
   SPIES_PER_GAME,
   CODE_LENGTH,
+  TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,
   makeRandomArray
@@ -213,7 +214,7 @@ class GameRoom {
   moveGameState(data) {
     this.clearResponses();
     switch (this.gameState) {
-      // if we are leaving the lobby
+      // if we are all ready
       case GAME_STATES.LOBBY:
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.setupGame();
@@ -224,6 +225,7 @@ class GameRoom {
         });
         break;
 
+      // if we have all picked rooms
       case GAME_STATES.ROUND_VOTE:
         this.gameState = GAME_STATES.ROUND_TURN_KEY;
         const { rooms } = data;
