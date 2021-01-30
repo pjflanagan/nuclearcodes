@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Slide, Typeable, Text, Pill } from '../../elements';
+import { Slide, Typeable, Text, Pill, Player } from '../../elements';
 
 const CHANGE_DELAY = 1000;
 
@@ -28,7 +28,11 @@ class AssignRolesWidget extends React.Component {
         <Text>along with:</Text>
         {
           spyPlayers.map((p, i) => (
-            <Pill key={i} color="red">{p.name}</Pill>
+            <Player
+              key={i}
+              me={me}
+              player={p}
+            />
           ))
         }
       </Typeable>

@@ -50,7 +50,7 @@ class ReadyUpWidget extends React.Component {
 
   render() {
     const { ready } = this.state;
-    const { gameState } = this.props;
+    const { gameState, me } = this.props;
     // ready up is for everyone, all need to be ready
     // ready up option becomes avaialable when everyone is here
     // also I should show which agent's have not readied up
@@ -64,8 +64,8 @@ class ReadyUpWidget extends React.Component {
                 key={i}
               >
                 <Player
-                  index={i}
-                  isTyped={true}
+                  me={me}
+                  doNotType={true}
                   player={player}
                 />
               </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pill, Slide } from '../../elements';
+import { Player, Slide } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -12,7 +12,6 @@ class ChooseRoomWidget extends React.Component {
   }
 
   sendRoomChoice(roomID) {
-    console.log({ roomID });
     this.props.socketService.pollResponse({
       type: 'ROUND_VOTE',
       data: {
@@ -23,9 +22,8 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { gameState: { players } } = this.props;
+    const { gameState: { players }, me } = this.props;
     const playersInRooms = players.filter(p => p.response !== false);
-    console.log({ playersInRooms });
     return (
       <Slide>
         {/* Player Name List */}
@@ -45,7 +43,12 @@ class ChooseRoomWidget extends React.Component {
                 <div className={Style.players}>
                   {
                     playersInRooms.filter(p => p.response.roomID === i).map((p) => (
-                      <Pill key={p.id} isTyped={true}>{p.name}</Pill>
+                      <Player
+                        key={p.id}
+                        doNotType={true}
+                        me={me}
+                        player={p}
+                      />
                     ))
                   }
                 </div>

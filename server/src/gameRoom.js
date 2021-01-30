@@ -240,6 +240,7 @@ class GameRoom {
             return;
           }
           // send a message to each socket, that says who they are in the room with
+          // send this prompt to everyone, even non spies, show different message for spies
           room.forEach(player => {
             this.socketServer.nextSlide(player.id, {
               slideID: 'key-room-prompt',
@@ -272,7 +273,7 @@ class GameRoom {
               spyCount++;
               const spyResponse = spyResponses.find(r => r.playerID === player.id);
               // if the respond to use the spy key
-              if (spyResponse.response.isSpyKey) {
+              if (!!spyResponse && !!spyResponse.response && spyResponse.response.isSpyKey) {
                 // record so we can show the fake vote
                 spyVoteFake = true;
               }

@@ -1,14 +1,18 @@
 
 
 import {
+  // messages
   MessageWidget,
   MessageWidgetWelcome,
+  MessageWidgetKeyRoom,
+
   LogoWidget,
-  PlayerNameWidget,
   LobbyWidget,
+  PlayerNameWidget,
   ReadyUpWidget,
   AssignRolesWidget,
-  ChooseRoomWidget
+  ChooseRoomWidget,
+  KeyChoiceWidget
 } from '../app/widgets';
 
 // A slides object is complicated, it needs to 
@@ -94,14 +98,15 @@ const GAMEPLAY = [
     id: 'room-picker',
     widget: ChooseRoomWidget
   },
-  // {
-  //   id: 'key-room-prompt',
-  //   widget: MessageKeyRoom
-  // },
-  // {
-  //   id: 'key-room',
-  //   widget: KeyRoom
-  // },
+  {
+    id: 'key-room-prompt',
+    widget: MessageWidgetKeyRoom,
+    next: ({ isSpy }) => (isSpy) ? 'key-choice' : 'WAIT'
+  },
+  {
+    id: 'key-choice',
+    widget: KeyChoiceWidget
+  },
   {
     id: 'gameover',
     next: () => 'credits'

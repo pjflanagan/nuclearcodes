@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Slide, Typeable, Text, Pill } from '../../elements';
+import { Slide, Typeable, Text, Pill, Player } from '../../elements';
 
 class MessageWidget extends React.Component {
   render() {
@@ -27,11 +27,36 @@ class MessageWidgetWelcome extends React.Component {
           <Text>{' agent '}</Text>
           <Pill>{playerName}</Pill>
           <Text>{'. You can invite friends to this game by sharing the url: '}</Text>
-          <Pill>{window.location.href}</Pill>
+          <Pill copyable={true}>{window.location.href}</Pill>
         </Typeable>
       </Slide>
     );
   }
 }
 
-export { MessageWidget, MessageWidgetWelcome };
+class MessageWidgetKeyRoom extends React.Component {
+  render() {
+    const { data, me } = this.props;
+    const prompt = (!me.isSpy) ?
+      'waiting for all rooms to turn thier keys' :
+      'choose which key to turn';
+    const otherPlayerArr = data.room.filter(p => p !== me.id);
+    const otherPlayer = (!!otherPlayerArr[0]) ? otherPlayerArr[0] : {};
+    return (
+      <Slide>
+        <Typeable doneTypingCallback={this.props.doneCallback}>
+          <Text>{'You are in room '}</Text>
+          <Pill>{data.roomID + 1}</Pill>
+          <Text>{' with '}</Text>
+          <Player
+            me={me}
+            player={otherPlayer}
+          />
+          <Text>{`, ${prompt}.`}</Text>
+        </Typeable>
+      </Slide>
+    )
+  }
+}
+
+export { MessageWidget, MessageWidgetWelcome, MessageWidgetKeyRoom };

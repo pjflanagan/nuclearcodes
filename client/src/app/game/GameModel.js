@@ -16,13 +16,20 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatchDoneCallback: (next, prevData) => {
-    // sometimes this will just send data to the server and not set next slide
-    // server will be the one to tell us to move to the next slide
+    // if there is a next function
     if (!!next) {
-      setTimeout(() =>
-        dispatch(nextSlide(getNextPlay(next(), prevData))),
-        NEXT_SLIDE_DELAY);
+      const nextPlayID = next(prevData);
+      // if the next function has a slidem take us to it
+      if (nextPlayID !== 'WAIT') {
+        setTimeout(() =>
+          dispatch(
+            nextSlide(getNextPlay(nextPlayID), prevData)
+          ),
+          NEXT_SLIDE_DELAY);
+      }
+      // otherwise wait
     }
+    // if there is not a next function we are waiting
   },
 });
 

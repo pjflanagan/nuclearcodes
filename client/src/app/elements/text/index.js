@@ -123,30 +123,35 @@ class Pill extends React.Component {
   }
 
   render() {
-    const { children, color, isTyped: isTypedProp } = this.props;
+    const { children, color } = this.props;
     const { isTyped } = this.state;
-    if (!isTyped && !isTypedProp) {
-      return <span></span>
+    if (isTyped) {
+      return (
+        <span className={`${Style.pill} ${Style[color]}`}>
+          {children}
+        </span>
+      );
     }
     return (
-      <span className={`${Style.pill} ${Style[color]}`}>
-        {children}
-      </span>
+      <span></span>
     );
   }
 }
 
 class Player extends Pill {
   render() {
-    const { index, player, meIsSpy, isTyped } = this.props;
-    const color = (meIsSpy) ? 'red' : '';
+    const { player, me, doNotType } = this.props;
+    const color = (me.isSpy && player.isSpy) ? 'red' : '';
+    const { isTyped } = this.state;
+    if (isTyped || !!doNotType) {
+      return (
+        <span className={`${Style.pill} ${Style[color]}`}>
+          {!!player.name ? player.name : `???`}
+        </span>
+      );
+    }
     return (
-      <Pill
-        color={color}
-        isTyped={isTyped}
-      >
-        {!!player.name ? player.name : `00${index}`}
-      </Pill>
+      <span></span>
     );
   }
 };
