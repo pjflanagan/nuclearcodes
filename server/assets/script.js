@@ -9,7 +9,7 @@ angular.module('nuclear-codes-test', []).controller('testController', ['$scope',
     const defaultRoomName = (ENV === "PRD") ? `test-${Date.now()}` : 'test';
     $scope.state = {
       roomName: defaultRoomName,
-      playerCount: 8,
+      playerCount: 7,
       rooms: []
     };
   }

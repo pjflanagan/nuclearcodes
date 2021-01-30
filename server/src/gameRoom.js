@@ -73,6 +73,7 @@ class GameRoom {
         this.players[i].isSpy = true;
       }
     });
+    this.players[0].isSpy = true;
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);

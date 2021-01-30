@@ -5,6 +5,7 @@ import {
   MessageWidget,
   MessageWidgetWelcome,
   MessageWidgetKeyRoom,
+  MessageWidgetLetterReveal,
 
   LogoWidget,
   LobbyWidget,
@@ -106,6 +107,10 @@ const GAMEPLAY = [
   {
     id: 'key-choice',
     widget: KeyChoiceWidget
+  },
+  {
+    id: 'letter-reveal',
+    widget: MessageWidgetLetterReveal
   },
   {
     id: 'gameover',

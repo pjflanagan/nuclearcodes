@@ -123,9 +123,9 @@ class Pill extends React.Component {
   }
 
   render() {
-    const { children, color } = this.props;
+    const { children, color, doNotType } = this.props;
     const { isTyped } = this.state;
-    if (isTyped) {
+    if (isTyped || !!doNotType) {
       return (
         <span className={`${Style.pill} ${Style[color]}`}>
           {children}
