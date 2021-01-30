@@ -1,4 +1,5 @@
 import React from 'react'
+import { render } from 'react-dom';
 
 import Style from './style.module.css';
 
@@ -122,9 +123,9 @@ class Pill extends React.Component {
   }
 
   render() {
-    const { children, color } = this.props;
+    const { children, color, isTyped: isTypedProp } = this.props;
     const { isTyped } = this.state;
-    if (!isTyped) {
+    if (!isTyped && !isTypedProp) {
       return <span></span>
     }
     return (
@@ -134,6 +135,25 @@ class Pill extends React.Component {
     );
   }
 }
+
+class Player extends Pill {
+  render() {
+    const { index, player, meIsSpy, isTyped } = this.props;
+    const color = (meIsSpy) ? 'red' : '';
+    return (
+      <Pill
+        color={color}
+        isTyped={isTyped}
+      >
+        {!!player.name ? player.name : `00${index}`}
+      </Pill>
+    );
+  }
+};
+
+export { Player }
+
+
 
 export {
   Typeable,

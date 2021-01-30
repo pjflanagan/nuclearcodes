@@ -2,7 +2,6 @@
 import io from "socket.io-client";
 
 import {
-  addPlayer,
   nextSlide,
   updateGameState,
 } from '../actions';

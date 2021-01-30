@@ -38,6 +38,7 @@ const GAMEPLAY = [
   {
     id: 'lobby-form',
     widget: LobbyWidget
+    // no next here because we will instead wait for server response
   },
   {
     id: 'name-prompt',
@@ -63,7 +64,6 @@ const GAMEPLAY = [
   {
     id: 'ready-up',
     widget: ReadyUpWidget,
-    // no next here because we will instead wait for server response
   },
   {
     id: 'introduction',
@@ -94,6 +94,30 @@ const GAMEPLAY = [
     id: 'room-picker',
     widget: ChooseRoomWidget
   },
+  // {
+  //   id: 'key-room-prompt',
+  //   widget: MessageKeyRoom
+  // },
+  // {
+  //   id: 'key-room',
+  //   widget: KeyRoom
+  // },
+  {
+    id: 'gameover',
+    next: () => 'credits'
+  },
+  {
+    id: 'victory',
+    next: () => 'credits'
+  },
+  {
+    id: 'credits',
+    next: () => 'play-again-prompt'
+  },
+  {
+    id: 'play-again-prompt',
+    next: () => 'ready-up'
+  }
   // { TODO:
   //   id: 'error',
   //   widget: MessageWidgetError

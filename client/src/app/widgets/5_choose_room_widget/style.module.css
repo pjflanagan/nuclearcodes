@@ -1,0 +1,34 @@
+.roomRow {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 180px;
+}
+
+.roomHolder {
+  width: 20%;
+  height: 100%;
+  padding: 8px;
+}
+
+.room {
+  height: 100%;
+  width: 100%;
+  background: #0008;
+  cursor: pointer;
+}
+
+.roomNumber {
+  width: 100%;
+  font-size: 26px;
+  font-weight: bold;
+  font-family: monospace;
+  text-align: center;
+  padding: 8px;
+}
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}

@@ -65,6 +65,7 @@ class ReadyUpWidget extends React.Component {
               >
                 <Player
                   index={i}
+                  isTyped={true}
                   player={player}
                 />
               </div>

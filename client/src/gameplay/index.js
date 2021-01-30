@@ -5,7 +5,7 @@ const getNextPlay = (nextPlayID, prevData = {}) => {
   const play = GAMEPLAY.find(play => play.id === nextPlayID);
 
   if (!play) {
-    console.error(`Cannot find ${nextPlayID} in GAMEPLAY`);
+    console.error(`Cannot find '${nextPlayID}' in GAMEPLAY`);
     return GAMEPLAY.find(play => play.id === 'error')
   }
 
