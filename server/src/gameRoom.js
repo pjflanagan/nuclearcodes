@@ -242,7 +242,7 @@ class GameRoom {
           // send a message to each socket, that says who they are in the room with
           room.forEach(player => {
             this.socketServer.nextSlide(player.id, {
-              slideID: 'key-room',
+              slideID: 'key-room-prompt',
               data: {
                 roomID: i,
                 room
