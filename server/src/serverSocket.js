@@ -26,11 +26,11 @@ class ServerSocket {
   // ADMIN
 
   connection(socket) {
-    console.log('[INFO] connection:', socket.id);
+    console.info('connection:', socket.id);
   }
 
   disconnect(socket) {
-    console.log('[INFO] disconnect:', socket.id);
+    console.info('disconnect:', socket.id);
 
     const gameRoom = this.getUserRoom(socket);
     if (!gameRoom) {
@@ -43,7 +43,7 @@ class ServerSocket {
     gameRoom.disconnect(socket);
 
     if (gameRoom.isEmpty()) {
-      console.log('[INFO] close room:', gameRoom.name);
+      console.info('close room:', gameRoom.name);
       // if the room is empty, delete the room
       this.gameRooms = this.gameRooms.filter(gr => gr.name !== gameRoom.name);
     } else {
@@ -63,7 +63,7 @@ class ServerSocket {
 
     let gameRoom = this.getRoomByName(roomName);
     if (!gameRoom) {
-      console.log('[INFO] open room:', roomName);
+      console.info('open room:', roomName);
       // if this room does not exist then create it
       // and send a new room state to the user
       gameRoom = new GameRoom(this, roomName);

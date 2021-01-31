@@ -20,10 +20,16 @@ class EnterCodeWidget extends React.Component {
     super(props);
     this.state = {
       values: [...Array(CODE_LENGTH)].fill(''),
-      errors: []
+      errors: [],
+      submitted: false
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  // TODO: maybe should be moved into the SegmentedInput element
+  componentDidMount() {
+    this.mountTimestamp = new Date().getTime();
   }
 
   onChange(fieldIndex, value) {
@@ -38,12 +44,14 @@ class EnterCodeWidget extends React.Component {
     const { values } = this.state;
     const code = sanitize(values);
     const errors = validate(code);
-    console.log(code);
     if (errors.length === 0) {
       this.props.socketService.pollResponse({
         type: 'ROUND_ENTER_CODE',
         data: { code }
       });
+      this.setState({
+        submitted: true
+      })
     }
     this.setState({
       errors
@@ -51,17 +59,17 @@ class EnterCodeWidget extends React.Component {
   }
 
   render() {
-    const { errors } = this.state;
-    const { isCurrent, gameState: { round } } = this.props;
+    const { errors, submitted } = this.state;
+    const { isCurrent } = this.props;
     return (
       <Slide>
         <SegmentedInput
-          disabled={!isCurrent}
+          disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           errors={errors}
           segments={CODE_LENGTH}
-          name={`Round${round}`}
+          name={`Round${this.mountTimestamp}`} // ensures uniquness
         />
       </Slide>
     );

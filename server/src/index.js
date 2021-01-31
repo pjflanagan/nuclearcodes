@@ -29,7 +29,7 @@ reload(app);
 // server
 const server = http.Server(app);
 server.listen(PORT, () => {
-  console.log(`[INFO] Listening for ${CLIENT_ENDPOINT} on *:${PORT}`);
+  console.info(`Listening for ${CLIENT_ENDPOINT} on *:${PORT}`);
 });
 
 // socket
