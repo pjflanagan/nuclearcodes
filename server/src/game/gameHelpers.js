@@ -10,7 +10,7 @@ const GAME_STATES = {
 const PLAYERS_PER_GAME = 8;
 const SPIES_PER_GAME = 3;
 const CODE_LENGTH = 5;
-const TOTAL_ROUNDS = 2;
+const TOTAL_ROUNDS = 5;
 const CHARSET = 'BCDFGHJKLMNPQRSTVWXYZ'; // no vowels
 
 const makeRandomArray = (length, range) => {

@@ -151,21 +151,26 @@ class MessageWidgetDefcon extends React.Component {
 class MessageGameOver extends React.Component {
   render() {
     const { data: { result, code }, me } = this.props;
+    let pill = (<></>)
     let message1 = '';
     let message2 = '';
     if (me.isSpy) {
       if (result === 'victory') {
+        pill = (<Pill>{'DEFEAT'}</Pill>);
         message1 = 'Foiled, your treachery was no match for American enginuity. Our agents guessed '
         message2 = ' and put an end to your terrorist and/or communist plot.'
       } else {
+        pill = (<Pill color="red">{'VICTORY'}</Pill>);
         message1 = 'Congrats, you managed to prevent our agents from guessing '
         message2 = " and with it, America, a beacon of hope to the world, has fallen. I hope you're happy."
       }
     } else {
       if (result === 'victory') {
+        pill = (<Pill>{'VICTORY'}</Pill>);
         message1 = 'Congradulations, our agents guessed '
         message2 = ' and put an end to this evil scheme. Mission Accomplished!'
       } else {
+        pill = (<Pill color="red">{'DEFEAT'}</Pill>);
         message1 = "It's over, the great American experiment crumbles before our eyes. All because we couldn't guess the right code:"
         message2 = ". You've let your country down."
       }
@@ -173,6 +178,7 @@ class MessageGameOver extends React.Component {
     return (
       <Slide>
         <Typeable doneTypingCallback={this.props.doneCallback}>
+          {pill}
           <Text>{`${message1}`}</Text>
           <Pill>{code}</Pill>
           <Text>{`${message2}`}</Text>

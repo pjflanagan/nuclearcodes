@@ -243,7 +243,7 @@ class GameRoom {
         this.round += 1;
         this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
         const { codeResponses } = data;
-        const numCorrect = codeResponses.reduce((sum, r) => (r.code === this.code ? sum + 1 : sum), 0);
+        const numCorrect = codeResponses.reduce((sum, r) => (r.code.toUpperCase() === this.code ? sum + 1 : sum), 0);
         // if they are correct: ROUND_LOBBY, 'victory'
         if (numCorrect > this.players.count() / 2) {
           this.gameState = GAME_STATES.LOBBY;
