@@ -9,6 +9,13 @@ import {
   makeFakeCode,
   makeRandomArray
 } from './gameHelpers.js';
+import {
+  RoundLobbyHandlers,
+  RoundTurnKeyHandlers,
+  RoundVoteHandlers,
+  RoundEnterCodeHandlers
+} from './gameRound.js';
+import { PlayerList } from './playerModel.js';
 
 class GameRoom {
   constructor(socketServer, roomName) {
@@ -16,7 +23,7 @@ class GameRoom {
     this.name = roomName;
 
     // game state
-    this.players = [];
+    this.players = new PlayerList();
     this.prevRooms = [];
     this.gameState = GAME_STATES.LOBBY;
     this.round = 0;
@@ -32,32 +39,19 @@ class GameRoom {
   // ADMIN
 
   joinRoom(socket) {
-    this.players.push({
-      id: socket.id,
-      response: false,
-      isSpy: false
-      // name: ''
-    });
+    this.players.addPlayer(socket);
   }
 
   disconnect(socket) {
-    this.players = this.players.filter(u => u.id !== socket.id);
+    this.players.removePlayer(socket);
     // update the game state so people know they left
     this.socketServer.updateGameState(this.name, this.getState());
     // if this changes a poll response then re-check
     this.moveIfPollOver();
   }
 
-  setPlayerName(socket, playerName, num = 0) {
-    let playerSetName = (num > 0) ? `${playerName}${num}` : playerName;
-    const player = this.findPlayer(socket);
-    const existingPlayer = this.players.find(p => p.name === playerSetName);
-    if (!!existingPlayer) {
-      // if this player exists tack a number on
-      return this.setPlayerName(socket, playerName, num + 1);
-    }
-    player.name = playerSetName;
-    return playerSetName;
+  setPlayerName(socket, playerName) {
+    return this.players.setPlayerName(socket, playerName);
   }
 
   // GAMEPLAY
@@ -65,15 +59,16 @@ class GameRoom {
   // make a game with spies, agents
   setupGame() {
     // reset the players if new game
-    this.players.forEach(p => p.isSpy = false);
+    this.players.resetSpies()
     const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
     arr.forEach(i => {
-      if (!!this.players[i]) {
-        // set two players to be spies
-        this.players[i].isSpy = true;
+      const player = this.players.get(i);
+      if (!!player) {
+        player.setSpy();
       }
     });
-    this.players[0].isSpy = true;
+    // TODO: FIXME: this is to debug game as a spy
+    this.players.get(0).setSpy();
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
@@ -81,7 +76,7 @@ class GameRoom {
 
   // players respond to polls and the data gets recorded here
   pollResponse(socket, response) {
-    const player = this.findPlayer(socket);
+    const player = this.players.findPlayer(socket);
 
     // if a player responds to a poll we are not polling, then ignore
     if (response.type !== this.gameState) {
@@ -93,32 +88,14 @@ class GameRoom {
     switch (response.type) {
       case GAME_STATES.LOBBY:
       case GAME_STATES.ROUND_ENTER_CODE:
-        console.debug(response);
         // just record the response they give here
-        player.response = response.data;
+        player.recordResponse(response.data);
         break;
       case GAME_STATES.ROUND_TURN_KEY:
-        // validate that they are a spy
-        if (player.isSpy) {
-          player.response = response.data;
-        } else {
-          console.error(`gameRoom.pollResponse: Response '${response.type}' recieved for agent, not spy.`);
-        }
+        RoundTurnKeyHandlers.pollResponse(player, response);
         break;
       case GAME_STATES.ROUND_VOTE:
-        // kick third player out of room if are also on the room
-        // based off of response time, latest response gets kicked
-        // TODO: Validate here, they can't enter same room as last time
-        const sameRoomPlayers = this.players.filter(p => p.response !== false && p.response.roomID === response.data.roomID);
-        if (sameRoomPlayers.length > 1) {
-          sameRoomPlayers.sort((a, b) => b.response.timestamp - a.response.timestamp);
-          // TODO: validate here, they can't enter room with same parter as before
-
-          sameRoomPlayers[0].response = false;
-        }
-        // or this could just happen on the front end
-        player.response = response.data;
-        this.socketServer.updateGameState(this.name, this.getState());
+        RoundVoteHandlers.pollResponse(player, this.players, response);
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -142,68 +119,20 @@ class GameRoom {
   // check if the poll is over
   isPollOver() {
     switch (this.gameState) {
-      // if they are readying up in the lobby
-      // validate they have enough players and they are all ready
       case GAME_STATES.LOBBY:
-        if (this.players.length < PLAYERS_PER_GAME) {
-          return [false];
-        }
-        const lobbyResponses = this.players.map(p => p.response);
-        if (lobbyResponses.filter(r => r !== false).length < this.players.length) {
-          return [false];
-        }
-        return [true];
+        return RoundLobbyHandlers.isPollOver(this.players)
 
       // if they are voting for rooms
       case GAME_STATES.ROUND_VOTE:
-        // validate that everyone is paired off in a room
-        // TODO: everyone is in a pair they have not been in last round
-        // TODO: everyone is in a room they haven't been in last round
-        const rooms = Array(CODE_LENGTH).fill(new Array());
-        this.players.forEach(player => {
-          if (player.response !== false && player.response.roomID !== undefined) {
-            rooms[player.response.roomID] = [...rooms[player.response.roomID], player];
-          }
-        });
-        // console.debug(rooms);
-        let hasInvalidRoom = false;
-        let roomVoteResponseCount = 0;
-        rooms.forEach((playersInRoom) => {
-          const count = playersInRoom.length;
-          roomVoteResponseCount += count;
-          // TODO: if a player drops the game breaks because of this rule
-          if (count % 2 !== 0 || count > 2) {
-            // if not an even number (pair) or 0
-            hasInvalidRoom = true;
-          }
-        });
-        return [
-          !hasInvalidRoom && roomVoteResponseCount >= this.players.length,
-          { rooms }
-        ];
+        return RoundVoteHandlers.isPollOver(this.players);
 
       // if they are turning keys, make sure all the spies have responded
       case GAME_STATES.ROUND_TURN_KEY:
-        const spies = this.players.filter(p => p.isSpy);
-        const spyResponses = spies.map(spy => ({
-          response: spy.response,
-          playerID: spy.id
-        }));
-        // console.debug(spyResponses);
-        if (spyResponses.filter(r => r.response !== false).length < spies.length) {
-          // if the spies have not all responded
-          // TODO: auto response here to keep game moving? maybe shouldn't happen here in code but we should have it in general
-          return [false];
-        }
-        return [true, { spyResponses }];
+        return RoundTurnKeyHandlers.isPollOver(this.players);
 
       // if they are entering codes, make sure they all have responded
       case GAME_STATES.ROUND_ENTER_CODE:
-        const codeResponses = this.players.map(p => p.response);
-        if (codeResponses.filter(r => r !== false).length < this.players.length) {
-          return [false];
-        }
-        return [true, codeResponses];
+        return RoundEnterCodeHandlers.isPollOver(this.players);
 
       // otherwise something is wrong with the gamestate
       default:
@@ -247,7 +176,7 @@ class GameRoom {
               slideID: 'key-room-prompt',
               data: {
                 roomID: i,
-                room
+                room // TODO: this could be named better, it's really roomPlayers
               }
             });
           })
@@ -269,7 +198,7 @@ class GameRoom {
           // for each player in the room
           room.forEach(player => {
             // if the player is a spy
-            if (player.isSpy) {
+            if (player.isSpy()) {
               // count up the number of spies
               spyCount++;
               const spyResponse = spyResponses.find(r => r.playerID === player.id);
@@ -337,7 +266,7 @@ class GameRoom {
 
   getState() {
     const gameState = {
-      players: this.players,
+      players: this.players.getPlayersAsData(),
       // code: this.code, // TODO: might be helpful to send these for tests
       // fakeCode: this.fakeCode
     };
@@ -345,11 +274,7 @@ class GameRoom {
   }
 
   clearResponses() {
-    this.players.forEach(p => p.response = false);
-  }
-
-  findPlayer(socket) {
-    return this.players.find(p => p.id === socket.id)
+    this.players.clearResponses();
   }
 
   isStarted() {
@@ -357,7 +282,7 @@ class GameRoom {
   }
 
   isFull() {
-    return this.players.length >= PLAYERS_PER_GAME;
+    return this.players.count() >= PLAYERS_PER_GAME;
   }
 
   isEmpty() {

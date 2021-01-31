@@ -8,7 +8,23 @@ class ChooseRoomWidget extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      playersInRooms: []
+    }
+
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
+  }
+
+
+  // only update our local state if this element isCurrent
+  // this way when we move slides the data doesn't vanish
+  componentDidUpdate(prevProps) {
+    if (this.props.isCurrent && prevProps !== this.props) {
+      const { gameState: { players } } = this.props;
+      this.setState({
+        playersInRooms: players.filter(p => p.response !== false)
+      });
+    }
   }
 
   sendRoomChoice(roomID) {
@@ -22,8 +38,8 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { gameState: { players }, me } = this.props;
-    const playersInRooms = players.filter(p => p.response !== false);
+    const { me } = this.props;
+    const { playersInRooms } = this.state;
     return (
       <Slide>
         {/* Player Name List */}

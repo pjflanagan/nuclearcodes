@@ -1,5 +1,5 @@
 
-import { GameRoom } from "./gameRoom.js";
+import { GameRoom } from "./game/index.js";
 
 // https://socket.io/docs/emit-cheatsheet/
 

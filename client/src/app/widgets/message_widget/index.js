@@ -60,24 +60,47 @@ class MessageWidgetKeyRoom extends React.Component {
 }
 
 class MessageWidgetLetterReveal extends React.Component {
-
   render() {
     // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z","showWhichLetter":"REAL"}
     const { data, me } = this.props;
     console.log({ data });
     // TODO: if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
-    // 
-    return (
-      <Slide>
+    let content = (<></>);
+    if (data.showWhichLetter === 'BOTH') {
+      content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
-          <Pill></Pill>
+          <Pill>{data.realLetter}</Pill>
+          <Text>{' and '}</Text>
+          <Pill color="red">{data.fakeLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
           {/* ...  */}
-          <Text>{'. Talk it over and vote on a code to enter.'}</Text>
+          <Text>{'. You and your fellow spy should only mention seeing one of them.'}</Text>
         </Typeable>
+      )
+    } else {
+      const prompt = (me.isSpy && data.showWhichLetter === 'FAKE') ?
+        'Remember, your fellow roommate thinks this letter is real' :
+        'Talk it over and vote on a code to enter'
+      content = (
+        <Typeable doneTypingCallback={this.props.doneCallback}>
+          <Text>{'You saw '}</Text>
+          <Pill color={me.isSpy && data.showWhichLetter === 'FAKE' ? 'red' : ''}>
+            {
+              data.showWhichLetter === 'FAKE' ? data.fakeLetter : data.realLetter
+            }
+          </Pill>
+          <Text>{' in room '}</Text>
+          <Pill>{data.roomID + 1}</Pill>
+          <Text>{`. ${prompt}.`}</Text>
+        </Typeable>
+      );
+    }
+    return (
+      <Slide>
+        {content}
       </Slide>
     );
   }
