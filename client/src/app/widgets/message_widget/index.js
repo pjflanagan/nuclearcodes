@@ -138,7 +138,7 @@ class MessageWidgetDefcon extends React.Component {
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{`
             So the code you all agreed on was incorrect. 
-            Remember the one the system takes is the most entered code.
+            Remember, we need a majority to be correct in order to unlock the nuclear football.
             It looks like we're up to defcon `}</Text>
           <Pill>{this.props.gameState.round}</Pill>
           <Text>{` ${message}`}</Text>

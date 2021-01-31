@@ -67,8 +67,6 @@ class GameRoom {
         player.setIsSpy(true);
       }
     });
-    // TODO: FIXME: this is to debug game as a spy
-    this.players.get(0).setIsSpy(true);
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
@@ -241,15 +239,34 @@ class GameRoom {
 
       // if we just entered codes
       case GAME_STATES.ROUND_ENTER_CODE:
-        // TODO: switch here 
-        console.debug(data);
-        // if they are correct: ROUND_LOBBY, 'victory'
-        // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
-        // otherwise: ROUND_VOTE, 'start-next-round'
-        // might be vote to KILL?
-        this.gameState = GAME_STATES.ROUND_VOTE;
         this.round += 1;
-        this.socketServer.updateGameState(this.name, this.getState());
+        this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
+        const { codeResponses } = data;
+        const numCorrect = codeResponses.reduce((sum, r) => (r.code === this.code ? sum + 1 : sum), 0);
+        // if they are correct: ROUND_LOBBY, 'victory'
+        if (numCorrect > this.players.count() / 2) {
+          this.gameState = GAME_STATES.ROUND_LOBBY;
+          this.socketServer.nextSlide(this.name, {
+            slideID: 'victory',
+            data: {
+              code: this.code
+            }
+          });
+          return;
+        }
+        // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
+        if (this.round === TOTAL_ROUNDS) {
+          this.gameState = GAME_STATES.ROUND_LOBBY;
+          this.socketServer.nextSlide(this.name, {
+            slideID: 'gameover',
+            data: {
+              code: this.code
+            }
+          });
+          return
+        }
+        // otherwise: ROUND_VOTE, 'start-next-round' // TODO: after some rounds vote to KILL?
+        this.gameState = GAME_STATES.ROUND_VOTE;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
         });

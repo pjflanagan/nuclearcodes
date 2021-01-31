@@ -35,7 +35,6 @@ const RoundVoteHandlers = {
     // TODO: everyone is in a pair they have not been in last round
     // TODO: everyone is in a room they haven't been in last round
     const rooms = players.createRoomArray();
-    // console.debug(rooms);
     let hasInvalidRoom = false;
     let roomVoteResponseCount = 0;
     rooms.forEach((playersInRoom) => {
@@ -69,7 +68,6 @@ const RoundTurnKeyHandlers = {
       response: spy.response,
       playerID: spy.id
     }));
-    // console.debug(spyResponses);
     if (spyResponses.filter(r => r.response !== false).length < spies.length) {
       // if the spies have not all responded
       // TODO: auto response here to keep game moving? maybe shouldn't happen here in code but we should have it in general
@@ -85,7 +83,7 @@ const RoundEnterCodeHandlers = {
     if (codeResponses.length < players.count()) {
       return [false];
     }
-    return [true, codeResponses];
+    return [true, { codeResponses }];
   }
 }
 
