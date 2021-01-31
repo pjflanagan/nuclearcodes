@@ -18,7 +18,11 @@ const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService 
               data={slide.data}
               socketID={socketID}
               me={me}
-              doneCallback={(prevData) => dispatchDoneCallback(slide.next, prevData)}
+              doneCallback={(prevData) => dispatchDoneCallback({
+                next: slide.next,
+                delay: slide.delay,
+                prevData
+              })}
               socketService={socketService}
               isCurrent={i === slides.length - 1}
             />

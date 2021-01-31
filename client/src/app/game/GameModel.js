@@ -6,7 +6,6 @@ import { getNextPlay } from '../../gameplay';
 
 import { GameComponent } from './GameComponent';
 
-
 const NEXT_SLIDE_DELAY = 360;
 
 const mapStateToProps = (state) => ({
@@ -15,7 +14,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  dispatchDoneCallback: (next, prevData) => {
+  dispatchDoneCallback: ({ next, prevData, delay = 0 }) => {
     // if there is a next function
     if (!!next) {
       const nextPlayID = next(prevData);
@@ -25,7 +24,7 @@ const mapDispatchToProps = dispatch => ({
           dispatch(
             nextSlide(getNextPlay(nextPlayID), prevData)
           ),
-          NEXT_SLIDE_DELAY);
+          NEXT_SLIDE_DELAY + delay);
       }
       // otherwise wait
     }

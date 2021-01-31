@@ -4,7 +4,7 @@ import { Slide } from '../../elements';
 
 import Style from './style.module.css';
 
-const CHANGE_DELAY = 1000;
+const MOVE_HAND_DELAY = 800;
 
 class DefconWidget extends React.Component {
   constructor(props) {
@@ -16,14 +16,11 @@ class DefconWidget extends React.Component {
 
   componentDidMount() {
     setTimeout(
-      () => this.setState({
-        round: this.props.gameState.round
-      }),
-      CHANGE_DELAY
-    );
-    setTimeout(
-      () => this.props.doneCallback(),
-      2 * CHANGE_DELAY
+      () => {
+        this.setState({ round: this.props.gameState.round });
+        this.props.doneCallback();
+      },
+      MOVE_HAND_DELAY
     );
   }
 

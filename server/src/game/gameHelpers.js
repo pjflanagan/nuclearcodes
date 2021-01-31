@@ -28,7 +28,10 @@ const makeCode = (codeLength, charset = CHARSET) => {
 }
 
 const makeFakeCode = (realCode) => {
-  const fakeCharset = CHARSET.split(realCode).join('')
+  let fakeCharset = CHARSET;
+  for (let i = 0; i < realCode.length; ++i) {
+    fakeCharset = fakeCharset.replace(realCode[i], '');
+  }
   return makeCode(realCode.length, fakeCharset);
 }
 

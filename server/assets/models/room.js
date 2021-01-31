@@ -1,6 +1,19 @@
 
 import { PlayerModel } from './player.js';
 
+const playerNames = [
+  'James Bond',
+  'Austin Powers',
+  'Jason Bourne',
+  'Ethan Hunt',
+  'Alex Rider',
+  'Black Widow',
+  'Kim Possible',
+  'MacGyver',
+  'Carmen Cortez',
+  'Archer'
+];
+
 class RoomModel {
   constructor($scope, roomName, playerCount) {
     this.$scope = $scope;
@@ -8,7 +21,7 @@ class RoomModel {
     this.roomURL = `${CLIENT_ENDPOINT}/${roomName}`;
     this.players = [];
     for (let i = 0; i < playerCount; ++i) {
-      this.players.push(new PlayerModel(this.$scope, this, `player00${i}`));
+      this.players.push(new PlayerModel(this.$scope, this, playerNames[i]));
     }
     this.allCode = '';
   }

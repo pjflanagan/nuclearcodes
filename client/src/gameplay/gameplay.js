@@ -36,7 +36,8 @@ const GAMEPLAY = [
     id: 'logo',
     widget: LogoWidget,
     data: { text: 'Nuclear Codes' },
-    next: () => 'lobby-prompt'
+    next: () => 'lobby-prompt',
+    delay: 600
   },
   {
     id: 'lobby-prompt',
@@ -84,12 +85,14 @@ const GAMEPLAY = [
       If a spy enters a room with you, they can choose to show you a false letter.
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
-    next: () => 'assign-roles'
+    next: () => 'assign-roles',
+    delay: 1600
   },
   {
     id: 'assign-roles',
     widget: AssignRolesWidget,
-    next: () => 'room-picker-prompt'
+    next: () => 'room-picker-prompt',
+    delay: 1600
   },
   {
     id: 'room-picker-prompt',
@@ -97,7 +100,8 @@ const GAMEPLAY = [
     data: {
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
-    next: () => 'room-picker'
+    next: () => 'room-picker',
+    delay: 200
   },
   {
     id: 'room-picker',
@@ -115,7 +119,8 @@ const GAMEPLAY = [
   {
     id: 'letter-reveal',
     widget: MessageWidgetLetterReveal,
-    next: () => 'enter-code'
+    next: () => 'enter-code',
+    delay: 1600
   },
   {
     id: 'enter-code',
@@ -129,12 +134,13 @@ const GAMEPLAY = [
   {
     id: 'defcon',
     widget: DefconWidget,
-    next: () => 'room-picker-prompt'
+    next: () => 'room-picker-prompt',
+    delay: 1000
   },
   {
     id: 'gameover',
     widget: MessageGameOver,
-    next: () => 'play-again-prompt'
+    next: () => 'play-again-prompt' // TODO: credits
   },
   {
     // TODO:

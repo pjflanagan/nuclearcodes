@@ -306,7 +306,7 @@ class GameRoom {
   }
 
   isEmpty() {
-    return this.players.length === 0;
+    return this.players.count() === 0;
   }
 }
 

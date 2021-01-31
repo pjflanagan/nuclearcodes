@@ -14,7 +14,7 @@ class LogoWidget extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.wakeServer(), 600);
+    this.wakeServer();
   }
 
   wakeServer() {

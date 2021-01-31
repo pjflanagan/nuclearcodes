@@ -60,6 +60,7 @@ class Input extends React.Component {
 }
 
 const getFieldIndexFromName = (name) => {
+  // eslint-disable-next-line
   const [fieldName, fieldIndex] = name.split("-");
   const fieldIndexInt = parseInt(fieldIndex, 10);
   return fieldIndexInt;

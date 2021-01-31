@@ -11,6 +11,11 @@ import Style from './style.module.css';
 class KeyChoiceWidget extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      submitted: false
+    }
+
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -21,28 +26,39 @@ class KeyChoiceWidget extends React.Component {
         isSpyKey: keyChoice === 'spyKey'
       }
     });
+    this.setState({
+      submitted: true
+    })
   }
 
   render() {
+    const { isCurrent } = this.props;
+    const { submitted } = this.state;
     return (
       <Slide>
         <div className={Style.keyOptions}>
           <div className={Style.keyOption}>
-            <Button onClick={e => this.onSubmit(e, 'agentKey')}>
+            <Button
+              onClick={e => this.onSubmit(e, 'agentKey')}
+              disabled={!isCurrent || submitted}
+            >
               <Pill
                 doNotType={true}
               >
-                Agent Key
-            </Pill>
+                {'Agent Key'}
+              </Pill>
             </Button>
           </div>
           <div className={Style.keyOption}>
-            <Button onClick={e => this.onSubmit(e, 'spyKey')}>
+            <Button
+              onClick={e => this.onSubmit(e, 'spyKey')}
+              disabled={!isCurrent || submitted}
+            >
               <Pill
                 doNotType={true}
                 color="red"
               >
-                Spy Key
+                {'Spy Key'}
               </Pill>
             </Button>
           </div>
