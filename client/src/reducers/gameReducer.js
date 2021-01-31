@@ -19,6 +19,10 @@ const GameReducer = (state = initState, action) => {
       return { ...state, ...{ slides: [...state.slides, action.slide] } };
     case UPDATE_GAME_STATE:
       return { ...state, ...{ gameState: action.gameState } };
+    // TODO: errors, sometimes we are adding a new slide, sometimes we are
+    // setting errors on an existing slide, should we maybe just
+    // have a permanant error slide at the bottom, where all errors go
+    // server and widget errors
     default:
       return state;
   }

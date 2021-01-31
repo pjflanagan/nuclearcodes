@@ -23,7 +23,7 @@ class AssignRolesWidget extends React.Component {
     const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
     return (
       <Typeable doneTypingCallback={this.doneTypingCallback}>
-        <Text>{'You are a'}</Text>
+        <Text>{'I guess you hate America. You are a'}</Text>
         <Pill color="red">{'SPY'}</Pill>
         <Text>{'along with:'}</Text>
         {

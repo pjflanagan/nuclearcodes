@@ -148,10 +148,46 @@ class MessageWidgetDefcon extends React.Component {
   }
 }
 
+class MessageGameOver extends React.Component {
+  render() {
+    const { data: { result, code }, me } = this.props;
+    let message1 = '';
+    let message2 = '';
+    if (me.isSpy) {
+      if (result === 'victory') {
+        message1 = 'Foiled, your treachery was no match for American enginuity. Our agents guessed '
+        message2 = ' and put an end to your terrorist and/or communist plot.'
+      } else {
+        message1 = 'Congrats, you managed to prevent our agents from guessing '
+        message2 = " and with it, America, a beacon of hope to the world, has fallen. I hope you're happy."
+      }
+    } else {
+      if (result === 'victory') {
+        message1 = 'Congradulations, our agents guessed '
+        message2 = ' and put an end to this evil scheme. Mission Accomplished!'
+      } else {
+        message1 = "It's over, the great American experiment crumbles before our eyes. All because we couldn't guess the right code:"
+        message2 = ". You've let your country down."
+      }
+    }
+    return (
+      <Slide>
+        <Typeable doneTypingCallback={this.props.doneCallback}>
+          <Text>{`${message1}`}</Text>
+          <Pill>{code}</Pill>
+          <Text>{`${message2}`}</Text>
+        </Typeable>
+      </Slide>
+    )
+  }
+}
+
+
 export {
   MessageWidget,
   MessageWidgetWelcome,
   MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
-  MessageWidgetDefcon
+  MessageWidgetDefcon,
+  MessageGameOver
 };

@@ -7,6 +7,7 @@ import {
   MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
   MessageWidgetDefcon,
+  MessageGameOver,
 
   LogoWidget,
   LobbyWidget,
@@ -132,18 +133,20 @@ const GAMEPLAY = [
   },
   {
     id: 'gameover',
-    next: () => 'credits'
+    widget: MessageGameOver,
+    next: () => 'play-again-prompt'
   },
   {
-    id: 'victory',
-    next: () => 'credits'
-  },
-  {
+    // TODO:
     id: 'credits',
     next: () => 'play-again-prompt'
   },
   {
     id: 'play-again-prompt',
+    widget: MessageWidget,
+    data: {
+      text: `Would you like to play again?`
+    },
     next: () => 'ready-up'
   }
   // { TODO:

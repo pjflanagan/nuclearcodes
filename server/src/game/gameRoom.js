@@ -59,6 +59,7 @@ class GameRoom {
   // make a game with spies, agents
   setupGame() {
     // reset the players if new game
+    this.round = 0;
     this.players.resetSpies()
     const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
     arr.forEach(i => {
@@ -245,10 +246,11 @@ class GameRoom {
         const numCorrect = codeResponses.reduce((sum, r) => (r.code === this.code ? sum + 1 : sum), 0);
         // if they are correct: ROUND_LOBBY, 'victory'
         if (numCorrect > this.players.count() / 2) {
-          this.gameState = GAME_STATES.ROUND_LOBBY;
+          this.gameState = GAME_STATES.LOBBY;
           this.socketServer.nextSlide(this.name, {
-            slideID: 'victory',
+            slideID: 'gameover',
             data: {
+              result: 'victory',
               code: this.code
             }
           });
@@ -256,14 +258,15 @@ class GameRoom {
         }
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
         if (this.round === TOTAL_ROUNDS) {
-          this.gameState = GAME_STATES.ROUND_LOBBY;
+          this.gameState = GAME_STATES.LOBBY;
           this.socketServer.nextSlide(this.name, {
             slideID: 'gameover',
             data: {
+              result: 'defeat',
               code: this.code
             }
           });
-          return
+          return;
         }
         // otherwise: ROUND_VOTE, 'start-next-round' // TODO: after some rounds vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
