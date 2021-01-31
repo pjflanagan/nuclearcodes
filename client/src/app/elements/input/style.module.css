@@ -39,6 +39,11 @@
   color: #fff8;
 }
 
+.inputSegment {
+  text-align: center;
+  margin: 0 4px;
+}
+
 .errors {
   min-height: 24px;
   margin: 12px 12px;

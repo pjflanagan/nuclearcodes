@@ -57,7 +57,7 @@ const RoundVoteHandlers = {
 const RoundTurnKeyHandlers = {
   // validate that they are a spy
   pollResponse: (player, response) => {
-    if (player.isSpy()) {
+    if (player.getIsSpy()) {
       player.recordResponse(response.data);
     } else {
       console.error(`gameRoom.pollResponse: Response '${response.type}' recieved for agent, not spy.`);

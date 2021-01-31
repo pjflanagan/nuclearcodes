@@ -40,8 +40,8 @@ class MessageWidgetKeyRoom extends React.Component {
     const prompt = (!me.isSpy) ?
       'waiting for all rooms to turn thier keys' :
       'choose which key to turn';
-    const otherPlayerArr = data.room.filter(p => p !== me.id);
-    const otherPlayer = (!!otherPlayerArr[0]) ? otherPlayerArr[0] : {};
+    const otherPlayerArr = data.room.filter(p => p.id !== me.id);
+    const otherPlayer = (!!otherPlayerArr[0]) ? otherPlayerArr[0] : {}; // players.find(p => p.id === otherPlayerArr[0].id)
     return (
       <Slide>
         <Typeable doneTypingCallback={() => this.props.doneCallback({ isSpy: me.isSpy })}>
@@ -60,6 +60,17 @@ class MessageWidgetKeyRoom extends React.Component {
 }
 
 class MessageWidgetLetterReveal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.doneCallback = this.doneCallback.bind(this);
+  }
+
+  doneCallback() {
+    setTimeout(() => {
+      this.props.doneCallback()
+    }, 1000);
+  }
+
   render() {
     // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z","showWhichLetter":"REAL"}
     const { data, me } = this.props;
@@ -68,7 +79,7 @@ class MessageWidgetLetterReveal extends React.Component {
     let content = (<></>);
     if (data.showWhichLetter === 'BOTH') {
       content = (
-        <Typeable doneTypingCallback={this.props.doneCallback}>
+        <Typeable doneTypingCallback={this.doneCallback}>
           <Text>{'You saw '}</Text>
           <Pill>{data.realLetter}</Pill>
           <Text>{' and '}</Text>
@@ -76,7 +87,7 @@ class MessageWidgetLetterReveal extends React.Component {
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
           {/* ...  */}
-          <Text>{'. You and your fellow spy should only mention seeing one of them.'}</Text>
+          <Text>{'. You and your fellow spy should only mention seeing one of them, or you could make up a third fake letter.'}</Text>
         </Typeable>
       )
     } else {
@@ -84,7 +95,7 @@ class MessageWidgetLetterReveal extends React.Component {
         'Remember, your fellow roommate thinks this letter is real' :
         'Talk it over and vote on a code to enter'
       content = (
-        <Typeable doneTypingCallback={this.props.doneCallback}>
+        <Typeable doneTypingCallback={this.doneCallback}>
           <Text>{'You saw '}</Text>
           <Pill color={me.isSpy && data.showWhichLetter === 'FAKE' ? 'red' : ''}>
             {
@@ -111,12 +122,16 @@ class MessageWidgetDefcon extends React.Component {
     switch (this.props.gameState.round) {
       case 1:
         message = "and that's okay, let's just try and not let it go any higher."
+        break;
       case 2:
         message = "and while this certanly isn't ideal, we still have some time."
+        break;
       case 3:
         message = "which is not great."
+        break;
       case 4:
         message = "so, like, this is our last chance."
+        break;
     }
     return (
       <Slide>

@@ -23,9 +23,9 @@ class AssignRolesWidget extends React.Component {
     const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
     return (
       <Typeable doneTypingCallback={this.doneTypingCallback}>
-        <Text>You are a</Text>
-        <Pill color="red">SPY</Pill>
-        <Text>along with:</Text>
+        <Text>{'You are a'}</Text>
+        <Pill color="red">{'SPY'}</Pill>
+        <Text>{'along with:'}</Text>
         {
           spyPlayers.map((p, i) => (
             <Player
@@ -42,9 +42,9 @@ class AssignRolesWidget extends React.Component {
   agentContent() {
     return (
       <Typeable doneTypingCallback={this.doneTypingCallback}>
-        <Text>You are an</Text>
-        <Pill>AGENT</Pill>
-        <Text>, be on the lookout for spies.</Text>
+        <Text>{'You are an'}</Text>
+        <Pill>{'AGENT'}</Pill>
+        <Text>{', be on the lookout for spies.'}</Text>
       </Typeable>
     );
   }

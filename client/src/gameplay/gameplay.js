@@ -118,8 +118,7 @@ const GAMEPLAY = [
   },
   {
     id: 'enter-code',
-    widget: EnterCodeWidget,
-    next: () => 'enter-code'
+    widget: EnterCodeWidget
   },
   {
     id: 'start-next-round',

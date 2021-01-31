@@ -5,7 +5,7 @@ import { CODE_LENGTH } from './gameHelpers.js'
 class Player {
   constructor({ id }) {
     this.id = id;
-    this.spy = false;
+    this.isSpy = false;
     this.response = false;
     this.name = '';
   }
@@ -14,12 +14,12 @@ class Player {
     this.name = name;
   }
 
-  setSpy() {
-    this.spy = true;
+  setIsSpy(isSpy) {
+    this.isSpy = isSpy;
   }
 
-  isSpy() {
-    return this.spy;
+  getIsSpy() {
+    return this.isSpy;
   }
 
   // TODO: better response handling (getting)
@@ -34,7 +34,7 @@ class Player {
 
   asData() {
     return {
-      isSpy: this.isSpy(),
+      isSpy: this.isSpy,
       name: this.name,
       id: this.id,
       response: this.response
@@ -85,7 +85,7 @@ class PlayerList {
   }
 
   getSpies() {
-    return this.players.filter(p => p.isSpy());
+    return this.players.filter(p => p.getIsSpy());
   }
 
   createRoomArray() {
@@ -119,7 +119,7 @@ class PlayerList {
   }
 
   resetSpies() {
-    this.players.forEach(p => p.spy = false);
+    this.players.forEach(p => p.setIsSpy(false));
   }
 }
 

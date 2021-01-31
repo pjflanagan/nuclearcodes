@@ -4,6 +4,20 @@ import { Slide, Input } from '../../elements';
 
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
+const validate = (playerName) => {
+  if (playerName.length === 0) {
+    return ["Your name must contain at least 1 character."];
+  }
+  if (!playerName.match(ALPHANUMERIC_REGEX)) {
+    return ["Your name must be alphanumeric and not contain spaces."];
+  }
+  return [];
+}
+
+const sanitize = (playerName) => {
+  return playerName.trim();
+}
+
 class PlayerNameWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -24,9 +38,9 @@ class PlayerNameWidget extends React.Component {
   }
 
   onSubmit() {
-    const errors = this.validate();
     const { playerName } = this.state;
-    const playerNameSanitized = playerName.trim();
+    const playerNameSanitized = sanitize(playerName);
+    const errors = validate(playerNameSanitized);
     if (errors.length === 0) {
       this.props.socketService.setPlayerName({ playerName: playerNameSanitized });
       this.props.doneCallback({ playerName: playerNameSanitized });
@@ -34,18 +48,6 @@ class PlayerNameWidget extends React.Component {
     this.setState({
       errors
     });
-  }
-
-
-  validate() {
-    const { playerName } = this.state;
-    if (playerName.length === 0) {
-      return ["Your name must contain at least 1 character."];
-    }
-    if (!playerName.match(ALPHANUMERIC_REGEX)) {
-      return ["Your name must be alphanumeric and not contain spaces."];
-    }
-    return [];
   }
 
 

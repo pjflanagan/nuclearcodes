@@ -64,11 +64,11 @@ class GameRoom {
     arr.forEach(i => {
       const player = this.players.get(i);
       if (!!player) {
-        player.setSpy();
+        player.setIsSpy(true);
       }
     });
     // TODO: FIXME: this is to debug game as a spy
-    this.players.get(0).setSpy();
+    this.players.get(0).setIsSpy(true);
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
@@ -198,7 +198,7 @@ class GameRoom {
           // for each player in the room
           room.forEach(player => {
             // if the player is a spy
-            if (player.isSpy()) {
+            if (player.getIsSpy()) {
               // count up the number of spies
               spyCount++;
               const spyResponse = spyResponses.find(r => r.playerID === player.id);
@@ -245,14 +245,13 @@ class GameRoom {
         console.debug(data);
         // if they are correct: ROUND_LOBBY, 'victory'
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
-        // otherwise: ROUND_VOTE, 'defcon'
+        // otherwise: ROUND_VOTE, 'start-next-round'
         // might be vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
+        this.round += 1;
+        this.socketServer.updateGameState(this.name, this.getState());
         this.socketServer.nextSlide(this.name, {
-          slideID: 'start-next-round', // show the defcon before each round for fun, leads to room vote
-          data: {
-            round: this.round
-          }
+          slideID: 'start-next-round'
         });
         break;
 
