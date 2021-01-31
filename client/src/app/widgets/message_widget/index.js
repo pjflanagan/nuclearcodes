@@ -63,7 +63,6 @@ class MessageWidgetLetterReveal extends React.Component {
   render() {
     // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z","showWhichLetter":"REAL"}
     const { data, me } = this.props;
-    console.log({ data });
     // TODO: if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
     let content = (<></>);
@@ -106,9 +105,38 @@ class MessageWidgetLetterReveal extends React.Component {
   }
 }
 
+class MessageWidgetDefcon extends React.Component {
+  render() {
+    let message = '';
+    switch (this.props.gameState.round) {
+      case 1:
+        message = "and that's okay, let's just try and not let it go any higher."
+      case 2:
+        message = "and while this certanly isn't ideal, we still have some time."
+      case 3:
+        message = "which is not great."
+      case 4:
+        message = "so, like, this is our last chance."
+    }
+    return (
+      <Slide>
+        <Typeable doneTypingCallback={this.props.doneCallback}>
+          <Text>{`
+            So the code you all agreed on was incorrect. 
+            Remember the one the system takes is the most entered code.
+            It looks like we're up to defcon `}</Text>
+          <Pill>{this.props.gameState.round}</Pill>
+          <Text>{` ${message}`}</Text>
+        </Typeable>
+      </Slide>
+    )
+  }
+}
+
 export {
   MessageWidget,
   MessageWidgetWelcome,
   MessageWidgetKeyRoom,
-  MessageWidgetLetterReveal
+  MessageWidgetLetterReveal,
+  MessageWidgetDefcon
 };

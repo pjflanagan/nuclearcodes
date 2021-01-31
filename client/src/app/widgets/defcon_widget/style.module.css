@@ -1,0 +1,50 @@
+.circle {
+  background: #dbdbdb;
+  width: 240px;
+  height: 240px;
+  border-radius: 120px;
+  position: relative;
+}
+
+.dotsHolder {
+  width: 120px;
+  height: 120px;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.dot {
+  background: #1c1c1c;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  margin: -14px;
+}
+
+.midnight {
+  background: #1c1c1c;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 84px;
+  margin: -70px -16px;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+.minuteHand {
+  background: #a71111;
+  position: absolute;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 112px;
+  margin: -84px -9px;
+  transform-origin: center 98px;
+  transition: transform 0.3s;
+}

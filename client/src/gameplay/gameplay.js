@@ -6,6 +6,7 @@ import {
   MessageWidgetWelcome,
   MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
+  MessageWidgetDefcon,
 
   LogoWidget,
   LobbyWidget,
@@ -13,7 +14,9 @@ import {
   ReadyUpWidget,
   AssignRolesWidget,
   ChooseRoomWidget,
-  KeyChoiceWidget
+  KeyChoiceWidget,
+  EnterCodeWidget,
+  DefconWidget
 } from '../app/widgets';
 
 // A slides object is complicated, it needs to 
@@ -110,7 +113,23 @@ const GAMEPLAY = [
   },
   {
     id: 'letter-reveal',
-    widget: MessageWidgetLetterReveal
+    widget: MessageWidgetLetterReveal,
+    next: () => 'enter-code'
+  },
+  {
+    id: 'enter-code',
+    widget: EnterCodeWidget,
+    next: () => 'enter-code'
+  },
+  {
+    id: 'start-next-round',
+    widget: MessageWidgetDefcon,
+    next: () => 'defcon'
+  },
+  {
+    id: 'defcon',
+    widget: DefconWidget,
+    next: () => 'room-picker-prompt'
   },
   {
     id: 'gameover',

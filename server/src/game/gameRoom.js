@@ -249,7 +249,7 @@ class GameRoom {
         // might be vote to KILL?
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.socketServer.nextSlide(this.name, {
-          slideID: 'defcon', // show the defcon before each round for fun, leads to vote
+          slideID: 'start-next-round', // show the defcon before each round for fun, leads to room vote
           data: {
             round: this.round
           }
@@ -269,6 +269,7 @@ class GameRoom {
       players: this.players.getPlayersAsData(),
       // code: this.code, // TODO: might be helpful to send these for tests
       // fakeCode: this.fakeCode
+      round: this.round
     };
     return gameState;
   }

@@ -6,7 +6,9 @@ const initState = {
   slides: [GAMEPLAY[0]],
   gameState: {
     players: [],
-    // gameState and round might be unncessary for the player to know
+    round: 0,
+    // player doesn't really need to know round
+    // player doesn't need to know code, fakeCode, or gameState enum
   },
   errors: []
 };
