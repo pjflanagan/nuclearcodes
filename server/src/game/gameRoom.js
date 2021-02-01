@@ -268,7 +268,7 @@ class GameRoom {
           });
           return;
         }
-        // otherwise: ROUND_VOTE, 'start-next-round' // TODO: after some rounds vote to KILL?
+        // otherwise: ROUND_VOTE, 'start-next-round'
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
@@ -286,7 +286,7 @@ class GameRoom {
   getState() {
     const gameState = {
       players: this.players.getPlayersAsData(),
-      // code: this.code, // TODO: might be helpful to send these for tests
+      // code: this.code, // it might be helpful to send these for tests
       // fakeCode: this.fakeCode
       round: this.round
     };

@@ -76,13 +76,13 @@ class SegmentedInput extends React.Component {
   }
 
   componentDidMount() {
+    this.mountTimestamp = new Date().getTime();
     this.focusSegment(0);
   }
 
   focusSegment(i) {
-    const { name } = this.props;
     const nextSibling = document.querySelector(
-      `input[name=seg${name}-${i}]`
+      `input[name=seg${this.mountTimestamp}-${i}]`
     );
 
     // If found, focus the next field
@@ -119,7 +119,7 @@ class SegmentedInput extends React.Component {
   }
 
   render() {
-    const { disabled, onSubmit, errors, segments, name } = this.props;
+    const { disabled, onSubmit, errors, segments } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
@@ -129,7 +129,7 @@ class SegmentedInput extends React.Component {
                 key={i}
                 type="text"
                 maxLength="1"
-                name={`seg${name}-${i}`}
+                name={`seg${this.mountTimestamp}-${i}`}
                 value={this.props.value}
                 placeholder={i + 1}
                 tabIndex={0}

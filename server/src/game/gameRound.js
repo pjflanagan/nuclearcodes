@@ -41,6 +41,8 @@ const RoundVoteHandlers = {
       const count = playersInRoom.length;
       roomVoteResponseCount += count;
       // TODO: if a player drops the game breaks because of this rule
+      // A: this needs to work with an odd number of players?
+      // B: this game needs to allow people to rejoin (do this one, then just have player drop error)
       if (count % 2 !== 0 || count > 2) {
         // if not an even number (pair) or 0
         hasInvalidRoom = true;

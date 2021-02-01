@@ -4,6 +4,7 @@ const GAME_STATES = {
   ROUND_VOTE: 'ROUND_VOTE', // vote on which room to go into
   ROUND_TURN_KEY: 'ROUND_TURN_KEY', // vote on which key to turn
   ROUND_ENTER_CODE: 'ROUND_ENTER_CODE', // enter a code into the game
+  // ROUND_KILL: 'ROUND_KILL'
   // no round game over, just move them to a gameover slide -> credits -> play again prompt -> lobby
 };
 

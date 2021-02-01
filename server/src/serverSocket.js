@@ -49,10 +49,11 @@ class ServerSocket {
     } else {
       // otherwise alert the room
       this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
-      // TODO: if the game is going while they are in the room
-      // prepare the room for them to come back, put thier player data into a
-      // gameRoom.ghosts array and if that playerName comes back then 
-      // re-add them
+      // TODO: TODO: TODO: if the game is going while they are in the room
+      // prepare the room for them to come back, player.setIsConnected(false)
+      // every time we set slide, set the room's lastSlide = slideID
+      // the next player to show up replaces that player, replaces their name and id but take the role
+      // send that new player this room's lastSlide
     }
   }
 
@@ -127,7 +128,6 @@ class ServerSocket {
   updateGameState(roomName, gameState) {
     this.io.to(roomName).emit('GAME_STATE', gameState);
   }
-
 
   // Helpers
 

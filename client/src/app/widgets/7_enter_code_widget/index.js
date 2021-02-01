@@ -27,11 +27,6 @@ class EnterCodeWidget extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  // TODO: maybe should be moved into the SegmentedInput element
-  componentDidMount() {
-    this.mountTimestamp = new Date().getTime();
-  }
-
   onChange(fieldIndex, value) {
     const newValues = [...this.state.values];
     newValues[fieldIndex] = value;
@@ -69,7 +64,6 @@ class EnterCodeWidget extends React.Component {
           onSubmit={this.onSubmit}
           errors={errors}
           segments={CODE_LENGTH}
-          name={`Round${this.mountTimestamp}`} // ensures uniquness
         />
       </Slide>
     );

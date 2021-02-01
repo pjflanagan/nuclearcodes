@@ -13,8 +13,7 @@ const validate = (roomName) => {
   if (!roomName.match(ALPHANUMERIC_REGEX)) {
     return ["Room name must be alphanumeric, and not contain spaces."];
   }
-  // TODO: if joining but room doesn't exist, prompt them to create a new room
-  // if creating room already exists, prompt them to joing
+  // we have no concept of create or join room
   return [];
 }
 
@@ -62,7 +61,7 @@ class LobbyWidgetComponent extends React.Component {
   }
 
   render() {
-    // TODO: append game errors here too
+    // TODO: TODO: TODO: no errors within elements, all errors are just affixed to the bottom
     const { errors, roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (

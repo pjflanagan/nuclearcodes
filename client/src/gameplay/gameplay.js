@@ -17,7 +17,8 @@ import {
   ChooseRoomWidget,
   KeyChoiceWidget,
   EnterCodeWidget,
-  DefconWidget
+  DefconWidget,
+  CreditsWidget
 } from '../app/widgets';
 
 // A slides object is complicated, it needs to 
@@ -140,11 +141,11 @@ const GAMEPLAY = [
   {
     id: 'gameover',
     widget: MessageGameOver,
-    next: () => 'play-again-prompt' // TODO: credits
+    next: () => 'credits'
   },
   {
-    // TODO:
     id: 'credits',
+    widget: CreditsWidget,
     next: () => 'play-again-prompt'
   },
   {
@@ -155,10 +156,6 @@ const GAMEPLAY = [
     },
     next: () => 'ready-up'
   }
-  // { TODO:
-  //   id: 'error',
-  //   widget: MessageWidgetError
-  // }
 ];
 
 export { GAMEPLAY };
