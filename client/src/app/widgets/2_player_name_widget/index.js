@@ -23,8 +23,7 @@ class PlayerNameWidget extends React.Component {
     super(props);
 
     this.state = {
-      playerName: "",
-      errors: []
+      playerName: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -45,14 +44,11 @@ class PlayerNameWidget extends React.Component {
       this.props.socketService.setPlayerName({ playerName: playerNameSanitized });
       this.props.doneCallback({ playerName: playerNameSanitized });
     }
-    this.setState({
-      errors
-    });
+    this.props.setErrors({ errors });
   }
 
 
   render() {
-    const { errors } = this.state;
     const { isCurrent } = this.props;
     return (
       <Slide>
@@ -62,7 +58,6 @@ class PlayerNameWidget extends React.Component {
           onChange={e => this.onChange(e)}
           onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
-          errors={errors}
         />
       </Slide>
     );

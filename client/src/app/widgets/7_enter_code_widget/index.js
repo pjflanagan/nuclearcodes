@@ -20,7 +20,6 @@ class EnterCodeWidget extends React.Component {
     super(props);
     this.state = {
       values: [...Array(CODE_LENGTH)].fill(''),
-      errors: [],
       submitted: false
     }
     this.onChange = this.onChange.bind(this);
@@ -48,13 +47,11 @@ class EnterCodeWidget extends React.Component {
         submitted: true
       })
     }
-    this.setState({
-      errors
-    });
+    this.props.setErrors({ errors });
   }
 
   render() {
-    const { errors, submitted } = this.state;
+    const { submitted } = this.state;
     const { isCurrent } = this.props;
     return (
       <Slide>
@@ -62,7 +59,6 @@ class EnterCodeWidget extends React.Component {
           disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
-          errors={errors}
           segments={CODE_LENGTH}
         />
       </Slide>

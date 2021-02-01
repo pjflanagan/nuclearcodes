@@ -4,12 +4,11 @@ import io from "socket.io-client";
 import {
   nextSlide,
   updateGameState,
+  setErrors
 } from '../actions';
 import { getNextPlay } from "../gameplay";
 
 const { REACT_APP_SOCKET_ENDPOINT } = process.env;
-
-
 const socket = io(REACT_APP_SOCKET_ENDPOINT, {
   withCredentials: true,
 });
@@ -27,6 +26,9 @@ class SocketServiceClass {
       socket.on('GAME_STATE', data => {
         dispatch(updateGameState(data));
       });
+      socket.on('SET_ERRORS', data => {
+        dispatch(setErrors(data.errors));
+      })
     }
   }
 

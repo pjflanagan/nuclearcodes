@@ -23,8 +23,7 @@ class LobbyWidgetComponent extends React.Component {
 
     this.state = {
       // createNewRoom: false,
-      roomName: "",
-      errors: []
+      roomName: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -51,9 +50,7 @@ class LobbyWidgetComponent extends React.Component {
       this.props.socketService.joinRoom({ roomName });
       this.props.history.push(`/${roomName}`);
     }
-    this.setState({
-      errors
-    });
+    this.props.setErrors({ errors });
   }
 
   getSanitizedRoomName() {
@@ -61,8 +58,7 @@ class LobbyWidgetComponent extends React.Component {
   }
 
   render() {
-    // TODO: TODO: TODO: no errors within elements, all errors are just affixed to the bottom
-    const { errors, roomName } = this.state; // createNewRoom
+    const { roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (
       <Slide>
@@ -73,7 +69,6 @@ class LobbyWidgetComponent extends React.Component {
           onChange={e => this.onChange(e)}
           onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
-          errors={errors}
         />
       </Slide>
     );

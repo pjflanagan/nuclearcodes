@@ -22,7 +22,7 @@ class Input extends React.Component {
   }
 
   render() {
-    const { disabled, placeholder, onChange, onSubmit, errors } = this.props;
+    const { disabled, placeholder, onChange, onSubmit } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
@@ -46,13 +46,6 @@ class Input extends React.Component {
           >
             {'Enter'}
           </Button>
-        </div>
-        <div className={Style.errors}>
-          {
-            errors.map((error, i) => (
-              <p key={i}>{error}</p>
-            ))
-          }
         </div>
       </div>
     );
@@ -119,7 +112,7 @@ class SegmentedInput extends React.Component {
   }
 
   render() {
-    const { disabled, onSubmit, errors, segments } = this.props;
+    const { disabled, onSubmit, segments } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
@@ -152,13 +145,6 @@ class SegmentedInput extends React.Component {
           >
             {'Enter'}
           </Button>
-        </div>
-        <div className={Style.errors}>
-          {
-            !!errors && errors.map((error, i) => (
-              <p key={i}>{error}</p>
-            ))
-          }
         </div>
       </div>
     );
