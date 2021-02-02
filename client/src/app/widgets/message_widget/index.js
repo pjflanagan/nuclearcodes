@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Slide, Typeable, Text, Pill, Player } from '../../elements';
+import { Slide, Title, Typeable, Text, Pill, Player } from '../../elements';
 
 class MessageWidget extends React.Component {
   render() {
     return (
       <Slide>
+        {!!this.props.data.title && <Title>{this.props.data.title}</Title>}
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>
             {this.props.data.text}
@@ -21,6 +22,7 @@ class MessageWidgetWelcome extends React.Component {
     const { playerName, roomName } = this.props.data;
     return (
       <Slide>
+        <Title>{'Begin Transmission'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'Welcome to Briefing Room '}</Text>
           <Pill>{roomName}</Pill>
@@ -44,6 +46,7 @@ class MessageWidgetKeyRoom extends React.Component {
     const otherPlayer = (!!otherPlayerArr[0]) ? otherPlayerArr[0] : {}; // players.find(p => p.id === otherPlayerArr[0].id)
     return (
       <Slide>
+        <Title>{'Key Room'}</Title>
         <Typeable doneTypingCallback={() => this.props.doneCallback({ isSpy: me.isSpy })}>
           <Text>{'You are in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
@@ -101,6 +104,7 @@ class MessageWidgetLetterReveal extends React.Component {
     }
     return (
       <Slide>
+        <Title>{'Code Entry'}</Title>
         {content}
       </Slide>
     );
@@ -128,6 +132,7 @@ class MessageWidgetDefcon extends React.Component {
     }
     return (
       <Slide>
+        <Title>{'Code Entry Result'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{`
             So the code you agreed on was incorrect. 
@@ -170,6 +175,7 @@ class MessageGameOver extends React.Component {
     }
     return (
       <Slide>
+        <Title>{'Game Over'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
           {pill}
           <Text>{`${message1}`}</Text>

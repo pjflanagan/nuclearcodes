@@ -46,8 +46,8 @@ class GameRoom {
     this.players.removePlayer(socket);
     // update the game state so people know they left
     this.socketServer.updateGameState(this.name, this.getState());
-    // if this changes a poll response then re-check
-    this.moveIfPollOver();
+    // FIXME: if this changes a poll response then re-check this.moveIfPollOver();
+    // we won't move the gamestate if a player leaves, we need them to rejoin
   }
 
   setPlayerName(socket, playerName) {
@@ -84,7 +84,6 @@ class GameRoom {
     // if a player responds to a poll we are not polling, then ignore
     if (response.type !== this.gameState) {
       console.error(`gameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
-      // TODO: error for user?
       return;
     }
 

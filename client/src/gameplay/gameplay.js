@@ -80,6 +80,7 @@ const GAMEPLAY = [
     id: 'introduction',
     widget: MessageWidget,
     data: {
+      title: 'Mission Brief',
       text: `Someone has hacked into the Pentagon and stolen our nuclear codes! 
       The only way to recover them is through these rooms. Each round all agents will enter
       rooms in pairs, each pair will be shown that room's letter. But there are spies in our midst.
@@ -99,6 +100,7 @@ const GAMEPLAY = [
     id: 'room-picker-prompt',
     widget: MessageWidget,
     data: {
+      title: 'Choose Rooms and Partners',
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
     next: () => 'room-picker',
@@ -141,12 +143,14 @@ const GAMEPLAY = [
   {
     id: 'gameover',
     widget: MessageGameOver,
-    next: () => 'credits'
+    next: () => 'credits',
+    delay: 2000
   },
   {
     id: 'credits',
-    widget: CreditsWidget,
-    next: () => 'play-again-prompt'
+    widget: CreditsWidget, // TODO: share widget after then play again
+    next: () => 'play-again-prompt',
+    delay: 400
   },
   {
     id: 'play-again-prompt',

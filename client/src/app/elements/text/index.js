@@ -1,5 +1,4 @@
 import React from 'react'
-import { render } from 'react-dom';
 
 import Style from './style.module.css';
 
@@ -104,6 +103,32 @@ class Text extends React.Component {
   }
 }
 
+class TextBreak extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTyped: false
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isTyping && this.props.isTyping) {
+      this.setState({
+        isTyped: true
+      });
+      this.props.reportDoneCallback();
+    }
+  }
+
+  render() {
+    const { isTyped } = this.state;
+    if (isTyped) {
+      return (<br />);
+    }
+    return (<span></span>);
+  }
+}
+
 class Pill extends React.Component {
   constructor(props) {
     super(props);
@@ -156,12 +181,17 @@ class Player extends Pill {
   }
 };
 
-export { Player }
+const Title = ({ children }) => (
+  <h1 className={Style.title}>{children}</h1>
+)
 
 
 
 export {
   Typeable,
+  Title,
   Text,
-  Pill
+  Pill,
+  Player,
+  TextBreak
 }

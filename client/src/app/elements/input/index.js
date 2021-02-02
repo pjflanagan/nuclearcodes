@@ -70,7 +70,10 @@ class SegmentedInput extends React.Component {
 
   componentDidMount() {
     this.mountTimestamp = new Date().getTime();
-    this.focusSegment(0);
+    this.setState({}, () => {
+      this.focusSegment(0);
+    });
+
   }
 
   focusSegment(i) {
@@ -100,15 +103,13 @@ class SegmentedInput extends React.Component {
   }
 
   onKeyDown(e) {
+    const { name, value } = e.target;
     if (e.key === 'Enter') {
       this.props.onSubmit();
+    } else if (e.key === 'Backspace' && value.length === 0) {
+      const fieldIndex = getFieldIndexFromName(name);
+      this.focusSegment(fieldIndex - 1);
     }
-    // TODO: select backward on delete
-    // else if (e.key === 'Backspace') {
-    //   const { name } = e.target;
-    //   const fieldIndex = getFieldIndexFromName(name);
-    //   this.focusSegment(fieldIndex - 1);
-    // }
   }
 
   render() {

@@ -1,11 +1,11 @@
 
 Client
-- [ ] no errors within elements, all errors are globally set DO THIS FIRST
+- [x] no errors within elements, all errors are globally set DO THIS FIRST
 - [ ] make mobile ready so people can play on phone (IMPORTANT)
 
 Server
-- [ ] alert error route, use this (a good place to start is sign on, but after that do room assignments)
-- [ ] a auto tester that responds automatically, also drops and re-adds players randomly
+- [x] alert error route, use this (a good place to start is sign on, but after that do room assignments)
+- [ ] an auto tester that responds automatically, also drops and re-adds players randomly
 - [ ] send timer route, it triggers a global timer that when not met advances with default data
 - [ ] remove env from git and add a password to the server test
 

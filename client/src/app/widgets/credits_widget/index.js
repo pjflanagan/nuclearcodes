@@ -1,14 +1,28 @@
 import React from 'react'
-import { Slide } from '../../elements'
+import { Slide, Title, Typeable, Text, TextBreak, Pill } from '../../elements'
 
-const CreditsWidget = () => (
+const CreditsWidget = ({
+  doneCallback
+}) => (
   <Slide>
-    <div>Credits</div>
-    <div>Game by <a target="_blank" href="https://pjflanagan.me" title="Peter James Flanagan">Peter James Flanagan</a>.</div>
-    <div>Icons by <a target="_blank" href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.</div>
-    <div>Please consider sharing!</div>
-    <div>The cost of hosting this game isn't much, but it isn't zero. Please considering donating if you enjoyed, every donation is encouragement for me to take on more projects like this. Thank you!</div>
+    <Title>{'Credits'}</Title>
+    <Typeable doneTypingCallback={doneCallback}>
+      <Text>{'Game by '}</Text>
+      <Pill><a rel="noreferrer" target="_blank" href="https://pjflanagan.me" title="Peter James Flanagan">{`Peter James Flanagan`}</a></Pill>
+      <Text>{`. If you enjoyed, please share this game with more friends! If you REALLY enjoyed, please `}</Text>
+      <Pill><a rel="noreferrer" target="_blank" href="https://paypal.me/pjflanagan1" title="Make a donation">{'Make A Donation!'}</a></Pill>
+      <Text>{` The cost of hosting this game isn't much, but it isn't zero, and every donation encourages me to take on more projects like this. Thank you!`}</Text>
+      <TextBreak />
+      <TextBreak />
+      <Text>{'Icons by '}</Text>
+      <Pill><a rel="noreferrer" target="_blank" href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">{'Kiranshastry'}</a></Pill>
+      <Text>{'.'}</Text>
+    </Typeable>
   </Slide>
 );
 
-export { CreditsWidget }
+const ShareWidget = () => {
+  // TODO: after credits, point to share icons here
+}
+
+export { CreditsWidget, ShareWidget }
