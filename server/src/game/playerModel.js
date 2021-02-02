@@ -95,7 +95,7 @@ class PlayerList {
         rooms[player.response.roomID] = [...rooms[player.response.roomID], player];
       }
     });
-    return rooms
+    return rooms;
   }
 
   getPlayersAsData() {

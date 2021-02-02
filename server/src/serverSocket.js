@@ -71,13 +71,13 @@ class ServerSocket {
       this.gameRooms.push(gameRoom);
     } else if (gameRoom.isFull()) {
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
-      this.io.to(socket.id).emit('SET_ERRORS', { errors: [`Game room '${roomName}' is full.`] });
+      this.sendError(socket, [`Game room '${roomName}' is full.`]);
       return;
     } else if (gameRoom.isStarted()) {
       // TODO: remove this error, allow join started game if it is not full
       // replace isConnected=false player
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
-      this.io.to(socket.id).emit('SET_ERRORS', { errors: [`Game room '${roomName}' has started, you may join next round.`] });
+      this.sendError(socket, [`Game room '${roomName}' has started, you may join next round.`]);
       return;
     }
     this.roomAssignments.push({
@@ -128,6 +128,10 @@ class ServerSocket {
 
   updateGameState(roomName, gameState) {
     this.io.to(roomName).emit('GAME_STATE', gameState);
+  }
+
+  sendError(socket, errors) {
+    this.io.to(socket.id).emit('SET_ERRORS', { errors });
   }
 
   // Helpers
