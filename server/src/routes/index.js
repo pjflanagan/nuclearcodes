@@ -6,11 +6,10 @@ import { serverSocket } from '../index.js';
 
 const router = express.Router();
 
-// TODO: check alive route with no data?
-
 dotenv.config();
 const { CLIENT_ENDPOINT, ENV } = process.env;
 
+// check if the server is alive and return some data too
 router.get("/", (req, res) => {
   res.send({
     status: "alive",

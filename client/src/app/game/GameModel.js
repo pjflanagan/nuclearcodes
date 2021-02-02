@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux'
 
-import { nextSlide } from '../../actions';
+import { nextSlide, setErrors } from '../../actions';
 import { getNextPlay } from '../../gameplay';
 
 import { GameComponent } from './GameComponent';
@@ -10,7 +10,8 @@ const NEXT_SLIDE_DELAY = 360;
 
 const mapStateToProps = (state) => ({
   slides: state.slides,
-  gameState: state.gameState
+  gameState: state.gameState,
+  errors: state.errors
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -30,6 +31,9 @@ const mapDispatchToProps = dispatch => ({
     }
     // if there is not a next function we are waiting
   },
+  setErrors: ({ errors }) => {
+    dispatch(setErrors(errors))
+  }
 });
 
 const Game = connect(

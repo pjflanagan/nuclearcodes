@@ -49,10 +49,11 @@ class ServerSocket {
     } else {
       // otherwise alert the room
       this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
-      // TODO: if the game is going while they are in the room
-      // prepare the room for them to come back, put thier player data into a
-      // gameRoom.ghosts array and if that playerName comes back then 
-      // re-add them
+      // TODO: TODO: TODO: if the game is going while they are in the room
+      // prepare the room for them to come back, player.setIsConnected(false)
+      // every time we set slide, set the room's lastSlide = slideID
+      // the next player to show up replaces that player, replaces their name and id but take the role
+      // send that new player this room's lastSlide
     }
   }
 
@@ -69,13 +70,14 @@ class ServerSocket {
       gameRoom = new GameRoom(this, roomName);
       this.gameRooms.push(gameRoom);
     } else if (gameRoom.isFull()) {
-      // TODO: handle ERROR emits
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
-      this.io.to(socket.id).emit('ERROR', { message: `Game room '${roomName}' is full.` });
+      this.sendError(socket, [`Game room '${roomName}' is full.`]);
       return;
     } else if (gameRoom.isStarted()) {
+      // TODO: remove this error, allow join started game if it is not full
+      // replace isConnected=false player
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
-      this.io.to(socket.id).emit('ERROR', { message: `Game room '${roomName}' has started, you may join next round.` });
+      this.sendError(socket, [`Game room '${roomName}' has started, you may join next round.`]);
       return;
     }
     this.roomAssignments.push({
@@ -128,6 +130,9 @@ class ServerSocket {
     this.io.to(roomName).emit('GAME_STATE', gameState);
   }
 
+  sendError(socket, errors) {
+    this.io.to(socket.id).emit('SET_ERRORS', { errors });
+  }
 
   // Helpers
 

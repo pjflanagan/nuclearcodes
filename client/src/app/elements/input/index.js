@@ -22,7 +22,7 @@ class Input extends React.Component {
   }
 
   render() {
-    const { disabled, placeholder, onChange, onSubmit, errors } = this.props;
+    const { disabled, placeholder, onChange, onSubmit } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
@@ -47,13 +47,6 @@ class Input extends React.Component {
             {'Enter'}
           </Button>
         </div>
-        <div className={Style.errors}>
-          {
-            errors.map((error, i) => (
-              <p key={i}>{error}</p>
-            ))
-          }
-        </div>
       </div>
     );
   }
@@ -76,13 +69,16 @@ class SegmentedInput extends React.Component {
   }
 
   componentDidMount() {
-    this.focusSegment(0);
+    this.mountTimestamp = new Date().getTime();
+    this.setState({}, () => {
+      this.focusSegment(0);
+    });
+
   }
 
   focusSegment(i) {
-    const { name } = this.props;
     const nextSibling = document.querySelector(
-      `input[name=seg${name}-${i}]`
+      `input[name=seg${this.mountTimestamp}-${i}]`
     );
 
     // If found, focus the next field
@@ -107,19 +103,17 @@ class SegmentedInput extends React.Component {
   }
 
   onKeyDown(e) {
+    const { name, value } = e.target;
     if (e.key === 'Enter') {
       this.props.onSubmit();
+    } else if (e.key === 'Backspace' && value.length === 0) {
+      const fieldIndex = getFieldIndexFromName(name);
+      this.focusSegment(fieldIndex - 1);
     }
-    // TODO: select backward on delete
-    // else if (e.key === 'Backspace') {
-    //   const { name } = e.target;
-    //   const fieldIndex = getFieldIndexFromName(name);
-    //   this.focusSegment(fieldIndex - 1);
-    // }
   }
 
   render() {
-    const { disabled, onSubmit, errors, segments, name } = this.props;
+    const { disabled, onSubmit, segments } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
@@ -129,7 +123,7 @@ class SegmentedInput extends React.Component {
                 key={i}
                 type="text"
                 maxLength="1"
-                name={`seg${name}-${i}`}
+                name={`seg${this.mountTimestamp}-${i}`}
                 value={this.props.value}
                 placeholder={i + 1}
                 tabIndex={0}
@@ -152,13 +146,6 @@ class SegmentedInput extends React.Component {
           >
             {'Enter'}
           </Button>
-        </div>
-        <div className={Style.errors}>
-          {
-            !!errors && errors.map((error, i) => (
-              <p key={i}>{error}</p>
-            ))
-          }
         </div>
       </div>
     );

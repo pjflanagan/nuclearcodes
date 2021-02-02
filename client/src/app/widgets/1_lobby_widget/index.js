@@ -13,8 +13,7 @@ const validate = (roomName) => {
   if (!roomName.match(ALPHANUMERIC_REGEX)) {
     return ["Room name must be alphanumeric, and not contain spaces."];
   }
-  // TODO: if joining but room doesn't exist, prompt them to create a new room
-  // if creating room already exists, prompt them to joing
+  // we have no concept of create or join room
   return [];
 }
 
@@ -24,8 +23,7 @@ class LobbyWidgetComponent extends React.Component {
 
     this.state = {
       // createNewRoom: false,
-      roomName: "",
-      errors: []
+      roomName: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -52,9 +50,7 @@ class LobbyWidgetComponent extends React.Component {
       this.props.socketService.joinRoom({ roomName });
       this.props.history.push(`/${roomName}`);
     }
-    this.setState({
-      errors
-    });
+    this.props.setErrors({ errors });
   }
 
   getSanitizedRoomName() {
@@ -62,8 +58,7 @@ class LobbyWidgetComponent extends React.Component {
   }
 
   render() {
-    // TODO: append game errors here too
-    const { errors, roomName } = this.state; // createNewRoom
+    const { roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (
       <Slide>
@@ -74,7 +69,6 @@ class LobbyWidgetComponent extends React.Component {
           onChange={e => this.onChange(e)}
           onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
-          errors={errors}
         />
       </Slide>
     );

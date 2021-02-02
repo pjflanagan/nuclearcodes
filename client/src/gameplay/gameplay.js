@@ -17,7 +17,8 @@ import {
   ChooseRoomWidget,
   KeyChoiceWidget,
   EnterCodeWidget,
-  DefconWidget
+  DefconWidget,
+  CreditsWidget
 } from '../app/widgets';
 
 // A slides object is complicated, it needs to 
@@ -79,6 +80,7 @@ const GAMEPLAY = [
     id: 'introduction',
     widget: MessageWidget,
     data: {
+      title: 'Mission Brief',
       text: `Someone has hacked into the Pentagon and stolen our nuclear codes! 
       The only way to recover them is through these rooms. Each round all agents will enter
       rooms in pairs, each pair will be shown that room's letter. But there are spies in our midst.
@@ -98,6 +100,7 @@ const GAMEPLAY = [
     id: 'room-picker-prompt',
     widget: MessageWidget,
     data: {
+      title: 'Choose Rooms and Partners',
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
     next: () => 'room-picker',
@@ -140,12 +143,14 @@ const GAMEPLAY = [
   {
     id: 'gameover',
     widget: MessageGameOver,
-    next: () => 'play-again-prompt' // TODO: credits
+    next: () => 'credits',
+    delay: 2000
   },
   {
-    // TODO:
     id: 'credits',
-    next: () => 'play-again-prompt'
+    widget: CreditsWidget, // TODO: share widget after then play again
+    next: () => 'play-again-prompt',
+    delay: 400
   },
   {
     id: 'play-again-prompt',
@@ -155,10 +160,6 @@ const GAMEPLAY = [
     },
     next: () => 'ready-up'
   }
-  // { TODO:
-  //   id: 'error',
-  //   widget: MessageWidgetError
-  // }
 ];
 
 export { GAMEPLAY };

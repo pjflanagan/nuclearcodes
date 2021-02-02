@@ -1,10 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+
+import { ErrorWidget } from '../widgets';
 
 import Style from './style.module.css';
 
 
-const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService }) => {
+const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService, errors, setErrors }) => {
   const socketID = socketService.getID();
   const me = gameState.players.find(p => p.id === socketID);
   return (
@@ -25,9 +27,11 @@ const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService 
               })}
               socketService={socketService}
               isCurrent={i === slides.length - 1}
+              setErrors={setErrors}
             />
           ))
         }
+        <ErrorWidget errors={errors} />
       </div>
     </div >
   );

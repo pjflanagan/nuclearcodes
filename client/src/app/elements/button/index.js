@@ -10,7 +10,7 @@ const Button = ({
 }) => (
   <button
     className={Style.button}
-    // TODO: this won't always be what we want to focus on ref={(input) => { this.input = input; }}
+    // ref={(input) => { this.input = input; }} // this won't always be what we want to focus on 
     tabIndex={0}
     onClick={() => onClick()}
     disabled={disabled}

@@ -59,7 +59,7 @@ class PlayerModel {
       type: 'ROUND_VOTE',
       data: {
         roomID,
-        timestamp: Date.now() // TODO: should this happen on backend, eh
+        timestamp: Date.now()
       }
     });
   }

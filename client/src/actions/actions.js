@@ -1,5 +1,5 @@
 import {
-  NEXT_SLIDE, JOIN_ROOM, UPDATE_GAME_STATE, SET_PLAYER_NAME
+  NEXT_SLIDE, JOIN_ROOM, UPDATE_GAME_STATE, SET_PLAYER_NAME, SET_ERRORS
 } from './actionTypes';
 
 export const nextSlide = (slide) => ({
@@ -20,4 +20,9 @@ export const setPlayerName = (playerName) => ({
 export const updateGameState = (gameState) => ({
   type: UPDATE_GAME_STATE,
   gameState
+})
+
+export const setErrors = (errors) => ({
+  type: SET_ERRORS,
+  errors
 })

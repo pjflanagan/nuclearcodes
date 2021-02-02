@@ -46,8 +46,8 @@ class GameRoom {
     this.players.removePlayer(socket);
     // update the game state so people know they left
     this.socketServer.updateGameState(this.name, this.getState());
-    // if this changes a poll response then re-check
-    this.moveIfPollOver();
+    // FIXME: if this changes a poll response then re-check this.moveIfPollOver();
+    // we won't move the gamestate if a player leaves, we need them to rejoin
   }
 
   setPlayerName(socket, playerName) {
@@ -58,9 +58,12 @@ class GameRoom {
 
   // make a game with spies, agents
   setupGame() {
-    // reset the players if new game
+    // reset the rounds and round data
     this.round = 0;
-    this.players.resetSpies()
+    this.prevRooms = [];
+
+    // reset the players
+    this.players.resetSpies();
     const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
     arr.forEach(i => {
       const player = this.players.get(i);
@@ -68,9 +71,10 @@ class GameRoom {
         player.setIsSpy(true);
       }
     });
+
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
-    this.fakeCode = makeFakeCode(this.code, CODE_LENGTH);
+    this.fakeCode = makeFakeCode(this.code);
   }
 
   // players respond to polls and the data gets recorded here
@@ -80,7 +84,6 @@ class GameRoom {
     // if a player responds to a poll we are not polling, then ignore
     if (response.type !== this.gameState) {
       console.error(`gameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
-      // TODO: error for user
       return;
     }
 
@@ -90,11 +93,16 @@ class GameRoom {
         // just record the response they give here
         player.recordResponse(response.data);
         break;
+      case GAME_STATES.ROUND_VOTE:
+        const roundVoteErrors = RoundVoteHandlers.pollResponse(player, this.players, response, this.prevRooms);
+        if (roundVoteErrors.length > 0) {
+          this.socketServer.sendError(socket, roundVoteErrors);
+          // no state to update here
+          return;
+        }
+        break;
       case GAME_STATES.ROUND_TURN_KEY:
         RoundTurnKeyHandlers.pollResponse(player, response);
-        break;
-      case GAME_STATES.ROUND_VOTE:
-        RoundVoteHandlers.pollResponse(player, this.players, response);
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -268,7 +276,7 @@ class GameRoom {
           });
           return;
         }
-        // otherwise: ROUND_VOTE, 'start-next-round' // TODO: after some rounds vote to KILL?
+        // otherwise: ROUND_VOTE, 'start-next-round'
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
@@ -286,7 +294,7 @@ class GameRoom {
   getState() {
     const gameState = {
       players: this.players.getPlayersAsData(),
-      // code: this.code, // TODO: might be helpful to send these for tests
+      // code: this.code, // it might be helpful to send these for tests
       // fakeCode: this.fakeCode
       round: this.round
     };
