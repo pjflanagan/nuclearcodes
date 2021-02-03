@@ -1,0 +1,52 @@
+< !doctype html>
+  <html>
+
+  <head>
+    <%- include('partials/head.ejs') -%>
+  </head>
+
+  <!-- TODO: password protect this page on PRD somehow -->
+
+  <body ng-app="nuclear-codes-test">
+    <div class="controller" ng-controller="testController" ng-init="init()">
+      <div class="header">
+        <h1>nuclear-codes-auto-test</h1>
+        <form ng-submit="addRoom()" class="form-row">
+          <label>Game Room Name:</label>
+          <input type="text" ng-model="state.roomName" />
+          <label>Players:</label>
+          <input type="number" ng-model="state.playerCount" />
+          <button>Start Auto Test Room</button>
+        </form>
+      </div>
+      <div class="container">
+        <div id="gamerooms">
+          <div class="room" ng-repeat="(i, room) in state.rooms">
+            <a href="{{room.roomURL}}" target="_blank">
+              <h2>{{ room.roomName }}</h2>
+            </a>
+            <div class="form-row">
+              <input type="text" ng-model="room.allCode" />
+              <button ng-click="room.sendEnterCode()">Send Code All</button>
+            </div>
+            <div class="players">
+              <div class="player" ng-class="player.isSpy() ? 'spy' : ''" ng-repeat="(j, player) in room.players">
+                <h3>{{ player.playerName }}</h3>
+                <p class="data">Room: {{ player.lastRoomID + 1 }}</p>
+                <p class="data">Letter: {{ player.lastSawLetter }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/packages/angular.min.js"></script>
+
+    <script src="/assets/autoTest.js" type="module"></script>
+    <script src="/reload/reload.js"></script>
+
+  </body>
+
+  </html>

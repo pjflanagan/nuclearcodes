@@ -83,7 +83,7 @@ class GameRoom {
 
     // if a player responds to a poll we are not polling, then ignore
     if (response.type !== this.gameState) {
-      console.error(`gameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
+      console.error(`GameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
       return;
     }
 
@@ -96,8 +96,11 @@ class GameRoom {
       case GAME_STATES.ROUND_VOTE:
         const roundVoteErrors = RoundVoteHandlers.pollResponse(player, this.players, response, this.prevRooms);
         if (roundVoteErrors.length > 0) {
-          this.socketServer.sendError(socket, roundVoteErrors);
-          // no state to update here
+          this.socketServer.sendError(socket, {
+            type: 'GameRoom.pollResponse.ROUND_VOTE',
+            errors: roundVoteErrors
+          });
+          // no state to update when there is an error
           return;
         }
         break;
@@ -296,7 +299,10 @@ class GameRoom {
       players: this.players.getPlayersAsData(),
       // code: this.code, // it might be helpful to send these for tests
       // fakeCode: this.fakeCode
-      round: this.round
+      round: this.round,
+      // prevRooms: this.prevRooms 
+      // TODO: do this so client side highlights and prevents user from clicking on room they aren't allowed
+      // in and shows the error client side
     };
     return gameState;
   }

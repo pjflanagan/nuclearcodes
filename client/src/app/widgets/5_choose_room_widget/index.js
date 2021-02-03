@@ -9,10 +9,15 @@ class ChooseRoomWidget extends React.Component {
     super(props);
 
     this.state = {
-      playersInRooms: []
+      playersInRooms: [],
     }
 
+    this.updatePlayers = this.updatePlayers.bind(this);
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
+  }
+
+  componentDidMount() {
+    this.updatePlayers();
   }
 
 
@@ -20,11 +25,15 @@ class ChooseRoomWidget extends React.Component {
   // this way when we move slides the data doesn't vanish
   componentDidUpdate(prevProps) {
     if (this.props.isCurrent && prevProps !== this.props) {
-      const { gameState: { players } } = this.props;
-      this.setState({
-        playersInRooms: players.filter(p => p.response !== false)
-      });
+      this.updatePlayers();
     }
+  }
+
+  updatePlayers() {
+    const { gameState: { players } } = this.props;
+    this.setState({
+      playersInRooms: players.filter(p => p.response !== false)
+    });
   }
 
   sendRoomChoice(roomID) {

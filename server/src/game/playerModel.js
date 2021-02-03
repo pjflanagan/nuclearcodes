@@ -91,7 +91,11 @@ class PlayerList {
   createRoomArray() {
     const rooms = Array(CODE_LENGTH).fill(new Array());
     this.players.forEach(player => {
-      if (player.response !== false && player.response.roomID !== undefined) {
+      if (
+        player.response !== false &&
+        player.response.roomID !== undefined &&
+        player.response.roomID < rooms.length
+      ) {
         rooms[player.response.roomID] = [...rooms[player.response.roomID], player];
       }
     });
