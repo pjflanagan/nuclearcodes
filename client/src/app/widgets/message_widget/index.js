@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Slide, Title, Typeable, Text, Pill, Player } from '../../elements';
+import { Slide, Title, Typeable, Text, Pill, PillCopy, Player } from '../../elements';
 
 class MessageWidget extends React.Component {
   render() {
@@ -29,7 +29,7 @@ class MessageWidgetWelcome extends React.Component {
           <Text>{' agent '}</Text>
           <Pill>{playerName}</Pill>
           <Text>{'. You can invite friends to this game by sharing the url: '}</Text>
-          <Pill copyable={true}>{window.location.href}</Pill>
+          <PillCopy>{window.location.href}</PillCopy>
         </Typeable>
       </Slide>
     );

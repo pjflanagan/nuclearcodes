@@ -129,57 +129,6 @@ class TextBreak extends React.Component {
   }
 }
 
-class Pill extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isTyped: false
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.isTyping && this.props.isTyping) {
-      this.setState({
-        isTyped: true
-      });
-      this.props.reportDoneCallback();
-    }
-  }
-
-  render() {
-    const { children, color, doNotType } = this.props;
-    const { isTyped } = this.state;
-    if (isTyped || !!doNotType) {
-      return (
-        <span className={`${Style.pill} ${Style[color]}`}>
-          {children}
-        </span>
-      );
-    }
-    return (
-      <span></span>
-    );
-  }
-}
-
-class Player extends Pill {
-  render() {
-    const { player, me, doNotType } = this.props;
-    const color = (me.isSpy && player.isSpy) ? 'red' : '';
-    const { isTyped } = this.state;
-    if (isTyped || !!doNotType) {
-      return (
-        <span className={`${Style.pill} ${Style[color]}`}>
-          {!!player.name ? player.name : `???`}
-        </span>
-      );
-    }
-    return (
-      <span></span>
-    );
-  }
-};
 
 const Title = ({ children }) => (
   <h1 className={Style.title}>{children}</h1>
@@ -191,7 +140,5 @@ export {
   Typeable,
   Title,
   Text,
-  Pill,
-  Player,
   TextBreak
 }

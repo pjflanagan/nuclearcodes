@@ -1,0 +1,35 @@
+.pill {
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 18px;
+  color: #1c1c1c;
+  background: #dbdbdb;
+  margin: 4px;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.pill.red {
+  color: #dbdbdb;
+  background: #a71111;
+}
+
+a .pill {
+  color: #165ac3;
+  text-decoration: none;
+}
+
+a:hover .pill {
+  color: #073a86;
+  text-decoration: underline;
+}
+
+.pill.actionable {
+  cursor: pointer;
+}
+
+.pill.actionable:hover {
+  background: #b5b5b5;
+}
+
+/* .pill .icon {} */
