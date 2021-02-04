@@ -39,16 +39,16 @@ class AutoRoomModel {
         )
       );
     }
-    this.allCode = '';
   }
 
   getRoomIDThisRound(round, playerIndex) {
     return ROUND_ROOMS[round][playerIndex];
   }
 
-  sendEnterCode() {
+
+  sendCode(isCorrect) {
     this.players.forEach(p => {
-      p.sendEnterCode(this.allCode);
+      p.sendEnterCode(isCorrect);
     })
   }
 }

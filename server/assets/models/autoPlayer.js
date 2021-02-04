@@ -33,12 +33,12 @@ class AutoPlayerModel {
           // choose room
           this.sendRoomChoice();
           break;
-        case 'key-room-prompt':
-          if (this.isSpy()) {
-            // choose key to turn
-            this.sendKeyChoice();
-          }
-          break;
+        // case 'key-room-prompt':
+        //   if (this.isSpy()) {
+        //     // choose key to turn
+        //     this.sendKeyChoice();
+        //   }
+        //   break;
         case 'letter-reveal':
           // display revealed letter
           this.recvLetterReveal(data);
@@ -135,13 +135,14 @@ class AutoPlayerModel {
     this.$scope.$apply();
   }
 
-  sendEnterCode(userSetCode) {
+  sendEnterCode(isCorrect) {
+    console.log({ isCorrect, gameState: this.gameState })
     // spies send an incorrect code
     // agents send what the user enters
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
       data: {
-        code: (this.isSpy()) ? 'RANDO' : userSetCode
+        code: (this.isSpy() || !isCorrect) ? 'RANDO' : this.gameState.code
       }
     });
   }

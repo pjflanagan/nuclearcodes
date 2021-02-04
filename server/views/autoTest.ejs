@@ -26,8 +26,8 @@
               <h2>{{ room.roomName }}</h2>
             </a>
             <div class="form-row">
-              <input type="text" ng-model="room.allCode" />
-              <button ng-click="room.sendEnterCode()">Send Code All</button>
+              <button ng-click="room.sendCode(true)">Send Correct Code</button>
+              <button ng-click="room.sendCode(false)">Send Incorrect Code</button>
             </div>
             <div class="players">
               <div class="player" ng-class="player.isSpy() ? 'spy' : ''" ng-repeat="(j, player) in room.players">

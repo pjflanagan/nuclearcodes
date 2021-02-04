@@ -63,49 +63,13 @@ const RoundVoteHandlers = {
     // validate that everyone is paired off in a room, no validation
     // about partners or which room, validation was done in poll response
     const rooms = players.createRoomArray();
-    let hasInvalidRoom = false;
-    let roomVoteResponseCount = 0;
-    rooms.forEach((playersInRoom) => {
-      const count = playersInRoom.length;
-      roomVoteResponseCount += count;
-      // TODO: if a player drops the game breaks because of this rule (option B is best)
-      // A: this needs to work with an odd number of players?
-      // B: this game needs to allow people to rejoin (do this one, then just have player drop error)
-      if (count % 2 !== 0 || count > 2) {
-        // if not an even number (pair) or 0
-        hasInvalidRoom = true;
-      }
-    });
+    const roomVoteResponseCount = rooms.reduce((sum, playersInRoom) => sum + playersInRoom.length, 0);
     return [
-      !hasInvalidRoom && roomVoteResponseCount >= players.count(),
+      roomVoteResponseCount >= players.count(),
       { rooms }
     ];
   }
 }
-
-const RoundTurnKeyHandlers = {
-  // validate that they are a spy
-  pollResponse: (player, response) => {
-    if (player.getIsSpy()) {
-      player.recordResponse(response.data);
-    } else {
-      console.error(`gameRoom.pollResponse: Response '${response.type}' recieved for agent, not spy.`);
-    }
-  },
-  isPollOver: (players) => {
-    const spies = players.getSpies();
-    const spyResponses = spies.map(spy => ({
-      response: spy.response,
-      playerID: spy.id
-    }));
-    if (spyResponses.filter(r => r.response !== false).length < spies.length) {
-      // if the spies have not all responded
-      // TODO: auto response here to keep game moving? maybe shouldn't happen here in code but we should have it in general
-      return [false];
-    }
-    return [true, { spyResponses }];
-  }
-};
 
 const RoundEnterCodeHandlers = {
   isPollOver: (players) => {
@@ -120,7 +84,6 @@ const RoundEnterCodeHandlers = {
 
 export {
   RoundLobbyHandlers,
-  RoundTurnKeyHandlers,
   RoundVoteHandlers,
   RoundEnterCodeHandlers
 }
