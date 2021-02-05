@@ -1,9 +1,7 @@
 
 import {
   GAME_STATES,
-  PLAYERS_PER_GAME,
-  SPIES_PER_GAME,
-  CODE_LENGTH,
+  MAX_PLAYERS_PER_GAME,
   TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,
@@ -11,7 +9,7 @@ import {
 } from './gameHelpers.js';
 import {
   RoundLobbyHandlers,
-  RoundVoteHandlers,
+  RoundChooseRoomHandlers,
   RoundEnterCodeHandlers
 } from './gameRound.js';
 import { PlayerList } from './playerModel.js';
@@ -23,9 +21,9 @@ class GameRoom {
 
     // game state
     this.players = new PlayerList();
-    this.prevRooms = [];
     this.gameState = GAME_STATES.LOBBY;
     this.round = 0;
+    this.codeLength = 0;
 
     // server side
     this.code = [];
@@ -60,13 +58,16 @@ class GameRoom {
 
   // make a game with spies, agents
   setupGame() {
+    const playerCount = this.players.count();
+
     // reset the rounds and round data
     this.round = 0;
-    this.prevRooms = [];
+
+    const spyCount = Math.floor(playerCount / 2);
 
     // reset the players
     this.players.resetSpies();
-    const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
+    const arr = makeRandomArray(spyCount, playerCount);
     arr.forEach(i => {
       const player = this.players.get(i);
       if (!!player) {
@@ -75,7 +76,7 @@ class GameRoom {
     });
 
     // make a code and a fake code that share no letters
-    this.code = makeCode(CODE_LENGTH);
+    this.code = makeCode(playerCount);
     this.fakeCode = makeFakeCode(this.code);
   }
 
@@ -92,7 +93,7 @@ class GameRoom {
     switch (response.type) {
       case GAME_STATES.LOBBY:
       case GAME_STATES.ROUND_ENTER_CODE:
-      case GAME_STATES.ROUND_VOTE:
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
         // just record the response they give here
         player.recordResponse(response.data);
         break;
@@ -122,8 +123,8 @@ class GameRoom {
         return RoundLobbyHandlers.isPollOver(this.players)
 
       // if they are voting for rooms
-      case GAME_STATES.ROUND_VOTE:
-        return RoundVoteHandlers.isPollOver(this.players);
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
+        return RoundChooseRoomHandlers.isPollOver(this.codeLength, this.players);
 
       // if they are entering codes, make sure they all have responded
       case GAME_STATES.ROUND_ENTER_CODE:
@@ -142,7 +143,7 @@ class GameRoom {
     switch (this.gameState) {
       // if we are all ready
       case GAME_STATES.LOBBY:
-        this.gameState = GAME_STATES.ROUND_VOTE;
+        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
         this.setupGame();
         // update the game state, it will name the spies
         this.socketServer.nextSlide(this.name, {
@@ -152,14 +153,11 @@ class GameRoom {
         break;
 
       // if we have all picked rooms
-      case GAME_STATES.ROUND_VOTE:
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
         this.gameState = GAME_STATES.ROUND_ENTER_CODE;
         const { rooms } = data;
-        // store this data so we can use it for restrictions next round
-        this.prevRooms = rooms;
-
         // for each room
-        this.prevRooms.forEach((room, i) => {
+        rooms.forEach((room, i) => {
           // if it has no people in it, return
           if (room.length === 0) {
             return;
@@ -211,8 +209,8 @@ class GameRoom {
           });
           return;
         }
-        // otherwise: ROUND_VOTE, 'start-next-round'
-        this.gameState = GAME_STATES.ROUND_VOTE;
+        // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
+        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
         });
@@ -228,11 +226,11 @@ class GameRoom {
 
   getState() {
     const gameState = {
+      codeLength: this.codeLength,
       players: this.players.getPlayersAsData(),
       code: this.code,
       fakeCode: this.fakeCode,
-      round: this.round,
-      prevRooms: this.prevRooms
+      round: this.round
     };
     return gameState;
   }
@@ -246,7 +244,7 @@ class GameRoom {
   }
 
   isFull() {
-    return this.players.count() >= PLAYERS_PER_GAME;
+    return this.players.count() >= MAX_PLAYERS_PER_GAME;
   }
 
   isEmpty() {

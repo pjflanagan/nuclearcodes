@@ -1,5 +1,4 @@
 
-import { CODE_LENGTH } from './gameHelpers.js'
 
 // a player object that represents a player
 class Player {
@@ -90,8 +89,8 @@ class PlayerList {
     return this.players.filter(p => p.getIsSpy());
   }
 
-  createRoomArray() {
-    const rooms = Array(CODE_LENGTH).fill(new Array());
+  createRoomArray(roomCount) {
+    const rooms = Array(roomCount).fill(new Array());
     this.players.forEach(player => {
       if (
         player.response !== false &&

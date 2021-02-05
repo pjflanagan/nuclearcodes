@@ -26,6 +26,7 @@
 
 ## Admin
 - [ ] TODO: PRIORITY handle log back in
+- [ ] TODO: make the game a variable number of players (5-10)
 - [ ] show error on midgame disconnect
 
 ## Test

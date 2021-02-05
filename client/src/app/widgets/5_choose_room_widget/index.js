@@ -39,7 +39,7 @@ class ChooseRoomWidget extends React.Component {
 
   sendRoomChoice(roomID) {
     this.props.socketService.pollResponse({
-      type: 'ROUND_VOTE',
+      type: 'ROUND_CHOOSE_ROOM',
       data: {
         roomID,
         timestamp: Date.now()

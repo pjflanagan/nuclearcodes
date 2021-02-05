@@ -64,12 +64,12 @@ class MessageWidgetKeyRoom extends React.Component {
 
 class MessageWidgetLetterReveal extends React.Component {
   render() {
-    // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z","showWhichLetter":"REAL"}
+    // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z"}
     const { data, me } = this.props;
     // if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
     let content = (<></>);
-    if (data.showWhichLetter === 'BOTH') {
+    if (me.isSpy) {
       content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
@@ -78,27 +78,17 @@ class MessageWidgetLetterReveal extends React.Component {
           <Pill color="red">{data.fakeLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
-          <Text>{'. You and your fellow spy should only mention seeing one of them, or you could make up a third fake letter. In the code field, enter an incorrect code.'}</Text>
+          <Text>{'. You my choose to lie and accuse your roommate of being a spy.'}</Text>
         </Typeable>
       )
     } else {
-      let prompt = (me.isSpy && data.showWhichLetter === 'FAKE') ?
-        'Remember, your fellow roommate thinks this letter is real.' :
-        'Talk it over and vote on a code to enter.'
-      if (me.isSpy) {
-        prompt += ' In the code field, enter an incorrect code.'
-      }
       content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
-          <Pill color={me.isSpy && data.showWhichLetter === 'FAKE' ? 'red' : ''}>
-            {
-              data.showWhichLetter === 'FAKE' ? data.fakeLetter : data.realLetter
-            }
-          </Pill>
+          <Pill>{data.realLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
-          <Text>{`. ${prompt}`}</Text>
+          <Text>{`. Talk it over and vote on a code to enter.`}</Text>
         </Typeable>
       );
     }

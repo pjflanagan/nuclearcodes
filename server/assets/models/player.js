@@ -56,7 +56,7 @@ class PlayerModel {
   sendRoomChoice() {
     const { roomID } = this.response;
     this.socket.emit('POLL_RESPONSE', {
-      type: 'ROUND_VOTE',
+      type: 'ROUND_CHOOSE_ROOM',
       data: {
         roomID,
         timestamp: Date.now()

@@ -4,7 +4,7 @@ import { Slide, Player, Button } from '../../elements';
 
 import Style from './style.module.css';
 
-const PLAYERS_PER_GAME = 8;
+const MIN_PLAYERS_PER_GAME = 8;
 
 class ReadyUpWidget extends React.Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class ReadyUpWidget extends React.Component {
     const { ready } = this.state;
     const { gameState, isCurrent } = this.props;
 
-    if (gameState.players.length >= PLAYERS_PER_GAME) {
+    if (gameState.players.length >= MIN_PLAYERS_PER_GAME) {
       if (ready) {
         if (!isCurrent) {
           return `Mission is a go.`
@@ -49,12 +49,12 @@ class ReadyUpWidget extends React.Component {
       }
       return `Ready Up!`;
     }
-    return `Waiting for ${PLAYERS_PER_GAME - gameState.players.length} more players to join...`;
+    return `Waiting for at least ${MIN_PLAYERS_PER_GAME - gameState.players.length} more players to join...`;
   }
 
   readyUp() {
     const { gameState, socketService } = this.props;
-    if (gameState.players.length < PLAYERS_PER_GAME) {
+    if (gameState.players.length < MIN_PLAYERS_PER_GAME) {
       // if not ready then do nothing
       return;
     }
