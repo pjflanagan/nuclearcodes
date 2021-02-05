@@ -5,10 +5,12 @@ import { ErrorWidget } from '../widgets';
 
 import Style from './style.module.css';
 
+const getMe = (players, socketID) => {
+  return players.find(p => p.id === socketID);
+}
 
 const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService, errors, setErrors }) => {
   const socketID = socketService.getID();
-  const me = gameState.players.find(p => p.id === socketID);
   return (
     <div className={Style.gameContainer}>
       <div className={Style.slidesHolder}>
@@ -19,7 +21,6 @@ const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService,
               gameState={gameState}
               data={slide.data}
               socketID={socketID}
-              me={me}
               doneCallback={(prevData) => dispatchDoneCallback({
                 next: slide.next,
                 delay: slide.delay,
@@ -48,4 +49,4 @@ GameComponent.propTypes = {
   dispatchDoneCallback: PropTypes.func.isRequired
 }
 
-export { GameComponent };
+export { GameComponent, getMe };

@@ -159,25 +159,11 @@ class GameRoom {
       case GAME_STATES.ROUND_CHOOSE_ROOM:
         this.gameState = GAME_STATES.ROUND_ENTER_CODE;
         const { rooms } = data;
-        // for each room
-        rooms.forEach((room, i) => {
-          // if it has no people in it, return
-          if (room.length === 0) {
-            return;
-          }
-          // send a message to each socket, that says who they are in the room with
-          // send this prompt to everyone, even non spies, show different message for spies
-          room.forEach(player => {
-            // for each player in the room reveal the letter they are supposed to see
-            this.socketServer.nextSlide(player.id, {
-              slideID: 'letter-reveal',
-              data: {
-                roomID: i,
-                realLetter: this.code[i],
-                fakeLetter: this.fakeCode[i]
-              }
-            })
-          });
+        RoundChooseRoomHandlers.moveGameState({
+          rooms,
+          socketServer: this.socketServer,
+          code: this.code,
+          fakeCode: this.fakeCode
         });
         this.socketServer.updateGameState(this.name, this.getState());
         break;

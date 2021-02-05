@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Slide, PlayerList, Button } from '../../elements';
+import { getMe } from '../../game/GameComponent';
 
 import Style from './style.module.css';
 
@@ -69,8 +70,8 @@ class ReadyUpWidget extends React.Component {
   }
 
   render() {
+    const { socketID } = this.props;
     const { ready, players } = this.state;
-    const { me } = this.props;
     // ready up is for everyone, all need to be ready
     // ready up option becomes avaialable when everyone is here
     // also I should show which agent's have not readied up
@@ -78,7 +79,7 @@ class ReadyUpWidget extends React.Component {
       <Slide>
         <PlayerList
           players={players}
-          me={me}
+          me={getMe(players, socketID)}
         />
         <div className={Style.readyUpButtonHolder}>
           <Button

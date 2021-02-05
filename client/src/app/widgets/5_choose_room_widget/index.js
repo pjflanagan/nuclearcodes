@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Player, Slide, PlayerList } from '../../elements';
+import { getMe } from '../../game/GameComponent';
 
 import Style from './style.module.css';
 
@@ -50,8 +51,9 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { me, gameState: { codeLength }, isCurrent } = this.props;
+    const { gameState: { codeLength }, isCurrent, socketID } = this.props;
     const { playersInRooms, players } = this.state;
+    const me = getMe(players, socketID);
     return (
       <Slide>
         <PlayerList

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SegmentedInput, Slide, Button, PlayerList } from '../../elements';
+import { getMe } from '../../game/GameComponent';
 
 import Style from './style.module.css';
 
@@ -31,11 +32,10 @@ class EnterCodeWidget extends React.Component {
     this.updatePlayers = this.updatePlayers.bind(this);
   }
 
-
   componentDidMount() {
-    const { gameState: { codeLength } } = this.props;
-    this.updatePlayers();
+    const { gameState: { codeLength, players } } = this.props;
     this.setState({
+      players,
       values: [...Array(codeLength)].fill('')
     });
   }
@@ -64,9 +64,10 @@ class EnterCodeWidget extends React.Component {
   }
 
   onSubmit(e) {
+    const { gameState: { codeLength } } = this.props;
     const { values } = this.state;
     const code = sanitize(values);
-    const errors = validate(code);
+    const errors = validate(code, codeLength);
     if (errors.length === 0) {
       this.props.socketService.pollResponse({
         type: 'ROUND_ENTER_CODE',
@@ -91,11 +92,12 @@ class EnterCodeWidget extends React.Component {
 
   render() {
     const { submitted, values, players } = this.state;
-    const { isCurrent, me } = this.props;
+    const { isCurrent, socketID } = this.props;
+    const me = getMe(players, socketID);
 
     let content = (<></>);
 
-    if (me.isSpy) {
+    if (!!me && me.isSpy) {
       content = (
         <div className={Style.readyUpButtonHolder}>
           <Button

@@ -13,6 +13,7 @@ const PlayerList = ({
     {
       players.map((p, i) => (
         <Player
+          key={i}
           me={me}
           doNotType={true}
           player={p}
