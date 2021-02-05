@@ -4,6 +4,8 @@ import { Player, Slide } from '../../elements';
 
 import Style from './style.module.css';
 
+// TODO: a place to click to leave all rooms
+
 class ChooseRoomWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,6 @@ class ChooseRoomWidget extends React.Component {
   componentDidMount() {
     this.updatePlayers();
   }
-
 
   // only update our local state if this element isCurrent
   // this way when we move slides the data doesn't vanish
@@ -38,7 +39,7 @@ class ChooseRoomWidget extends React.Component {
 
   sendRoomChoice(roomID) {
     this.props.socketService.pollResponse({
-      type: 'ROUND_VOTE',
+      type: 'ROUND_CHOOSE_ROOM',
       data: {
         roomID,
         timestamp: Date.now()

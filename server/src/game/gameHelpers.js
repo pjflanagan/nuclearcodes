@@ -1,16 +1,14 @@
 
 const GAME_STATES = {
   LOBBY: 'LOBBY', // after here we will set spies and game code, introduce the rules
-  ROUND_VOTE: 'ROUND_VOTE', // vote on which room to go into
-  ROUND_TURN_KEY: 'ROUND_TURN_KEY', // vote on which key to turn
+  ROUND_CHOOSE_ROOM: 'ROUND_CHOOSE_ROOM', // vote on which room to go into
   ROUND_ENTER_CODE: 'ROUND_ENTER_CODE', // enter a code into the game
   // ROUND_KILL: 'ROUND_KILL'
   // no round game over, just move them to a gameover slide -> credits -> play again prompt -> lobby
 };
 
-const PLAYERS_PER_GAME = 8;
-const SPIES_PER_GAME = 3;
-const CODE_LENGTH = 5;
+const MIN_PLAYERS_PER_GAME = 5;
+const MAX_PLAYERS_PER_GAME = 10;
 const TOTAL_ROUNDS = 5;
 const CHARSET = 'BCDFGHJKLMNPQRSTVWXYZ'; // no vowels
 
@@ -38,9 +36,8 @@ const makeFakeCode = (realCode) => {
 
 export {
   GAME_STATES,
-  PLAYERS_PER_GAME,
-  SPIES_PER_GAME,
-  CODE_LENGTH,
+  MIN_PLAYERS_PER_GAME,
+  MAX_PLAYERS_PER_GAME,
   TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,

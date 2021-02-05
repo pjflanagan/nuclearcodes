@@ -25,5 +25,5 @@ $ cd ./server && npm run start
 ```
 Then visit: 
 
-  - http://localhost:3000 in browser to play the game
-  - http://localhost:5000/test to test the server
+  - http://localhost:5000/test to start the test, click on the link to open
+  - http://localhost:3000/test in browser to join the test room

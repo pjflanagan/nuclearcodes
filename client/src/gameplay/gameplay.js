@@ -4,7 +4,7 @@ import {
   // messages
   MessageWidget,
   MessageWidgetWelcome,
-  MessageWidgetKeyRoom,
+  // MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
   MessageWidgetDefcon,
   MessageGameOver,
@@ -15,7 +15,7 @@ import {
   ReadyUpWidget,
   AssignRolesWidget,
   ChooseRoomWidget,
-  KeyChoiceWidget,
+  // KeyChoiceWidget,
   EnterCodeWidget,
   DefconWidget,
   CreditsWidget
@@ -110,15 +110,15 @@ const GAMEPLAY = [
     id: 'room-picker',
     widget: ChooseRoomWidget
   },
-  {
-    id: 'key-room-prompt',
-    widget: MessageWidgetKeyRoom,
-    next: ({ isSpy }) => (isSpy) ? 'key-choice' : 'WAIT'
-  },
-  {
-    id: 'key-choice',
-    widget: KeyChoiceWidget
-  },
+  // {
+  //   id: 'key-room-prompt',
+  //   widget: MessageWidgetKeyRoom,
+  //   next: ({ isSpy }) => (isSpy) ? 'key-choice' : 'WAIT'
+  // },
+  // {
+  //   id: 'key-choice',
+  //   widget: KeyChoiceWidget
+  // },
   {
     id: 'letter-reveal',
     widget: MessageWidgetLetterReveal,

@@ -1,5 +1,4 @@
 
-import { CODE_LENGTH } from './gameHelpers.js'
 
 // a player object that represents a player
 class Player {
@@ -58,7 +57,9 @@ class PlayerList {
     // TODO: this should just set them as a ghost
     // in the event that they rejoin?, must rejoin with same name
     // move them into a ghosts array
+    const player = this.findPlayer(socket);
     this.players = this.players.filter(p => p.id !== socket.id);
+    return player;
   }
 
   setPlayerName(socket, playerName, num = 0) {
@@ -88,8 +89,8 @@ class PlayerList {
     return this.players.filter(p => p.getIsSpy());
   }
 
-  createRoomArray() {
-    const rooms = Array(CODE_LENGTH).fill(new Array());
+  createRoomArray(roomCount) {
+    const rooms = Array(roomCount).fill(new Array());
     this.players.forEach(player => {
       if (
         player.response !== false &&

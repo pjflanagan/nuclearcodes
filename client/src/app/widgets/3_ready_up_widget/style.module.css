@@ -11,38 +11,7 @@
   width: 25%;
   padding: 12px;
 }
-
 .readyUpButtonHolder {
   width: 100%;
   margin: 24px 0 12px 0;
-}
-
-.readyUpButtonHolder .readyUpButton {
-  display: block;
-  width: 70%;
-  padding: 20px;
-  margin: 0 auto;
-  text-align: center;
-  background: #FFF1;
-  border: none;
-  color: #fff;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  outline: none;
-}
-
-.readyUpButtonHolder .readyUpButton:hover,
-.readyUpButtonHolder .readyUpButton:focus {
-  background: #FFF3;
-}
-
-.readyUpButtonHolder .readyUpButton:active {
-  background: #FFF2;
-}
-
-.readyUpButtonHolder .readyUpButton:disabled {
-  pointer-events: none;
-  filter: opacity(0.6);
 }

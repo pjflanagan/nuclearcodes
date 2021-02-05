@@ -56,7 +56,7 @@ class PlayerModel {
   sendRoomChoice() {
     const { roomID } = this.response;
     this.socket.emit('POLL_RESPONSE', {
-      type: 'ROUND_VOTE',
+      type: 'ROUND_CHOOSE_ROOM',
       data: {
         roomID,
         timestamp: Date.now()
@@ -64,15 +64,15 @@ class PlayerModel {
     });
   }
 
-  sendKeyChoice() {
-    const { keyChoice } = this.response;
-    this.socket.emit('POLL_RESPONSE', {
-      type: 'ROUND_TURN_KEY',
-      data: {
-        isSpyKey: keyChoice === 'spyKey'
-      }
-    });
-  }
+  // sendKeyChoice() {
+  //   const { keyChoice } = this.response;
+  //   this.socket.emit('POLL_RESPONSE', {
+  //     type: 'ROUND_TURN_KEY',
+  //     data: {
+  //       isSpyKey: keyChoice === 'spyKey'
+  //     }
+  //   });
+  // }
 
   sendEnterCode() {
     const { code } = this.response;

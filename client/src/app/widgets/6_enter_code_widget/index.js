@@ -1,12 +1,17 @@
 import React from 'react';
 
-import { SegmentedInput, Slide } from '../../elements';
+import { SegmentedInput, Slide, Button } from '../../elements';
 
-const CODE_LENGTH = 5;
+import Style from './style.module.css';
+
+const CODE_LENGTH = 5; // TODO: this comes from gamestate
+
+// TODO: display previous code
+// TODO: spies just have a button and cannot enter a code
 
 const validate = (code) => {
   if (code.length < CODE_LENGTH) {
-    return ["Code must contain all 5 characters."];
+    return [`Code must contain all ${CODE_LENGTH} characters.`];
   }
   return [];
 };
@@ -24,6 +29,7 @@ class EnterCodeWidget extends React.Component {
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.spySubmit = this.spySubmit.bind(this);
   }
 
   onChange(fieldIndex, value) {
@@ -45,22 +51,52 @@ class EnterCodeWidget extends React.Component {
       });
       this.setState({
         submitted: true
-      })
+      });
     }
     this.props.setErrors({ errors });
   }
 
+  spySubmit(e) {
+    this.props.socketService.pollResponse({
+      type: 'ROUND_ENTER_CODE',
+      data: { code: 'FAKECODE' }
+    });
+    this.setState({
+      submitted: true
+    });
+  }
+
   render() {
     const { submitted } = this.state;
-    const { isCurrent } = this.props;
-    return (
-      <Slide>
+    const { isCurrent, me } = this.props;
+
+    let content = (<></>);
+
+    if (me.isSpy) {
+      content = (
+        <div className={Style.readyUpButtonHolder}>
+          <Button
+            onClick={this.spySubmit}
+            disabled={submitted}
+          >
+            {`Spies don't submit codes, press here to fake submit`}
+          </Button>
+        </div>
+      );
+    } else {
+      content = (
         <SegmentedInput
           disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           segments={CODE_LENGTH}
         />
+      );
+    }
+
+    return (
+      <Slide>
+        {content}
       </Slide>
     );
   }

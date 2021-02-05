@@ -39,12 +39,12 @@ class RoomModel {
     });
   }
 
-  sendKeyChoices() {
-    this.players.forEach(p => {
-      p.response.keyChoice = (Math.random() > 0.5) ? 'spyKey' : 'agentKey';
-      p.sendKeyChoice();
-    });
-  }
+  // sendKeyChoices() {
+  //   this.players.forEach(p => {
+  //     p.response.keyChoice = (Math.random() > 0.5) ? 'spyKey' : 'agentKey';
+  //     p.sendKeyChoice();
+  //   });
+  // }
 
   sendEnterCode() {
     this.players.forEach(p => {

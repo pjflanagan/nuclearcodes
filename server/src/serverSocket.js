@@ -40,7 +40,7 @@ class ServerSocket {
 
     // if there is a room, disconnect them from it
     this.roomAssignments = this.roomAssignments.filter(ra => socket.id !== ra.socketID);
-    gameRoom.disconnect(socket);
+    const player = gameRoom.disconnect(socket);
 
     if (gameRoom.isEmpty()) {
       console.info('close room:', gameRoom.name);
@@ -49,6 +49,10 @@ class ServerSocket {
     } else {
       // otherwise alert the room
       this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
+      this.sendError(gameRoom.name, {
+        type: 'ServerSocket.disconnect',
+        errors: [`${player.name} has left the game.`]
+      });
       // TODO: TODO: TODO: if the game is going while they are in the room
       // prepare the room for them to come back, player.setIsConnected(false)
       // every time we set slide, set the room's lastSlide = slideID
@@ -71,7 +75,7 @@ class ServerSocket {
       this.gameRooms.push(gameRoom);
     } else if (gameRoom.isFull()) {
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
-      this.sendError(socket, {
+      this.sendError(socket.id, {
         type: 'ServerSocket.joinRoom',
         errors: [`Game room '${roomName}' is full.`]
       });
@@ -80,7 +84,7 @@ class ServerSocket {
       // TODO: remove this error, allow join started game if it is not full
       // replace isConnected=false player
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
-      this.sendError(socket, {
+      this.sendError(socket.id, {
         type: 'ServerSocket.joinRoom',
         errors: [`Game room '${roomName}' has started, you may join next round.`]
       });
@@ -136,8 +140,8 @@ class ServerSocket {
     this.io.to(roomName).emit('GAME_STATE', gameState);
   }
 
-  sendError(socket, { type, errors }) {
-    this.io.to(socket.id).emit('SET_ERRORS', { type, errors });
+  sendError(receiver, { type, errors }) {
+    this.io.to(receiver).emit('SET_ERRORS', { type, errors });
   }
 
   // Helpers

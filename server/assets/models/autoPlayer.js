@@ -33,12 +33,12 @@ class AutoPlayerModel {
           // choose room
           this.sendRoomChoice();
           break;
-        case 'key-room-prompt':
-          if (this.isSpy()) {
-            // choose key to turn
-            this.sendKeyChoice();
-          }
-          break;
+        // case 'key-room-prompt':
+        //   if (this.isSpy()) {
+        //     // choose key to turn
+        //     this.sendKeyChoice();
+        //   }
+        //   break;
         case 'letter-reveal':
           // display revealed letter
           this.recvLetterReveal(data);
@@ -71,7 +71,7 @@ class AutoPlayerModel {
 
     this.socket.on('SET_ERRORS', data => {
       this.errors = data.errors;
-      // if (data.type === 'GameRoom.pollResponse.ROUND_VOTE') {
+      // if (data.type === 'GameRoom.pollResponse.ROUND_CHOOSE_ROOM') {
       //   // if we have an error entering the room, try and enter again
       //   this.sendRoomChoice();
       // }
@@ -103,7 +103,7 @@ class AutoPlayerModel {
   sendRoomChoice() {
     this.lastRoomID = this.room.getRoomIDThisRound(this.gameState.round, this.index);
     this.socket.emit('POLL_RESPONSE', {
-      type: 'ROUND_VOTE',
+      type: 'ROUND_CHOOSE_ROOM',
       data: {
         roomID: this.lastRoomID,
         timestamp: Date.now()
@@ -121,27 +121,18 @@ class AutoPlayerModel {
   }
 
   recvLetterReveal(data) {
-    switch (data.showWhichLetter) {
-      case 'FAKE':
-        this.lastSawLetter = `${data.showWhichLetter}: ${data.fakeLetter}`;
-        break;
-      case 'REAL':
-        this.lastSawLetter = `${data.showWhichLetter}: ${data.realLetter}`;
-        break;
-      case 'BOTH':
-        this.lastSawLetter = `${data.showWhichLetter}: ${data.realLetter} && ${data.fakeLetter}`;
-        break;
-    }
+    this.lastSawLetter = `Real: ${data.realLetter} Fake: ${data.fakeLetter}`;
     this.$scope.$apply();
   }
 
-  sendEnterCode(userSetCode) {
+  sendEnterCode(isCorrect) {
+    console.log({ isCorrect, gameState: this.gameState })
     // spies send an incorrect code
     // agents send what the user enters
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
       data: {
-        code: (this.isSpy()) ? 'RANDO' : userSetCode
+        code: (this.isSpy() || !isCorrect) ? 'RANDO' : this.gameState.code
       }
     });
   }

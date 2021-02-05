@@ -1,9 +1,7 @@
 
 import {
   GAME_STATES,
-  PLAYERS_PER_GAME,
-  SPIES_PER_GAME,
-  CODE_LENGTH,
+  MAX_PLAYERS_PER_GAME,
   TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,
@@ -11,8 +9,7 @@ import {
 } from './gameHelpers.js';
 import {
   RoundLobbyHandlers,
-  RoundTurnKeyHandlers,
-  RoundVoteHandlers,
+  RoundChooseRoomHandlers,
   RoundEnterCodeHandlers
 } from './gameRound.js';
 import { PlayerList } from './playerModel.js';
@@ -24,9 +21,9 @@ class GameRoom {
 
     // game state
     this.players = new PlayerList();
-    this.prevRooms = [];
     this.gameState = GAME_STATES.LOBBY;
     this.round = 0;
+    this.codeLength = 0;
 
     // server side
     this.code = [];
@@ -43,11 +40,14 @@ class GameRoom {
   }
 
   disconnect(socket) {
-    this.players.removePlayer(socket);
+    // TODO: removing a player should not mean removing them from the list
+    // it needs to instead make the player a ghost and wait for someone
+    // else to take over it's body
+    const player = this.players.removePlayer(socket);
     // update the game state so people know they left
     this.socketServer.updateGameState(this.name, this.getState());
-    // FIXME: if this changes a poll response then re-check this.moveIfPollOver();
     // we won't move the gamestate if a player leaves, we need them to rejoin
+    return player;
   }
 
   setPlayerName(socket, playerName) {
@@ -58,13 +58,16 @@ class GameRoom {
 
   // make a game with spies, agents
   setupGame() {
+    const playerCount = this.players.count();
+
     // reset the rounds and round data
     this.round = 0;
-    this.prevRooms = [];
+
+    const spyCount = Math.floor(playerCount / 2);
 
     // reset the players
     this.players.resetSpies();
-    const arr = makeRandomArray(SPIES_PER_GAME, PLAYERS_PER_GAME);
+    const arr = makeRandomArray(spyCount, playerCount);
     arr.forEach(i => {
       const player = this.players.get(i);
       if (!!player) {
@@ -73,7 +76,7 @@ class GameRoom {
     });
 
     // make a code and a fake code that share no letters
-    this.code = makeCode(CODE_LENGTH);
+    this.code = makeCode(playerCount);
     this.fakeCode = makeFakeCode(this.code);
   }
 
@@ -90,22 +93,9 @@ class GameRoom {
     switch (response.type) {
       case GAME_STATES.LOBBY:
       case GAME_STATES.ROUND_ENTER_CODE:
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
         // just record the response they give here
         player.recordResponse(response.data);
-        break;
-      case GAME_STATES.ROUND_VOTE:
-        const roundVoteErrors = RoundVoteHandlers.pollResponse(player, this.players, response, this.prevRooms);
-        if (roundVoteErrors.length > 0) {
-          this.socketServer.sendError(socket, {
-            type: 'GameRoom.pollResponse.ROUND_VOTE',
-            errors: roundVoteErrors
-          });
-          // no state to update when there is an error
-          return;
-        }
-        break;
-      case GAME_STATES.ROUND_TURN_KEY:
-        RoundTurnKeyHandlers.pollResponse(player, response);
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -133,12 +123,8 @@ class GameRoom {
         return RoundLobbyHandlers.isPollOver(this.players)
 
       // if they are voting for rooms
-      case GAME_STATES.ROUND_VOTE:
-        return RoundVoteHandlers.isPollOver(this.players);
-
-      // if they are turning keys, make sure all the spies have responded
-      case GAME_STATES.ROUND_TURN_KEY:
-        return RoundTurnKeyHandlers.isPollOver(this.players);
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
+        return RoundChooseRoomHandlers.isPollOver(this.codeLength, this.players);
 
       // if they are entering codes, make sure they all have responded
       case GAME_STATES.ROUND_ENTER_CODE:
@@ -157,24 +143,21 @@ class GameRoom {
     switch (this.gameState) {
       // if we are all ready
       case GAME_STATES.LOBBY:
-        this.gameState = GAME_STATES.ROUND_VOTE;
+        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
         this.setupGame();
         // update the game state, it will name the spies
-        this.socketServer.updateGameState(this.name, this.getState());
         this.socketServer.nextSlide(this.name, {
           slideID: 'introduction' // leads to vote
         });
+        this.socketServer.updateGameState(this.name, this.getState());
         break;
 
       // if we have all picked rooms
-      case GAME_STATES.ROUND_VOTE:
-        this.gameState = GAME_STATES.ROUND_TURN_KEY;
+      case GAME_STATES.ROUND_CHOOSE_ROOM:
+        this.gameState = GAME_STATES.ROUND_ENTER_CODE;
         const { rooms } = data;
-        // store this data so we can use it for key reveal and error checking
-        this.prevRooms = rooms;
-
         // for each room
-        this.prevRooms.forEach((room, i) => {
+        rooms.forEach((room, i) => {
           // if it has no people in it, return
           if (room.length === 0) {
             return;
@@ -182,71 +165,17 @@ class GameRoom {
           // send a message to each socket, that says who they are in the room with
           // send this prompt to everyone, even non spies, show different message for spies
           room.forEach(player => {
-            this.socketServer.nextSlide(player.id, {
-              slideID: 'key-room-prompt',
-              data: {
-                roomID: i,
-                room // TODO: this could be named better, it's really roomPlayers
-              }
-            });
-          })
-        });
-        break;
-
-      // if we just turned keys
-      case GAME_STATES.ROUND_TURN_KEY:
-        this.gameState = GAME_STATES.ROUND_ENTER_CODE;
-        const { spyResponses } = data;
-        // for each room
-        this.prevRooms.forEach((room, i) => {
-          if (room.length === 0) {
-            return;
-          }
-
-          let spyCount = 0;
-          let spyVoteFake = false;
-          // for each player in the room
-          room.forEach(player => {
-            // if the player is a spy
-            if (player.getIsSpy()) {
-              // count up the number of spies
-              spyCount++;
-              const spyResponse = spyResponses.find(r => r.playerID === player.id);
-              // if the respond to use the spy key
-              if (!!spyResponse && !!spyResponse.response && spyResponse.response.isSpyKey) {
-                // record so we can show the fake vote
-                spyVoteFake = true;
-              }
-            }
-          });
-
-          // if the room has no spies: reveal the correct code
-          let showWhichLetter = 'REAL';
-          switch (spyCount) {
-            case 2:
-              // if the room has two spies: reveal both
-              showWhichLetter = 'BOTH';
-              break;
-            case 1:
-              // if the room has one spy: reveal what the spy said
-              if (spyVoteFake) {
-                showWhichLetter = 'FAKE';
-              }
-              break;
-          }
-          room.forEach(player => {
             // for each player in the room reveal the letter they are supposed to see
             this.socketServer.nextSlide(player.id, {
               slideID: 'letter-reveal',
               data: {
                 roomID: i,
                 realLetter: this.code[i],
-                fakeLetter: this.fakeCode[i],
-                showWhichLetter
+                fakeLetter: this.fakeCode[i]
               }
             })
-          })
-        })
+          });
+        });
         break;
 
       // if we just entered codes
@@ -255,8 +184,9 @@ class GameRoom {
         this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
         const { codeResponses } = data;
         const numCorrect = codeResponses.reduce((sum, r) => (r.code.toUpperCase() === this.code ? sum + 1 : sum), 0);
+        // TODO: plurality is entered, also auto do only agents
         // if they are correct: ROUND_LOBBY, 'victory'
-        if (numCorrect > this.players.count() / 2) {
+        if (numCorrect >= this.players.count() / 2) {
           this.gameState = GAME_STATES.LOBBY;
           this.socketServer.nextSlide(this.name, {
             slideID: 'gameover',
@@ -279,8 +209,8 @@ class GameRoom {
           });
           return;
         }
-        // otherwise: ROUND_VOTE, 'start-next-round'
-        this.gameState = GAME_STATES.ROUND_VOTE;
+        // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
+        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
         });
@@ -296,13 +226,11 @@ class GameRoom {
 
   getState() {
     const gameState = {
+      codeLength: this.codeLength,
       players: this.players.getPlayersAsData(),
-      // code: this.code, // it might be helpful to send these for tests
-      // fakeCode: this.fakeCode
-      round: this.round,
-      // prevRooms: this.prevRooms 
-      // TODO: do this so client side highlights and prevents user from clicking on room they aren't allowed
-      // in and shows the error client side
+      code: this.code,
+      fakeCode: this.fakeCode,
+      round: this.round
     };
     return gameState;
   }
@@ -316,7 +244,7 @@ class GameRoom {
   }
 
   isFull() {
-    return this.players.count() >= PLAYERS_PER_GAME;
+    return this.players.count() >= MAX_PLAYERS_PER_GAME;
   }
 
   isEmpty() {

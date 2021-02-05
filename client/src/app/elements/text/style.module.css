@@ -8,32 +8,6 @@
   color: #FFF;
 }
 
-.pill {
-  padding: 3px 8px;
-  border-radius: 2px;
-  font-size: 18px;
-  color: #1c1c1c;
-  background: #dbdbdb;
-  margin: 4px;
-  font-weight: bold;
-  font-family: monospace;
-}
-
-.pill.red {
-  color: #dbdbdb;
-  background: #a71111;
-}
-
-.pill a {
-  color: #165ac3;
-  text-decoration: none;
-}
-
-.pill a:hover {
-  color: #073a86;
-  text-decoration: underline;
-}
-
 h1.title {
   font-size: 24px;
   margin: 12px 0;
