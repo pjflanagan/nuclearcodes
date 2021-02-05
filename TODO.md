@@ -2,22 +2,21 @@
 # Client
 
 - [ ] react router fix favicon, make own icon and remove them from credits
-- [ ] player list widget does ready up (shown on rooms, ready up, and code entry)
 
 ## Gameplay
 
-- [ ] highlight room you cannot enter
 - [ ] front end auto vote timer, use diff with same code as previous time, first round excluded, 2 minutes, spy auto vote wrong
+- [ ] gameover slide reveal who was a spy
 
 ## Admin
 - [ ] sanitize name by removing spaces (not just leading and trailing)
 - [ ] share slide
 
 ## Visual
-
+- [ ] game visually annoying when you are a spy and you change to being an agent, make more transitions
+      and that should probably be okay
 - [ ] make mobile ready so people can play on phone (IMPORTANT)
 - [ ] pill has copy on click with icons, whole pill is a link, also icons
-
 
 
 # Server
@@ -26,12 +25,11 @@
 
 ## Admin
 - [ ] TODO: PRIORITY handle log back in
-- [ ] TODO: make the game a variable number of players (5-10)
-- [ ] show error on midgame disconnect
 
 ## Test
 - [x] an auto tester that responds automatically
 - [ ] auto test randomly drops and re-adds players
+- [ ] an auto test for many different rooms
 
 
 
@@ -41,7 +39,7 @@
 
 
 
-# NEW GAME RULES
+# NEW GAME RULES IDEAS
 
 - Two spies in a room: only show a fake letter, that way can they both lie together and it’ll look like they’re innocent
 - One spy, one agent: show the agent the real letter, show the spy both

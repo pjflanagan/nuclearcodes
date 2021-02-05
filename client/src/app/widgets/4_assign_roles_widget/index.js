@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Slide, Typeable, Text, Pill, Player } from '../../elements';
+import { GameWidget } from '../../game/';
 
-class AssignRolesWidget extends React.Component {
-  spyContent() {
-    const { me } = this.props;
+class AssignRolesWidget extends GameWidget {
+  spyContent(me) {
     const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
     return (
       <Typeable doneTypingCallback={this.props.doneCallback}>
@@ -35,8 +35,8 @@ class AssignRolesWidget extends React.Component {
   }
 
   render() {
-    const { me } = this.props;
-    const content = me.isSpy ? this.spyContent() : this.agentContent();
+    const me = this.getMe();
+    const content = me.isSpy ? this.spyContent(me) : this.agentContent();
     return (
       <Slide>
         { content}

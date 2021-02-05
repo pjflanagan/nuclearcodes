@@ -1,0 +1,7 @@
+.playerList {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+}

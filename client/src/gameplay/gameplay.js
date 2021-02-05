@@ -4,7 +4,6 @@ import {
   // messages
   MessageWidget,
   MessageWidgetWelcome,
-  // MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
   MessageWidgetDefcon,
   MessageGameOver,
@@ -15,7 +14,6 @@ import {
   ReadyUpWidget,
   AssignRolesWidget,
   ChooseRoomWidget,
-  // KeyChoiceWidget,
   EnterCodeWidget,
   DefconWidget,
   CreditsWidget
@@ -83,8 +81,8 @@ const GAMEPLAY = [
       title: 'Mission Brief',
       text: `Someone has hacked into the Pentagon and stolen our nuclear codes! 
       The only way to recover them is through these rooms. Each round all agents will enter
-      rooms in pairs, each pair will be shown that room's letter. But there are spies in our midst.
-      If a spy enters a room with you, they can choose to show you a false letter.
+      rooms, and be shown that room's letter. But there are spies in our midst.
+      Spies are also shown a false letter, and can lie to you about the contents of the rooms they enter.
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
     next: () => 'assign-roles',
@@ -110,15 +108,6 @@ const GAMEPLAY = [
     id: 'room-picker',
     widget: ChooseRoomWidget
   },
-  // {
-  //   id: 'key-room-prompt',
-  //   widget: MessageWidgetKeyRoom,
-  //   next: ({ isSpy }) => (isSpy) ? 'key-choice' : 'WAIT'
-  // },
-  // {
-  //   id: 'key-choice',
-  //   widget: KeyChoiceWidget
-  // },
   {
     id: 'letter-reveal',
     widget: MessageWidgetLetterReveal,

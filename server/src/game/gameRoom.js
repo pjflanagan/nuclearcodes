@@ -62,8 +62,11 @@ class GameRoom {
 
     // reset the rounds and round data
     this.round = 0;
-
-    const spyCount = Math.floor(playerCount / 2);
+    this.codeLength = playerCount;
+    // 5 or 6 players 2 spies
+    // 7 or 8 players 3 spies
+    // 9 o 10 players 4 spies
+    const spyCount = Math.floor((playerCount - 1) / 2);
 
     // reset the players
     this.players.resetSpies();
@@ -76,7 +79,7 @@ class GameRoom {
     });
 
     // make a code and a fake code that share no letters
-    this.code = makeCode(playerCount);
+    this.code = makeCode(this.codeLength);
     this.fakeCode = makeFakeCode(this.code);
   }
 
@@ -156,32 +159,18 @@ class GameRoom {
       case GAME_STATES.ROUND_CHOOSE_ROOM:
         this.gameState = GAME_STATES.ROUND_ENTER_CODE;
         const { rooms } = data;
-        // for each room
-        rooms.forEach((room, i) => {
-          // if it has no people in it, return
-          if (room.length === 0) {
-            return;
-          }
-          // send a message to each socket, that says who they are in the room with
-          // send this prompt to everyone, even non spies, show different message for spies
-          room.forEach(player => {
-            // for each player in the room reveal the letter they are supposed to see
-            this.socketServer.nextSlide(player.id, {
-              slideID: 'letter-reveal',
-              data: {
-                roomID: i,
-                realLetter: this.code[i],
-                fakeLetter: this.fakeCode[i]
-              }
-            })
-          });
+        RoundChooseRoomHandlers.moveGameState({
+          rooms,
+          socketServer: this.socketServer,
+          code: this.code,
+          fakeCode: this.fakeCode
         });
+        this.socketServer.updateGameState(this.name, this.getState());
         break;
 
       // if we just entered codes
       case GAME_STATES.ROUND_ENTER_CODE:
         this.round += 1;
-        this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
         const { codeResponses } = data;
         const numCorrect = codeResponses.reduce((sum, r) => (r.code.toUpperCase() === this.code ? sum + 1 : sum), 0);
         // TODO: plurality is entered, also auto do only agents
@@ -192,9 +181,11 @@ class GameRoom {
             slideID: 'gameover',
             data: {
               result: 'victory',
-              code: this.code
+              code: this.code,
+              spies: this.players.getSpies()
             }
           });
+          this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
           return;
         }
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
@@ -204,9 +195,11 @@ class GameRoom {
             slideID: 'gameover',
             data: {
               result: 'defeat',
-              code: this.code
+              code: this.code,
+              spies: this.players.getSpies()
             }
           });
+          this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
           return;
         }
         // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
@@ -214,6 +207,7 @@ class GameRoom {
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round'
         });
+        this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
         break;
 
       default:

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Slide, Title, Typeable, Text, Pill, PillCopy, Player } from '../../elements';
+import { GameWidget } from '../../game';
 
 class MessageWidget extends React.Component {
   render() {
@@ -36,40 +37,15 @@ class MessageWidgetWelcome extends React.Component {
   }
 }
 
-class MessageWidgetKeyRoom extends React.Component {
-  render() {
-    const { data, me } = this.props;
-    const prompt = (!me.isSpy) ?
-      'waiting for all rooms to turn their keys' :
-      'choose which key to turn';
-    const otherPlayerArr = data.room.filter(p => p.id !== me.id);
-    const otherPlayer = (!!otherPlayerArr[0]) ? otherPlayerArr[0] : {}; // players.find(p => p.id === otherPlayerArr[0].id)
-    return (
-      <Slide>
-        <Title>{'Key Room'}</Title>
-        <Typeable doneTypingCallback={() => this.props.doneCallback({ isSpy: me.isSpy })}>
-          <Text>{'You are in room '}</Text>
-          <Pill>{data.roomID + 1}</Pill>
-          <Text>{' with '}</Text>
-          <Player
-            me={me}
-            player={otherPlayer}
-          />
-          <Text>{`, ${prompt}.`}</Text>
-        </Typeable>
-      </Slide>
-    )
-  }
-}
-
-class MessageWidgetLetterReveal extends React.Component {
+class MessageWidgetLetterReveal extends GameWidget {
   render() {
     // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z"}
-    const { data, me } = this.props;
+    const { data } = this.props;
+    const me = this.getMe();
     // if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
     let content = (<></>);
-    if (me.isSpy) {
+    if (!!me && me.isSpy) {
       content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
@@ -136,13 +112,14 @@ class MessageWidgetDefcon extends React.Component {
   }
 }
 
-class MessageGameOver extends React.Component {
+class MessageGameOver extends GameWidget {
   render() {
-    const { data: { result, code }, me } = this.props;
+    const { data: { result, code } } = this.props;
+    const me = this.getMe();
     let pill = (<></>)
     let message1 = '';
     let message2 = '';
-    if (me.isSpy) {
+    if (!!me && me.isSpy) {
       if (result === 'victory') {
         pill = (<Pill>{'DEFEAT'}</Pill>);
         message1 = ' , your treachery was no match for American ingenuity. Our agents guessed '
@@ -181,7 +158,6 @@ class MessageGameOver extends React.Component {
 export {
   MessageWidget,
   MessageWidgetWelcome,
-  MessageWidgetKeyRoom,
   MessageWidgetLetterReveal,
   MessageWidgetDefcon,
   MessageGameOver

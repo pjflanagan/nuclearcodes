@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  height: 180px;
 }
 
 .roomHolder {
@@ -17,6 +16,10 @@
   background: #0008;
   cursor: pointer;
   overflow: hidden;
+}
+
+.room.disabled {
+  cursor: default;
 }
 
 .roomNumber {

@@ -1,39 +1,29 @@
 import React from 'react';
 
-import { Player, Slide } from '../../elements';
+import { Player, Slide, PlayerList } from '../../elements';
+import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
 // TODO: a place to click to leave all rooms
 
-class ChooseRoomWidget extends React.Component {
+class ChooseRoomWidget extends GameWidget {
   constructor(props) {
     super(props);
 
     this.state = {
       playersInRooms: [],
+      players: []
     }
 
-    this.updatePlayers = this.updatePlayers.bind(this);
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
   }
 
-  componentDidMount() {
-    this.updatePlayers();
-  }
-
-  // only update our local state if this element isCurrent
-  // this way when we move slides the data doesn't vanish
-  componentDidUpdate(prevProps) {
-    if (this.props.isCurrent && prevProps !== this.props) {
-      this.updatePlayers();
-    }
-  }
-
-  updatePlayers() {
+  updateGameState() {
     const { gameState: { players } } = this.props;
     this.setState({
-      playersInRooms: players.filter(p => p.response !== false)
+      playersInRooms: players.filter(p => p.response !== false),
+      players
     });
   }
 
@@ -48,19 +38,23 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { me } = this.props;
-    const { playersInRooms } = this.state;
+    const { gameState: { codeLength }, isCurrent } = this.props;
+    const { playersInRooms, players } = this.state;
+    const me = this.getMe();
     return (
       <Slide>
-        {/* Player Name List */}
+        <PlayerList
+          players={players}
+          me={me}
+        />
         <div className={Style.roomRow}>
-          {[...Array(5)].map((a, i) => (
+          {[...Array(codeLength)].map((a, i) => (
             <div
               className={Style.roomHolder}
               key={i}
             >
               <div
-                className={Style.room}
+                className={`${Style.room} ${!isCurrent ? Style.disabled : ''}`}
                 onClick={e => this.sendRoomChoice(i)}
               >
                 <div className={Style.roomNumber}>

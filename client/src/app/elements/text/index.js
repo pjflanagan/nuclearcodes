@@ -71,7 +71,6 @@ class Text extends React.Component {
     this.type = this.type.bind(this);
   }
 
-
   componentDidUpdate(prevProps) {
     if (!prevProps.isTyping && this.props.isTyping) {
       this.type(0);

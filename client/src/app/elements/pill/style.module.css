@@ -7,6 +7,7 @@
   margin: 4px;
   font-weight: bold;
   font-family: monospace;
+  transition: 0.3s;
 }
 
 .pill.red {
@@ -33,7 +34,7 @@ a:hover .pill {
 }
 
 .responded {
-  opacity: 0.6;
+  filter: opacity(0.6)
 }
 
 /* .pill .icon {} */

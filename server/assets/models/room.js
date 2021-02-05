@@ -2,15 +2,15 @@
 import { PlayerModel } from './player.js';
 
 const playerNames = [
-  'James Bond',
-  'Austin Powers',
-  'Jason Bourne',
-  'Ethan Hunt',
-  'Alex Rider',
-  'Black Widow',
-  'Kim Possible',
+  'JamesBond',
+  'AustinPowers',
+  'JasonBourne',
+  'EthanHunt',
+  'AlexRider',
+  'BlackWidow',
+  'KimPossible',
   'MacGyver',
-  'Carmen Cortez',
+  'CarmenCortez',
   'Archer'
 ];
 

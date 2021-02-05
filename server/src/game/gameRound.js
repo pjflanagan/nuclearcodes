@@ -29,6 +29,30 @@ const RoundChooseRoomHandlers = {
       roomVoteResponseCount >= players.count(),
       { rooms }
     ];
+  },
+  moveGameState: ({
+    rooms, code, fakeCode, socketServer
+  }) => {
+    // for each room
+    rooms.forEach((room, i) => {
+      // if it has no people in it, return
+      if (room.length === 0) {
+        return;
+      }
+      // send a message to each socket, that says who they are in the room with
+      // send this prompt to everyone, even non spies, show different message for spies
+      room.forEach(player => {
+        // for each player in the room reveal the letter they are supposed to see
+        socketServer.nextSlide(player.id, {
+          slideID: 'letter-reveal',
+          data: {
+            roomID: i,
+            realLetter: code[i],
+            fakeLetter: fakeCode[i]
+          }
+        })
+      });
+    });
   }
 }
 
