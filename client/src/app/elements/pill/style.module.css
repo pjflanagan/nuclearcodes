@@ -33,7 +33,7 @@ a:hover .pill {
 }
 
 .responded {
-  opacity: 0.6;
+  filter: opacity(0.6)
 }
 
 /* .pill .icon {} */

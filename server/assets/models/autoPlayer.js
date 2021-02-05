@@ -101,7 +101,7 @@ class AutoPlayerModel {
   }
 
   sendRoomChoice() {
-    this.lastRoomID = this.room.getRoomIDThisRound(this.gameState.round, this.index);
+    this.lastRoomID = Math.floor(Math.random() * this.room.players.length)
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_CHOOSE_ROOM',
       data: {

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Slide, Player, Button } from '../../elements';
+import { Slide, PlayerList, Button } from '../../elements';
 
 import Style from './style.module.css';
 
-const MIN_PLAYERS_PER_GAME = 8;
+const MIN_PLAYERS_PER_GAME = 5;
 
 class ReadyUpWidget extends React.Component {
   constructor(props) {
@@ -12,27 +12,28 @@ class ReadyUpWidget extends React.Component {
 
     this.state = {
       players: [],
-      ready: false
+      ready: false,
     };
 
     this.readyUp = this.readyUp.bind(this);
   }
 
   componentDidMount() {
-    this.updatePlayers();
+    this.updateGameState();
   }
 
   // only update our local state if this element isCurrent
   // this way when we move slides the data doesn't vanish
   componentDidUpdate(prevProps) {
     if (this.props.isCurrent && prevProps !== this.props) {
-      this.updatePlayers();
+      this.updateGameState();
     }
   }
-  updatePlayers() {
+
+  updateGameState() {
     const { gameState: { players } } = this.props;
     this.setState({
-      players
+      players,
     });
   }
 
@@ -75,24 +76,10 @@ class ReadyUpWidget extends React.Component {
     // also I should show which agent's have not readied up
     return (
       <Slide>
-        <div className={Style.players}>
-          {
-            players.map((player, i) => (
-              // TODO: make this a class and make it just a row
-              <div
-                className={Style.playerHolder}
-                key={i}
-              >
-                <Player
-                  me={me}
-                  doNotType={true}
-                  player={player}
-                  displayResponded={true}
-                />
-              </div>
-            ))
-          }
-        </div>
+        <PlayerList
+          players={players}
+          me={me}
+        />
         <div className={Style.readyUpButtonHolder}>
           <Button
             onClick={() => this.readyUp()}

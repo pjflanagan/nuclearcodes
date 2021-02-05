@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Player, Slide } from '../../elements';
+import { Player, Slide, PlayerList } from '../../elements';
 
 import Style from './style.module.css';
 
@@ -12,6 +12,7 @@ class ChooseRoomWidget extends React.Component {
 
     this.state = {
       playersInRooms: [],
+      players: []
     }
 
     this.updatePlayers = this.updatePlayers.bind(this);
@@ -33,7 +34,8 @@ class ChooseRoomWidget extends React.Component {
   updatePlayers() {
     const { gameState: { players } } = this.props;
     this.setState({
-      playersInRooms: players.filter(p => p.response !== false)
+      playersInRooms: players.filter(p => p.response !== false),
+      players
     });
   }
 
@@ -48,19 +50,22 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { me } = this.props;
-    const { playersInRooms } = this.state;
+    const { me, gameState: { codeLength }, isCurrent } = this.props;
+    const { playersInRooms, players } = this.state;
     return (
       <Slide>
-        {/* Player Name List */}
+        <PlayerList
+          players={players}
+          me={me}
+        />
         <div className={Style.roomRow}>
-          {[...Array(5)].map((a, i) => (
+          {[...Array(codeLength)].map((a, i) => (
             <div
               className={Style.roomHolder}
               key={i}
             >
               <div
-                className={Style.room}
+                className={`${Style.room} ${!isCurrent ? Style.disabled : ''}`}
                 onClick={e => this.sendRoomChoice(i)}
               >
                 <div className={Style.roomNumber}>

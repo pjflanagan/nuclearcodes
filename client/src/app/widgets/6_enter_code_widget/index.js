@@ -1,17 +1,14 @@
 import React from 'react';
 
-import { SegmentedInput, Slide, Button } from '../../elements';
+import { SegmentedInput, Slide, Button, PlayerList } from '../../elements';
 
 import Style from './style.module.css';
 
-const CODE_LENGTH = 5; // TODO: this comes from gamestate
+// TODO: display this user's previous code
 
-// TODO: display previous code
-// TODO: spies just have a button and cannot enter a code
-
-const validate = (code) => {
-  if (code.length < CODE_LENGTH) {
-    return [`Code must contain all ${CODE_LENGTH} characters.`];
+const validate = (code, codeLength) => {
+  if (code.length < codeLength) {
+    return [`Code must contain all ${codeLength} characters.`];
   }
   return [];
 };
@@ -24,12 +21,38 @@ class EnterCodeWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: [...Array(CODE_LENGTH)].fill(''),
-      submitted: false
+      values: [],
+      submitted: false,
+      players: []
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.spySubmit = this.spySubmit.bind(this);
+    this.updatePlayers = this.updatePlayers.bind(this);
+  }
+
+
+  componentDidMount() {
+    const { gameState: { codeLength } } = this.props;
+    this.updatePlayers();
+    this.setState({
+      values: [...Array(codeLength)].fill('')
+    });
+  }
+
+  // only update our local state if this element isCurrent
+  // this way when we move slides the data doesn't vanish
+  componentDidUpdate(prevProps) {
+    if (this.props.isCurrent && prevProps !== this.props) {
+      this.updatePlayers();
+    }
+  }
+
+  updatePlayers() {
+    const { gameState: { players } } = this.props;
+    this.setState({
+      players
+    });
   }
 
   onChange(fieldIndex, value) {
@@ -59,7 +82,7 @@ class EnterCodeWidget extends React.Component {
   spySubmit(e) {
     this.props.socketService.pollResponse({
       type: 'ROUND_ENTER_CODE',
-      data: { code: 'FAKECODE' }
+      data: { code: 'FAKECODE' } // this will never be right because it has vowels
     });
     this.setState({
       submitted: true
@@ -67,7 +90,7 @@ class EnterCodeWidget extends React.Component {
   }
 
   render() {
-    const { submitted } = this.state;
+    const { submitted, values, players } = this.state;
     const { isCurrent, me } = this.props;
 
     let content = (<></>);
@@ -89,13 +112,14 @@ class EnterCodeWidget extends React.Component {
           disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
-          segments={CODE_LENGTH}
+          segments={values.length}
         />
       );
     }
 
     return (
       <Slide>
+        <PlayerList me={me} players={players} />
         {content}
       </Slide>
     );
