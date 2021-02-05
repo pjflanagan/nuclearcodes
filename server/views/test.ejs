@@ -33,7 +33,7 @@
           <div class="form-row">
             <button ng-click="room.sendReadyUp()">Send Ready Up All</button>
             <button ng-click="room.sendRoomChoices()">Send Room Choice All</button>
-            <button ng-click="room.sendKeyChoices()">Send Turn Key All</button>
+            <!-- <button ng-click="room.sendKeyChoices()">Send Turn Key All</button> -->
             <input type="text" ng-model="room.allCode" />
             <button ng-click="room.sendEnterCode()">Send Code All</button>
           </div>
@@ -49,14 +49,14 @@
                 <input type="number" min="0" max="4" val="0" ng-model="player.response.roomID" />
                 <button ng-click="player.sendRoomChoice()">Send Room Choice</button>
               </div>
-              <div class="form-row" ng-if="player.isSpy()">
+              <!-- <div class="form-row" ng-if="player.isSpy()">
                 <label>Key:</label>
                 <select ng-model="player.response.keyChoice">
                   <option value="spyKey">Spy Key</option>
                   <option value="agentKey">Agent Key</option>
                 </select>
                 <button ng-click="player.sendKeyChoice()">Send Key Choice</button>
-              </div>
+              </div> -->
               <div class="form-row">
                 <label>Code:</label>
                 <input type="text" ng-model="player.response.code" />

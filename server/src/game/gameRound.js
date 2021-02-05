@@ -35,30 +35,40 @@ const RoundLobbyHandlers = {
 }
 
 const RoundVoteHandlers = {
-  pollResponse: (player, players, response, prevRooms) => {
-    // validate here they can't enter same room as last time
-    const [prevRoomID, prevRoomMate] = getPlayerPreviousRoom(prevRooms, player);
-    if (prevRoomID === response.data.roomID) {
-      return [`Cannot join same room as last round.`];
-    }
-    const sameRoomPlayers = players.sameRoomPlayers(response.data.roomID);
-    if (sameRoomPlayers.length > 0) {
-      // if there is already a player in here, order them by the time they entered
-      sameRoomPlayers.sort((a, b) => a.response.timestamp - b.response.timestamp);
+  // pollResponse: (player, players, response, prevRooms) => {
+  //   // validate here they can't enter same room as last time
+  //   const [prevRoomID, prevRoomMate] = getPlayerPreviousRoom(prevRooms, player);
+  //   if (prevRoomID === response.data.roomID) {
+  //     return [`Cannot join same room as last round.`];
+  //   }
+  //   const sameRoomPlayers = players.sameRoomPlayers(response.data.roomID);
+  //   if (sameRoomPlayers.length > 0) {
+  //     // if there is already a player in here, order them by the time they entered
+  //     sameRoomPlayers.sort((a, b) => a.response.timestamp - b.response.timestamp);
 
-      // validate here they can't enter room with same parter as before
-      if (sameRoomPlayers[0].id === prevRoomMate.id) {
-        return [`Cannot join room with the same partner as last time.`];
-      }
+  //     // validate here they can't enter room with same parter as before
+  //     if (sameRoomPlayers[0].id === prevRoomMate.id) {
+  //       return [`Cannot join room with the same partner as last time.`];
+  //     }
 
-      if (sameRoomPlayers.length > 1) {
-        // if there are two in here, kick the second player out
-        sameRoomPlayers[1].unsetResponse();
-      }
-    }
-    player.recordResponse(response.data);
-    return [];
-  },
+  //     if (sameRoomPlayers.length > 1) {
+  //       // if there are two in here, kick the second player out
+  //       sameRoomPlayers[1].unsetResponse();
+  //     }
+  //   }
+  //   player.recordResponse(response.data);
+  //   return [];
+  // },
+  // later in main: const roundVoteErrors = RoundVoteHandlers.pollResponse(player, this.players, response, this.prevRooms);
+  //       if (roundVoteErrors.length > 0) {
+  //         this.socketServer.sendError(socket.id, {
+  //           type: 'GameRoom.pollResponse.ROUND_VOTE',
+  //           errors: roundVoteErrors
+  //         });
+  //         // no state to update when there is an error
+  //         return;
+  //       }
+  //       break;
   isPollOver: (players) => {
     // validate that everyone is paired off in a room, no validation
     // about partners or which room, validation was done in poll response

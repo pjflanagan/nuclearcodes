@@ -61,8 +61,7 @@ class GameRoom {
   // make a game with spies, agents
   setupGame() {
     // reset the rounds and round data
-    this.round = -1;
-    this.newRound();
+    this.round = 0;
     this.prevRooms = [];
 
     // reset the players
@@ -74,15 +73,10 @@ class GameRoom {
         player.setIsSpy(true);
       }
     });
-  }
 
-  newRound() {
-    const oldCode = this.code;
-    this.round += 1;
     // make a code and a fake code that share no letters
     this.code = makeCode(CODE_LENGTH);
     this.fakeCode = makeFakeCode(this.code);
-    return oldCode;
   }
 
   // players respond to polls and the data gets recorded here
@@ -98,19 +92,9 @@ class GameRoom {
     switch (response.type) {
       case GAME_STATES.LOBBY:
       case GAME_STATES.ROUND_ENTER_CODE:
+      case GAME_STATES.ROUND_VOTE:
         // just record the response they give here
         player.recordResponse(response.data);
-        break;
-      case GAME_STATES.ROUND_VOTE:
-        const roundVoteErrors = RoundVoteHandlers.pollResponse(player, this.players, response, this.prevRooms);
-        if (roundVoteErrors.length > 0) {
-          this.socketServer.sendError(socket.id, {
-            type: 'GameRoom.pollResponse.ROUND_VOTE',
-            errors: roundVoteErrors
-          });
-          // no state to update when there is an error
-          return;
-        }
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -161,10 +145,10 @@ class GameRoom {
         this.gameState = GAME_STATES.ROUND_VOTE;
         this.setupGame();
         // update the game state, it will name the spies
-        this.socketServer.updateGameState(this.name, this.getState());
         this.socketServer.nextSlide(this.name, {
           slideID: 'introduction' // leads to vote
         });
+        this.socketServer.updateGameState(this.name, this.getState());
         break;
 
       // if we have all picked rooms
@@ -198,7 +182,7 @@ class GameRoom {
 
       // if we just entered codes
       case GAME_STATES.ROUND_ENTER_CODE:
-        const oldCode = this.newRound();
+        this.round += 1;
         this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
         const { codeResponses } = data;
         const numCorrect = codeResponses.reduce((sum, r) => (r.code.toUpperCase() === this.code ? sum + 1 : sum), 0);
@@ -210,7 +194,7 @@ class GameRoom {
             slideID: 'gameover',
             data: {
               result: 'victory',
-              code: oldCode
+              code: this.code
             }
           });
           return;
@@ -222,7 +206,7 @@ class GameRoom {
             slideID: 'gameover',
             data: {
               result: 'defeat',
-              code: oldCode
+              code: this.code
             }
           });
           return;

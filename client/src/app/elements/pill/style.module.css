@@ -32,4 +32,8 @@ a:hover .pill {
   background: #b5b5b5;
 }
 
+.responded {
+  opacity: 0.6;
+}
+
 /* .pill .icon {} */

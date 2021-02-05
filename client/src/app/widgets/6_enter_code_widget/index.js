@@ -4,6 +4,9 @@ import { SegmentedInput, Slide } from '../../elements';
 
 const CODE_LENGTH = 5;
 
+// TODO: display previous code
+// TODO: spies just have a button and cannot enter a code
+
 const validate = (code) => {
   if (code.length < CODE_LENGTH) {
     return ["Code must contain all 5 characters."];
