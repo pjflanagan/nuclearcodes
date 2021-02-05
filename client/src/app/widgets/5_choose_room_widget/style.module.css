@@ -1,12 +1,19 @@
+.playerListHolder {
+  background: #0008;
+  border-radius: 2px;
+  padding: 2px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
 .roomRow {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  min-height: 169px;
 }
 
 .roomHolder {
-  width: 20%;
-  height: 100%;
   padding: 8px;
 }
 
@@ -15,6 +22,7 @@
   width: 100%;
   background: #0008;
   cursor: pointer;
+  border-radius: 2px;
   overflow: hidden;
 }
 

@@ -11,12 +11,11 @@
 ## Admin
 - [ ] sanitize name by removing spaces (not just leading and trailing)
 - [ ] share slide
+- [ ] social media cards
 
 ## Visual
-- [ ] game visually annoying when you are a spy and you change to being an agent, make more transitions
-      and that should probably be okay
 - [ ] make mobile ready so people can play on phone (IMPORTANT)
-- [ ] pill has copy on click with icons, whole pill is a link, also icons
+- [ ] ICONS: pill has copy on click with icons, whole pill is a link, also icons
 
 
 # Server

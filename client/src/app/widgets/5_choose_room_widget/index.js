@@ -17,6 +17,7 @@ class ChooseRoomWidget extends GameWidget {
     }
 
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
+    this.deselectRoom = this.deselectRoom.bind(this);
   }
 
   updateGameState() {
@@ -37,21 +38,36 @@ class ChooseRoomWidget extends GameWidget {
     });
   }
 
+  deselectRoom() {
+    this.props.socketService.pollResponse({
+      type: 'ROUND_CHOOSE_ROOM',
+      data: false
+    });
+  }
+
   render() {
     const { gameState: { codeLength }, isCurrent } = this.props;
     const { playersInRooms, players } = this.state;
     const me = this.getMe();
     return (
       <Slide>
-        <PlayerList
-          players={players}
-          me={me}
-        />
+        <div
+          className={Style.playerListHolder}
+          onClick={this.deselectRoom}
+        >
+          <PlayerList
+            players={players}
+            me={me}
+          />
+        </div>
         <div className={Style.roomRow}>
           {[...Array(codeLength)].map((a, i) => (
             <div
               className={Style.roomHolder}
               key={i}
+              style={{
+                width: `${100 / codeLength}%`
+              }}
             >
               <div
                 className={`${Style.room} ${!isCurrent ? Style.disabled : ''}`}

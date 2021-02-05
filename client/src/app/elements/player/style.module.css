@@ -1,5 +1,5 @@
 .playerList {
-  width: 100%;
+  width: calc(100% - 40px);
   height: auto;
   display: flex;
   flex-wrap: wrap;

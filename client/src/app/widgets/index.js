@@ -8,7 +8,7 @@ export * from './5_choose_room_widget';
 export * from './6_enter_code_widget';
 
 
-
+export * from './game_over_widget';
 export * from './defcon_widget';
 export * from './message_widget';
 export * from './error_widget';
