@@ -98,8 +98,8 @@ class PillCopy extends Pill {
 
 class Player extends Pill {
   render() {
-    const { player, me, doNotType, displayResponded } = this.props;
-    const color = (me.isSpy && player.isSpy) ? 'red' : '';
+    const { player, me, doNotType, displayResponded, doNotShowSpies } = this.props;
+    const color = (!doNotShowSpies && me.isSpy && player.isSpy) ? 'red' : '';
     const { isTyped } = this.state;
     const className = (displayResponded && !!player.response) ? Style.responded : '';
     if (isTyped || !!doNotType) {

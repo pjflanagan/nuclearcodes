@@ -7,7 +7,8 @@ import Style from './style.module.css'
 const PlayerList = ({
   players,
   me,
-  isCurrent
+  isCurrent,
+  doNotShowSpies
 }) => (
   <div className={Style.playerList}>
     {
@@ -15,6 +16,7 @@ const PlayerList = ({
         <Player
           key={i}
           me={me}
+          doNotShowSpies={doNotShowSpies}
           doNotType={true}
           player={p}
           displayResponded={true}

@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { Player, Slide, PlayerList } from '../../elements';
-import { getMe } from '../../game/GameComponent';
+import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
 // TODO: a place to click to leave all rooms
 
-class ChooseRoomWidget extends React.Component {
+class ChooseRoomWidget extends GameWidget {
   constructor(props) {
     super(props);
 
@@ -16,23 +16,10 @@ class ChooseRoomWidget extends React.Component {
       players: []
     }
 
-    this.updatePlayers = this.updatePlayers.bind(this);
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
   }
 
-  componentDidMount() {
-    this.updatePlayers();
-  }
-
-  // only update our local state if this element isCurrent
-  // this way when we move slides the data doesn't vanish
-  componentDidUpdate(prevProps) {
-    if (this.props.isCurrent && prevProps !== this.props) {
-      this.updatePlayers();
-    }
-  }
-
-  updatePlayers() {
+  updateGameState() {
     const { gameState: { players } } = this.props;
     this.setState({
       playersInRooms: players.filter(p => p.response !== false),
@@ -51,9 +38,9 @@ class ChooseRoomWidget extends React.Component {
   }
 
   render() {
-    const { gameState: { codeLength }, isCurrent, socketID } = this.props;
+    const { gameState: { codeLength }, isCurrent } = this.props;
     const { playersInRooms, players } = this.state;
-    const me = getMe(players, socketID);
+    const me = this.getMe();
     return (
       <Slide>
         <PlayerList

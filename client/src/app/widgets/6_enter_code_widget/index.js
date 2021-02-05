@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { SegmentedInput, Slide, Button, PlayerList } from '../../elements';
-import { getMe } from '../../game/GameComponent';
+import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
@@ -18,7 +18,7 @@ const sanitize = (values) => {
   return values.join('').toUpperCase();
 };
 
-class EnterCodeWidget extends React.Component {
+class EnterCodeWidget extends GameWidget {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +29,6 @@ class EnterCodeWidget extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.spySubmit = this.spySubmit.bind(this);
-    this.updatePlayers = this.updatePlayers.bind(this);
   }
 
   componentDidMount() {
@@ -37,21 +36,6 @@ class EnterCodeWidget extends React.Component {
     this.setState({
       players,
       values: [...Array(codeLength)].fill('')
-    });
-  }
-
-  // only update our local state if this element isCurrent
-  // this way when we move slides the data doesn't vanish
-  componentDidUpdate(prevProps) {
-    if (this.props.isCurrent && prevProps !== this.props) {
-      this.updatePlayers();
-    }
-  }
-
-  updatePlayers() {
-    const { gameState: { players } } = this.props;
-    this.setState({
-      players
     });
   }
 
@@ -93,7 +77,7 @@ class EnterCodeWidget extends React.Component {
   render() {
     const { submitted, values, players } = this.state;
     const { isCurrent, socketID } = this.props;
-    const me = getMe(players, socketID);
+    const me = this.getMe();
 
     let content = (<></>);
 

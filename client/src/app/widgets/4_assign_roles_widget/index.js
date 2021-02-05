@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Slide, Typeable, Text, Pill, Player } from '../../elements';
-import { getMe } from '../../game/GameComponent';
+import { GameWidget } from '../../game/';
 
-class AssignRolesWidget extends React.Component {
+class AssignRolesWidget extends GameWidget {
   spyContent(me) {
     const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
     return (
@@ -35,7 +35,7 @@ class AssignRolesWidget extends React.Component {
   }
 
   render() {
-    const me = getMe(this.props.gameState.players, this.props.socketID);
+    const me = this.getMe();
     const content = me.isSpy ? this.spyContent(me) : this.agentContent();
     return (
       <Slide>

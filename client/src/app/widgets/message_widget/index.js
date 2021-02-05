@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Slide, Title, Typeable, Text, Pill, PillCopy, Player } from '../../elements';
-import { getMe } from '../../game/GameComponent';
+import { GameWidget } from '../../game';
 
 class MessageWidget extends React.Component {
   render() {
@@ -37,11 +37,11 @@ class MessageWidgetWelcome extends React.Component {
   }
 }
 
-class MessageWidgetLetterReveal extends React.Component {
+class MessageWidgetLetterReveal extends GameWidget {
   render() {
     // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z"}
-    const { data, gameState: { players }, socketID } = this.props;
-    const me = getMe(players, socketID)
+    const { data } = this.props;
+    const me = this.getMe();
     // if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
     let content = (<></>);
@@ -112,10 +112,10 @@ class MessageWidgetDefcon extends React.Component {
   }
 }
 
-class MessageGameOver extends React.Component {
+class MessageGameOver extends GameWidget {
   render() {
-    const { data: { result, code }, gameState: { players }, socketID } = this.props;
-    const me = getMe(players, socketID);
+    const { data: { result, code } } = this.props;
+    const me = this.getMe();
     let pill = (<></>)
     let message1 = '';
     let message2 = '';

@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { Slide, PlayerList, Button } from '../../elements';
-import { getMe } from '../../game/GameComponent';
+import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
 const MIN_PLAYERS_PER_GAME = 5;
 
-class ReadyUpWidget extends React.Component {
+class ReadyUpWidget extends GameWidget {
   constructor(props) {
     super(props);
 
@@ -17,25 +17,6 @@ class ReadyUpWidget extends React.Component {
     };
 
     this.readyUp = this.readyUp.bind(this);
-  }
-
-  componentDidMount() {
-    this.updateGameState();
-  }
-
-  // only update our local state if this element isCurrent
-  // this way when we move slides the data doesn't vanish
-  componentDidUpdate(prevProps) {
-    if (this.props.isCurrent && prevProps !== this.props) {
-      this.updateGameState();
-    }
-  }
-
-  updateGameState() {
-    const { gameState: { players } } = this.props;
-    this.setState({
-      players,
-    });
   }
 
   getPrompt() {
@@ -70,8 +51,8 @@ class ReadyUpWidget extends React.Component {
   }
 
   render() {
-    const { socketID } = this.props;
     const { ready, players } = this.state;
+    const me = this.getMe();
     // ready up is for everyone, all need to be ready
     // ready up option becomes avaialable when everyone is here
     // also I should show which agent's have not readied up
@@ -79,7 +60,8 @@ class ReadyUpWidget extends React.Component {
       <Slide>
         <PlayerList
           players={players}
-          me={getMe(players, socketID)}
+          me={me}
+          doNotShowSpies={true}
         />
         <div className={Style.readyUpButtonHolder}>
           <Button

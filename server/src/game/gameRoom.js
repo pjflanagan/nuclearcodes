@@ -185,7 +185,6 @@ class GameRoom {
               spies: this.players.getSpies()
             }
           });
-          this.players.resetSpies();
           this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
           return;
         }
@@ -200,7 +199,6 @@ class GameRoom {
               spies: this.players.getSpies()
             }
           });
-          this.players.resetSpies();
           this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
           return;
         }
