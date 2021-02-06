@@ -1,7 +1,7 @@
 
 import { PlayerModel } from '../player/player.js';
 
-const playerNames = [
+const PLAYER_NAMES = [
   'JamesBond',
   'AustinPowers',
   'JasonBourne',
@@ -20,10 +20,13 @@ class RoomModel {
     this.roomName = roomName;
     this.roomURL = `${CLIENT_ENDPOINT}/${roomName}`;
     this.players = [];
+    this.makePlayers(playerCount);
+  }
+
+  makePlayers(playerCount) {
     for (let i = 0; i < playerCount; ++i) {
-      this.players.push(new PlayerModel(this.$scope, this, playerNames[i]));
+      this.players.push(new PlayerModel(this.$scope, this, PLAYER_NAMES[i]));
     }
-    this.allCode = '';
   }
 
   sendReadyUp() {
@@ -39,19 +42,11 @@ class RoomModel {
     });
   }
 
-  // sendKeyChoices() {
-  //   this.players.forEach(p => {
-  //     p.response.keyChoice = (Math.random() > 0.5) ? 'spyKey' : 'agentKey';
-  //     p.sendKeyChoice();
-  //   });
-  // }
-
-  sendEnterCode() {
+  sendCode(isCorrect) {
     this.players.forEach(p => {
-      p.response.code = this.allCode;
-      p.sendEnterCode();
+      p.sendEnterCode(isCorrect);
     })
   }
 }
 
-export { RoomModel };
+export { RoomModel, PLAYER_NAMES };

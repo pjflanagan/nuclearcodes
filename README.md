@@ -7,7 +7,7 @@
 
 ### [Play Nuclear Codes!](https://nuclear-codes.netlify.app)
 
-This is a React based Socket.io game that can be played by 8 friends. Agents
+This is a React based Socket.io game that can be played by 5 to 10 friends. Agents
 try to recover a code while Spies try and stop them. Hosted on Netlify and Heroku.
 
 ## Install

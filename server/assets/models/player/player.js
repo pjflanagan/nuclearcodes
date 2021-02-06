@@ -10,13 +10,25 @@ class PlayerModel {
       withCredentials: true,
     });
 
+    this.lastSlideID = '';
+    this.lastRoomID = -1;
+    this.lastSawLetter = '';
+
     this.slide = '';
     this.gameState = {
-      players: []
+      players: [],
+      round: 0
     };
+    this.errors = [];
+
     // this.isConnected = true;
 
-    // listeners
+    // login
+    this.login();
+    this.makeListeners();
+  }
+
+  makeListeners() {
     this.socket.on('NEXT_SLIDE', (data) => {
       this.slide = data;
       this.$scope.$apply();
@@ -25,9 +37,6 @@ class PlayerModel {
       this.gameState = data;
       this.$scope.$apply();
     });
-
-    // login
-    this.login();
   }
 
   // socket
@@ -36,6 +45,10 @@ class PlayerModel {
     this.socket.emit('JOIN_ROOM', {
       roomName: this.room.roomName
     });
+    this.submitName();
+  }
+
+  submitName() {
     this.socket.emit('SET_PLAYER_NAME', {
       playerName: this.playerName
     });
@@ -64,30 +77,28 @@ class PlayerModel {
     });
   }
 
-  // sendKeyChoice() {
-  //   const { keyChoice } = this.response;
-  //   this.socket.emit('POLL_RESPONSE', {
-  //     type: 'ROUND_TURN_KEY',
-  //     data: {
-  //       isSpyKey: keyChoice === 'spyKey'
-  //     }
-  //   });
-  // }
-
-  sendEnterCode() {
-    const { code } = this.response;
+  sendEnterCode(isCorrect) {
+    // spies send an incorrect code
+    // agents send what the user enters
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
-      data: { code }
+      data: {
+        code: (this.isSpy() || !isCorrect) ? 'RANDO' : this.gameState.code
+      }
     });
   }
 
 
-  // helpers 
+  // helpers
 
-  isSpy() {
+  getPlayerInfoFromGameState() {
     const socketID = this.socket.id;
     const playerInfo = this.gameState.players.find(p => p.id === socketID);
+    return playerInfo;
+  }
+
+  isSpy() {
+    const playerInfo = this.getPlayerInfoFromGameState()
     if (!playerInfo) {
       return false;
     }

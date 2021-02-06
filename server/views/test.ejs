@@ -9,6 +9,8 @@
 
 <body ng-app="nuclear-codes-test">
   <div class="controller" ng-controller="testController" ng-init="init()">
+
+    <!-- HEADER -->
     <div class="header">
       <h1>nuclear-codes-test</h1>
       <div class="form-row">
@@ -22,13 +24,20 @@
         <button ng-click="addFullAutoRoom()">Start Full Auto Test Room</button>
       </div>
     </div>
+
+    <!-- CONTAINER -->
     <div class="container">
       <div id="gamerooms">
+
+        <!-- GAMEROOM -->
         <div class="room" ng-repeat="(i, room) in state.rooms">
+
+          <!-- ROOM INFO -->
           <a href="{{room.roomURL}}" target="_blank">
             <h2>{{ room.roomName }}</h2>
           </a>
           <div class="form-row">
+            <!-- TODO: make this work -->
             <label>Add Player Name</label>
             <input type="text" />
             <button>Add Player To Game</button>
@@ -39,26 +48,38 @@
             <button ng-click="room.sendCode(true)">Send Correct Code</button>
             <button ng-click="room.sendCode(false)">Send Incorrect Code</button>
           </div>
+
+          <!-- PLAYERS -->
           <div class="players">
             <div class="player" ng-class="player.isSpy() ? 'spy' : ''" ng-repeat="(j, player) in room.players">
               <h3>{{ player.playerName }}</h3>
               <p class="data">{{ player.slide }}</p>
+
+              <!-- Ready Up -->
               <div class="form-row">
                 <button ng-click="player.sendReadyUp()">Send Ready Up</button>
               </div>
+
+              <!-- Room Choice -->
               <div class="form-row">
                 <label>Room Number:</label>
                 <input type="number" min="0" max="4" val="0" ng-model="player.response.roomID" />
                 <button ng-click="player.sendRoomChoice()">Send Room Choice</button>
               </div>
+
+              <!-- Enter Code -->
               <div class="form-row">
                 <label>Code:</label>
-                <input type="text" ng-model="player.response.code" />
-                <button ng-click="player.sendEnterCode()">Send Enter Code</button>
+                <button ng-click="player.sendEnterCode(true)">Send Correct Code</button>
+                <button ng-click="player.sendEnterCode(false)">Send Incorrect Code</button>
               </div>
+
+              <!-- Disconnect -->
               <div class="form-row">
                 <button ng-click="player.disconnectPlayer()">Disconnect</button>
               </div>
+
+              <!-- TODO: Reconnect -->
             </div>
           </div>
         </div>

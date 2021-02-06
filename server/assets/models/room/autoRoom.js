@@ -1,34 +1,10 @@
 
+import { RoomModel, PLAYER_NAMES } from './room.js';
 import { AutoPlayerModel } from '../player/autoPlayer.js';
 
-const PLAYER_NAMES = [
-  'JamesBond',
-  'AustinPowers',
-  'JasonBourne',
-  'EthanHunt',
-  'AlexRider',
-  'BlackWidow',
-  'KimPossible',
-  'MacGyver',
-  'CarmenCortez',
-  'Archer'
-];
-
-const ROUND_ROOMS = [
-  [0, 0, 1, 1, 2, 2, 3, 3],
-  [1, 2, 2, 3, 3, 4, 4, 1],
-  [0, 0, 1, 1, 2, 2, 3, 3],
-  [1, 2, 2, 3, 3, 4, 4, 1],
-  [0, 0, 1, 1, 2, 2, 3, 3],
-  [1, 2, 2, 3, 3, 4, 4, 1],
-]
-
-class AutoRoomModel {
-  constructor($scope, roomName, playerCount) {
-    this.$scope = $scope;
-    this.roomName = roomName;
-    this.roomURL = `${CLIENT_ENDPOINT}/${roomName}`;
-    this.players = [];
+// TODO: this should extend room
+class AutoRoomModel extends RoomModel {
+  makePlayers(playerCount) {
     for (let i = 0; i < playerCount; ++i) {
       this.players.push(
         new AutoPlayerModel(
@@ -41,16 +17,9 @@ class AutoRoomModel {
     }
   }
 
-  getRoomIDThisRound(round, playerIndex) {
-    return ROUND_ROOMS[round][playerIndex];
-  }
-
-
-  sendCode(isCorrect) {
-    this.players.forEach(p => {
-      p.sendEnterCode(isCorrect);
-    })
-  }
+  // getRoomIDThisRound(round, playerIndex) {
+  //   return ROUND_ROOMS[round][playerIndex];
+  // }
 }
 
 export { AutoRoomModel };
