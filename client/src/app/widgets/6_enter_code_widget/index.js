@@ -5,8 +5,6 @@ import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
-// TODO: display this user's previous code
-
 const validate = (code, codeLength) => {
   if (code.length < codeLength) {
     return [`Code must contain all ${codeLength} characters.`];
@@ -18,13 +16,16 @@ const sanitize = (values) => {
   return values.join('').toUpperCase();
 };
 
+const DEFAULT_PLACEHOLDER = '??????????';
+
 class EnterCodeWidget extends GameWidget {
   constructor(props) {
     super(props);
     this.state = {
       values: [],
       submitted: false,
-      players: []
+      players: [],
+      placeholder: DEFAULT_PLACEHOLDER
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -36,6 +37,16 @@ class EnterCodeWidget extends GameWidget {
     this.setState({
       players,
       values: [...Array(codeLength)].fill('')
+    }, () => {
+      // after the players have been set, getMe can be run
+      // set the placeholder here
+      const me = this.getMe();
+      console.log({ me })
+      const placeholder = (!!me && !!me.prevCode && me.prevCode !== '') ? me.prevCode : DEFAULT_PLACEHOLDER;
+      console.log({ placeholder });
+      this.setState({
+        placeholder,
+      })
     });
   }
 
@@ -75,8 +86,8 @@ class EnterCodeWidget extends GameWidget {
   }
 
   render() {
-    const { submitted, values, players } = this.state;
-    const { isCurrent, socketID } = this.props;
+    const { submitted, players, placeholder } = this.state;
+    const { isCurrent, gameState: { codeLength } } = this.props;
     const me = this.getMe();
 
     let content = (<></>);
@@ -95,10 +106,11 @@ class EnterCodeWidget extends GameWidget {
     } else {
       content = (
         <SegmentedInput
+          placeholder={placeholder}
           disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
-          segments={values.length}
+          segments={codeLength}
         />
       );
     }

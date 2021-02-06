@@ -95,10 +95,13 @@ class GameRoom {
 
     switch (response.type) {
       case GAME_STATES.LOBBY:
-      case GAME_STATES.ROUND_ENTER_CODE:
       case GAME_STATES.ROUND_CHOOSE_ROOM:
         // just record the response they give here
         player.recordResponse(response.data);
+        break;
+      case GAME_STATES.ROUND_ENTER_CODE:
+        player.recordResponse(response.data);
+        player.setPrevCode(response.data);
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
@@ -106,7 +109,6 @@ class GameRoom {
     }
 
     this.socketServer.updateGameState(this.name, this.getState());
-
     this.moveIfPollOver();
   }
 

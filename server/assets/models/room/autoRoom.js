@@ -1,5 +1,5 @@
 
-import { AutoPlayerModel } from './autoPlayer.js';
+import { AutoPlayerModel } from '../player/autoPlayer.js';
 
 const PLAYER_NAMES = [
   'JamesBond',

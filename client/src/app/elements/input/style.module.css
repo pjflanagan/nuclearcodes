@@ -7,6 +7,7 @@
 .inputHolder {
   width: calc(100% - 180px);
   padding: 10px;
+  display: flex;
 }
 
 .buttonHolder {
@@ -39,7 +40,18 @@
   color: #fff8;
 }
 
+/* segmented input */
+
+.segmentHolder {
+  margin: 0 4px;
+}
+
 .inputSegment {
   text-align: center;
-  margin: 0 4px;
+}
+
+.segmentLabel {
+  text-align: center;
+  font-size: 22px;
+  margin: 8px 0;
 }

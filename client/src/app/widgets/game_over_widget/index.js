@@ -40,8 +40,8 @@ class MessageGameOver extends GameWidget {
           <Pill>{code}</Pill>
           <Text>{`${message2}`}</Text>
           {
-            !!me && !me.isSpy && spies.map(p => (
-              <Pill color="red">{p.name}</Pill>
+            !!me && !me.isSpy && spies.map((p, i) => (
+              <Pill key={i} color="red">{p.name}</Pill>
             ))
           }
         </Typeable>

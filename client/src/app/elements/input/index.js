@@ -113,28 +113,33 @@ class SegmentedInput extends React.Component {
   }
 
   render() {
-    const { disabled, onSubmit, segments } = this.props;
+    const { disabled, onSubmit, segments, placeholder } = this.props;
     return (
       <div className={Style.inputRow}>
         <div className={Style.inputHolder}>
           {
             [...Array(segments)].map((a, i) => (
-              <input
+              <div
                 key={i}
-                type="text"
-                maxLength="1"
-                name={`seg${this.mountTimestamp}-${i}`}
-                value={this.props.value}
-                placeholder={i + 1}
-                tabIndex={0}
-                className={`${Style.input} ${Style.inputSegment}`}
+                className={Style.segmentHolder}
                 style={{
                   width: `calc(${100 / segments}% - 8px)`
                 }}
-                onChange={e => this.onChange(e)}
-                onKeyDown={e => this.onKeyDown(e)}
-                disabled={disabled}
-              />
+              >
+                <input
+                  type="text"
+                  maxLength="1"
+                  name={`seg${this.mountTimestamp}-${i}`}
+                  placeholder={placeholder[i]}
+                  value={this.props.value} // doesn't work without this even though it's not set
+                  tabIndex={0}
+                  className={`${Style.input} ${Style.inputSegment}`}
+                  onChange={e => this.onChange(e)}
+                  onKeyDown={e => this.onKeyDown(e)}
+                  disabled={disabled}
+                />
+                <div className={Style.segmentLabel}>{i + 1}</div>
+              </div>
             ))
           }
         </div>

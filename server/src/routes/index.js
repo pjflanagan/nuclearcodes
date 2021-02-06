@@ -25,11 +25,4 @@ router.get("/test", (req, res) => {
   });
 });
 
-router.get("/autoTest", (req, res) => {
-  res.render('autoTest', {
-    CLIENT_ENDPOINT,
-    ENV
-  });
-});
-
 export { router }

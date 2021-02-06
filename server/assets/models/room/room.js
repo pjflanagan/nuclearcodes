@@ -1,5 +1,5 @@
 
-import { PlayerModel } from './player.js';
+import { PlayerModel } from '../player/player.js';
 
 const playerNames = [
   'JamesBond',
