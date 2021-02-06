@@ -56,13 +56,40 @@ const RoundChooseRoomHandlers = {
   }
 }
 
+function mostCommonCode(codeResponses) {
+  return codeResponses.sort((a, b) =>
+    codeResponses.filter(r => r.code === a).length
+    - codeResponses.filter(r => r.code === b).length
+  ).pop();
+}
+
+function stringDiff(str1, str2) {
+  let diff = "";
+  str2.split('').forEach(function (val, i) {
+    if (val != str1.charAt(i))
+      diff += val;
+  });
+  return diff;
+}
+
 const RoundEnterCodeHandlers = {
   isPollOver: (players) => {
-    const codeResponses = players.getResponses();
-    if (codeResponses.length < players.count()) {
+    const allResponses = players.getResponses();
+    if (allResponses.length < players.count()) {
       return [false];
     }
+    const codeResponses = players.getAgentResponses();
     return [true, { codeResponses }];
+  },
+  moveGameState: ({ codeResponses, code }) => {
+    const { code: guessedCode } = mostCommonCode(codeResponses);
+    const d = stringDiff(code, guessedCode);
+    const charsCorrect = code.length - d.length;
+
+    return {
+      guessedCode,
+      charsCorrect
+    }
   }
 }
 

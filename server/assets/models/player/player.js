@@ -88,6 +88,16 @@ class PlayerModel {
     });
   }
 
+  sendManualCode(code) {
+    this.socket.emit('POLL_RESPONSE', {
+      type: 'ROUND_ENTER_CODE',
+      data: {
+        code: code
+      }
+    });
+
+  }
+
 
   // helpers
 

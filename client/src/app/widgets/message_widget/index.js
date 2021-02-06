@@ -64,7 +64,7 @@ class MessageWidgetLetterReveal extends GameWidget {
           <Pill>{data.realLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
-          <Text>{`. Talk it over and vote on a code to enter.`}</Text>
+          <Text>{`. Talk it over and vote on a code to enter. Remember, the code changes every round.`}</Text>
         </Typeable>
       );
     }
@@ -79,6 +79,7 @@ class MessageWidgetLetterReveal extends GameWidget {
 
 class MessageWidgetDefcon extends React.Component {
   render() {
+    const { data: { guessedCode, charsCorrect } } = this.props;
     let message = '';
     switch (this.props.gameState.round) {
       case 1:
@@ -100,9 +101,12 @@ class MessageWidgetDefcon extends React.Component {
       <Slide>
         <Title>{'Code Entry Result'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
+          <Text>{"The majority voted for "}</Text>
+          <Pill>{guessedCode}</Pill>
+          <Text>{" which contained "}</Text>
+          <Pill>{charsCorrect}</Pill>
           <Text>{`
-            So the code you agreed on was incorrect. 
-            Remember, we need a majority to be correct in order to unlock the nuclear football. 
+            correct characters, and failed to unlock the nuclear football. 
             We've moved up to defcon `}</Text>
           <Pill>{this.props.gameState.round}</Pill>
           <Text>{` ${message}`}</Text>

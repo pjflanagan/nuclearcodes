@@ -83,6 +83,7 @@ const GAMEPLAY = [
       The only way to recover them is through these rooms. Each round all agents will enter
       rooms, and be shown that room's letter. But there are spies in our midst.
       Spies are also shown a false letter, and can lie to you about the contents of the rooms they enter.
+      The code changes after each incorrect guess.
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
     next: () => 'assign-roles',
@@ -98,7 +99,7 @@ const GAMEPLAY = [
     id: 'room-picker-prompt',
     widget: MessageWidget,
     data: {
-      title: 'Choose Rooms and Partners',
+      title: 'Choose Rooms',
       text: `Talk amongst yourselves, and decide who will enter which room.`
     },
     next: () => 'room-picker',
@@ -127,7 +128,7 @@ const GAMEPLAY = [
     id: 'defcon',
     widget: DefconWidget,
     next: () => 'room-picker-prompt',
-    delay: 1000
+    delay: 1600
   },
   {
     id: 'gameover',
