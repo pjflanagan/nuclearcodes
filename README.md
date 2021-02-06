@@ -1,6 +1,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/cc32c9bf-a028-4662-b96a-80f6dd8818db/deploy-status)](https://app.netlify.com/sites/nuclear-codes/deploys)
 
+![Nuclear Codes Logo](https://raw.githubusercontent.com/pjflanagan/nuclear-codes/master/media/social.png)
+
 # Nuclear Codes
 
 ### [Play Nuclear Codes!](https://nuclear-codes.netlify.app)
@@ -23,7 +25,7 @@ $ cd ./client && npm run start
 # terminal 2
 $ cd ./server && npm run start
 ```
-Then visit: 
+## Test 
 
-  - http://localhost:5000/test to start the test, click on the link to open
-  - http://localhost:3000/test in browser to join the test room
+  1. http://localhost:5000/test to open the test, click one of the "Start Test" buttons
+  2. http://localhost:3000/test in browser to join the test room

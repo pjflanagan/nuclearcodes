@@ -6,7 +6,6 @@
 ## Gameplay
 
 - [ ] front end auto vote timer, use diff with same code as previous time, first round excluded, 2 minutes, spy auto vote wrong
-- [ ] gameover slide reveal who was a spy
 
 ## Admin
 - [ ] sanitize name by removing spaces (not just leading and trailing)

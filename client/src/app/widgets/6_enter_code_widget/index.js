@@ -41,9 +41,7 @@ class EnterCodeWidget extends GameWidget {
       // after the players have been set, getMe can be run
       // set the placeholder here
       const me = this.getMe();
-      console.log({ me })
       const placeholder = (!!me && !!me.prevCode && me.prevCode !== '') ? me.prevCode : DEFAULT_PLACEHOLDER;
-      console.log({ placeholder });
       this.setState({
         placeholder,
       })
