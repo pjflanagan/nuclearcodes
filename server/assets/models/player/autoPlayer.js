@@ -70,7 +70,7 @@ class AutoPlayerModel extends PlayerModel {
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_CHOOSE_ROOM',
       data: {
-        roomID: Math.floor(Math.random() * this.room.players.length),
+        roomID: Math.floor(Math.random() * this.gameState.codeLength),
         timestamp: Date.now()
       }
     });

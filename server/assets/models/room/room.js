@@ -20,6 +20,7 @@ class RoomModel {
     this.roomName = roomName;
     this.roomURL = `${CLIENT_ENDPOINT}/${roomName}`;
     this.players = [];
+    this.allCode = '';
     this.makePlayers(playerCount);
   }
 
@@ -45,6 +46,12 @@ class RoomModel {
   sendCode(isCorrect) {
     this.players.forEach(p => {
       p.sendEnterCode(isCorrect);
+    })
+  }
+
+  sendManualCode() {
+    this.players.forEach(p => {
+      p.sendManualCode(this.allCode);
     })
   }
 }

@@ -76,7 +76,7 @@ class EnterCodeWidget extends GameWidget {
   spySubmit(e) {
     this.props.socketService.pollResponse({
       type: 'ROUND_ENTER_CODE',
-      data: { code: 'FAKECODE' } // this will never be right because it has vowels
+      data: { code: DEFAULT_PLACEHOLDER } // spy response is ignored
     });
     this.setState({
       submitted: true

@@ -117,6 +117,10 @@ class PlayerList {
     return this.players.map(p => p.response).filter(r => r !== false);
   }
 
+  getAgentResponses() {
+    return this.players.filter(p => !p.isSpy).map(p => p.response).filter(r => r !== false);
+  }
+
   clearResponses() {
     this.players.forEach(p => p.response = false);
   }

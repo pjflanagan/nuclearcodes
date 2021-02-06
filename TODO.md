@@ -39,12 +39,18 @@
 
 # NEW GAME RULES IDEAS
 
-- Two spies in a room: only show a fake letter, that way can they both lie together and it’ll look like they’re innocent
-- One spy, one agent: show the agent the real letter, show the spy both
-- Both agents, both see the real letter
+- Spies see both letters
+- Agents only see true letter
 
-This way the spy can choose to lie, and accuse the agent of being a spy, this will make it a more who is who kind of game, rather than a which is which
+This way the spy can choose to lie, and accuse the agent of being a spy, this will make it more a who is who kind of game, rather than a which is which. By the end of the game, the agents should know who to trust so that way they send one agent into each room.
 
-- The code changes every round (it could be too easy for agents to figure out who a spy is by reentering a room and seeing who was lying). 
-- By the end of the game, the agents should know who to trust so that way they send one agent into each room (still 5 agents, still 5 rooms, you're allowed to enter a room alone)
+Options:
+- Code stays same
+  - could be too easy for agents to figure out spies, everyone goes into room alone is best agent strategy
+- The code changes every round TODO: this is the way I think it should be done
+  - could be too hard for agents (needs rooms=agents for this to work)
+  - if we do it this way, say which percentage was correct:
 
+Determine code logic:
+  - select the most voted for code amongst agents
+  - return the code that was voted for and what percent it was correct

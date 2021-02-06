@@ -23,8 +23,8 @@ class MessageGameOver extends GameWidget {
     } else {
       if (result === 'victory') {
         pill = (<Pill>{'VICTORY'}</Pill>);
-        message1 = ' Congratulations, our agents guessed '
-        message2 = ' and put an end to this terrorist and/or communist scheme. Mission Accomplished!'
+        message1 = ' Mission Accomplished! Our agents guessed '
+        message2 = ' and put an end to the terrorist and/or communist scheme spearheaded by '
       } else {
         pill = (<Pill color="red">{'DEFEAT'}</Pill>);
         message1 = " It's over, the great American experiment has crumbled before our eyes. All because we couldn't guess the right code: "
