@@ -7,11 +7,14 @@ import Style from './style.module.css';
 class Slide extends React.Component {
   render() {
     const {
-      children
+      children,
+      isPrompt
     } = this.props;
 
+    const className = !!isPrompt ? Style.prompt : ''
+
     return (
-      <div className={`${Style.slide}`}>
+      <div className={`${Style.slide} ${className}`}>
         { children}
       </div>
     );

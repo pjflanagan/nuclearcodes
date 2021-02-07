@@ -32,9 +32,8 @@ a:hover .pill {
 .pill.actionable:hover {
   background: #b5b5b5;
 }
-
 .responded {
-  filter: opacity(0.6)
+  filter: opacity(0.6);
 }
 
 /* .pill .icon {} */

@@ -51,7 +51,7 @@ class PlayerNameWidget extends React.Component {
   render() {
     const { isCurrent } = this.props;
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         <Input
           placeholder="Your Secret Agent Name"
           tabIndex={0}

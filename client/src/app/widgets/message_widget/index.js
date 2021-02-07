@@ -39,7 +39,7 @@ class MessageWidgetWelcome extends React.Component {
 
 class MessageWidgetLetterReveal extends GameWidget {
   render() {
-    // data: {"data":{"roomID":0,"realLetter":"J","fakeLetter":"Z"}
+    // data: {"data":{"roomID":0,"realLetter":"","fakeLetter":""}
     const { data } = this.props;
     const me = this.getMe();
     // if a spy, highlight the letter with color,
@@ -54,7 +54,7 @@ class MessageWidgetLetterReveal extends GameWidget {
           <Pill color="red">{data.fakeLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
-          <Text>{'. You my choose to lie and accuse your roommate of being a spy.'}</Text>
+          <Text>{'. You may choose to lie, accuse your roommate of being a spy. In the next round your code entry will be fake.'}</Text>
         </Typeable>
       )
     } else {
@@ -106,7 +106,7 @@ class MessageWidgetDefcon extends React.Component {
           <Text>{" which contained "}</Text>
           <Pill>{charsCorrect}</Pill>
           <Text>{`
-            correct characters, and failed to unlock the nuclear football. 
+            correct characters, and failed to unlock the nuclear football, the code has now changed. 
             We've moved up to defcon `}</Text>
           <Pill>{this.props.gameState.round}</Pill>
           <Text>{` ${message}`}</Text>

@@ -5,6 +5,7 @@ import { Slide } from '../../elements';
 import Style from './style.module.css';
 
 const MOVE_HAND_DELAY = 800;
+const TOTAL_ROUNDS = 5;
 
 class DefconWidget extends React.Component {
   constructor(props) {
@@ -30,12 +31,12 @@ class DefconWidget extends React.Component {
       <Slide>
         <div className={Style.circle}>
           <div className={Style.dotsHolder}>
-            {[...Array(4)].map((e, i) => (
+            {[...Array(TOTAL_ROUNDS)].map((e, i) => (
               <div
                 key={i}
                 className={Style.dot}
                 style={{
-                  transform: `translate(${-90 * Math.cos(i * Math.PI / 6)}px, ${-90 * Math.sin(i * Math.PI / 6)}px)`
+                  transform: `translate(${-94 * Math.cos(i * Math.PI / 8)}px, ${-94 * Math.sin(i * Math.PI / 8)}px)`
                 }}
               />
             ))}
@@ -43,7 +44,7 @@ class DefconWidget extends React.Component {
           <div className={Style.midnight}></div>
           <div className={Style.minuteHand}
             style={{
-              transform: `rotate(${(round - 4) * Math.PI / 6}rad)`
+              transform: `rotate(${(round - TOTAL_ROUNDS) * Math.PI / 8}rad)`
             }}
           ></div>
         </div>

@@ -16,13 +16,13 @@
 
 .dot {
   background: #1c1c1c;
-  width: 28px;
-  height: 28px;
-  border-radius: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
   position: absolute;
   top: 100%;
   left: 100%;
-  margin: -14px;
+  margin: -12px;
 }
 
 .midnight {

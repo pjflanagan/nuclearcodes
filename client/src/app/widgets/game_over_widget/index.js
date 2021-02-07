@@ -34,7 +34,7 @@ class MessageGameOver extends GameWidget {
     return (
       <Slide>
         <Title>{'Game Over'}</Title>
-        <Typeable doneTypingCallback={this.props.doneCallback}>
+        <Typeable doneTypingCallback={() => this.props.doneCallback({ result })}>
           {pill}
           <Text>{`${message1}`}</Text>
           <Pill>{code}</Pill>

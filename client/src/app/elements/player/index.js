@@ -10,7 +10,7 @@ const PlayerList = ({
   isCurrent,
   doNotShowSpies
 }) => (
-  <div className={Style.playerList}>
+  <div className={`${Style.playerList} ${!isCurrent ? Style.allReady : ''}`}>
     {
       players.map((p, i) => (
         <Player
@@ -20,7 +20,6 @@ const PlayerList = ({
           doNotType={true}
           player={p}
           displayResponded={true}
-          isCurrent={isCurrent}
         />
       ))
     }

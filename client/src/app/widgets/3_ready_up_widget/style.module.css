@@ -1,16 +1,3 @@
-.players {
-  display: flex;
-  margin: 0 auto;
-  width: 90%;
-  flex-direction: revert;
-  flex-wrap: wrap;
-}
-
-/* TODO: use screen min-width (size sm should be 3 only) */
-.players .playerHolder {
-  width: 25%;
-  padding: 12px;
-}
 .readyUpButtonHolder {
   width: 100%;
   margin: 24px 0 12px 0;

@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { SegmentedInput, Slide, Button, PlayerList } from '../../elements';
+import { SegmentedInput, Slide, PlayerList } from '../../elements';
 import { GameWidget } from '../../game';
-
-import Style from './style.module.css';
 
 const validate = (code, codeLength) => {
   if (code.length < codeLength) {
@@ -25,7 +23,6 @@ class EnterCodeWidget extends GameWidget {
       values: [],
       submitted: false,
       players: [],
-      placeholder: DEFAULT_PLACEHOLDER
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,14 +34,6 @@ class EnterCodeWidget extends GameWidget {
     this.setState({
       players,
       values: [...Array(codeLength)].fill('')
-    }, () => {
-      // after the players have been set, getMe can be run
-      // set the placeholder here
-      const me = this.getMe();
-      const placeholder = (!!me && !!me.prevCode && me.prevCode !== '') ? me.prevCode : DEFAULT_PLACEHOLDER;
-      this.setState({
-        placeholder,
-      })
     });
   }
 
@@ -84,39 +73,22 @@ class EnterCodeWidget extends GameWidget {
   }
 
   render() {
-    const { submitted, players, placeholder } = this.state;
+    const { submitted, players } = this.state;
     const { isCurrent, gameState: { codeLength } } = this.props;
     const me = this.getMe();
 
-    let content = (<></>);
-
-    if (!!me && me.isSpy) {
-      content = (
-        <div className={Style.readyUpButtonHolder}>
-          <Button
-            onClick={this.spySubmit}
-            disabled={submitted}
-          >
-            {`Spies don't submit codes, press here to fake submit`}
-          </Button>
-        </div>
-      );
-    } else {
-      content = (
-        <SegmentedInput
-          placeholder={placeholder}
-          disabled={!isCurrent || submitted}
-          onChange={this.onChange}
-          onSubmit={this.onSubmit}
-          segments={codeLength}
-        />
-      );
-    }
+    const submitCallback = (!!me && me.isSpy) ? this.spySubmit : this.onSubmit;
 
     return (
       <Slide>
-        <PlayerList me={me} players={players} />
-        {content}
+        <PlayerList me={me} players={players} isCurrent={isCurrent} />
+        <SegmentedInput
+          placeholder={DEFAULT_PLACEHOLDER}
+          disabled={!isCurrent || submitted}
+          onChange={this.onChange}
+          onSubmit={submitCallback}
+          segments={codeLength}
+        />
       </Slide>
     );
   }

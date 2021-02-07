@@ -87,7 +87,7 @@ const GAMEPLAY = [
       We only have five guesses to recover our nuclear codes, failure is not an option!`
     },
     next: () => 'assign-roles',
-    delay: 1600
+    delay: 2800
   },
   {
     id: 'assign-roles',
@@ -122,7 +122,8 @@ const GAMEPLAY = [
   {
     id: 'start-next-round',
     widget: MessageWidgetDefcon,
-    next: () => 'defcon'
+    next: () => 'defcon',
+    delay: 1600
   },
   {
     id: 'defcon',
@@ -133,8 +134,14 @@ const GAMEPLAY = [
   {
     id: 'gameover',
     widget: MessageGameOver,
+    next: ({ result }) => (result === 'defeat') ? 'final-defcon' : 'credits',
+    delay: 2800
+  },
+  {
+    id: 'final-defcon',
+    widget: DefconWidget,
     next: () => 'credits',
-    delay: 2000
+    delay: 1600
   },
   {
     id: 'credits',

@@ -33,7 +33,9 @@ class LobbyWidgetComponent extends React.Component {
   componentDidMount() {
     const { roomName } = this.props.match.params;
     if (!!roomName) {
-      this.setState({ roomName }, this.onSubmit);
+      this.setState({
+        roomName
+      });
     }
   }
 
@@ -61,7 +63,7 @@ class LobbyWidgetComponent extends React.Component {
     const { roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         <Input
           type="text"
           value={roomName}

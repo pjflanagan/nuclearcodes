@@ -58,6 +58,7 @@ class ChooseRoomWidget extends GameWidget {
           <PlayerList
             players={players}
             me={me}
+            isCurrent={isCurrent}
           />
         </div>
         <div className={Style.roomRow}>

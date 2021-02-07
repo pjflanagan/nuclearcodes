@@ -52,6 +52,7 @@ class ReadyUpWidget extends GameWidget {
 
   render() {
     const { ready, players } = this.state;
+    const { isCurrent } = this.props;
     const me = this.getMe();
     // ready up is for everyone, all need to be ready
     // ready up option becomes avaialable when everyone is here
@@ -62,6 +63,7 @@ class ReadyUpWidget extends GameWidget {
           players={players}
           me={me}
           doNotShowSpies={true}
+          isCurrent={isCurrent}
         />
         <div className={Style.readyUpButtonHolder}>
           <Button

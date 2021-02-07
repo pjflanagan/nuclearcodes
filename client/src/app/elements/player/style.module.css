@@ -5,3 +5,7 @@
   flex-wrap: wrap;
   margin: 20px;
 }
+
+.playerList.allReady {
+  filter: opacity(0.6);
+}
