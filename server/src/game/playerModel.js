@@ -7,7 +7,6 @@ class Player {
     this.isSpy = false;
     this.response = false;
     this.name = '';
-    this.prevCode = '';
   }
 
   setName(name) {
@@ -20,10 +19,6 @@ class Player {
 
   getIsSpy() {
     return this.isSpy;
-  }
-
-  setPrevCode({ code }) {
-    this.prevCode = code;
   }
 
   // TODO: better response handling (getting)
@@ -41,8 +36,7 @@ class Player {
       isSpy: this.isSpy,
       name: this.name,
       id: this.id,
-      response: this.response,
-      prevCode: this.prevCode
+      response: this.response
     };
   }
 }

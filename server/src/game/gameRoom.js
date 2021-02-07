@@ -108,7 +108,6 @@ class GameRoom {
         break;
       case GAME_STATES.ROUND_ENTER_CODE:
         player.recordResponse(response.data);
-        player.setPrevCode(response.data);
         break;
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);

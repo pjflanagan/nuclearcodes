@@ -56,6 +56,8 @@ const RoundChooseRoomHandlers = {
   }
 }
 
+// TODO: test this function, what if there is a tie?
+// should tie always favor spies
 function mostCommonCode(codeResponses) {
   return codeResponses.sort((a, b) =>
     codeResponses.filter(r => r.code === a).length
