@@ -15,7 +15,7 @@ const validate = (playerName) => {
 }
 
 const sanitize = (playerName) => {
-  return playerName.trim();
+  return playerName.replace(' ', '');
 }
 
 class PlayerNameWidget extends React.Component {
