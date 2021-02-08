@@ -1,6 +1,7 @@
 
 # Client
 
+- [ ] redux production flag
 - [ ] people want to be able to scroll up
 - [ ] react router fix favicon, make own icon and remove them from credits
 
@@ -20,6 +21,9 @@
 
 # Server
 
+- [ ] setup a mocha test for all the server functions
+  - [ ] this can help make the code more functional and clear
+  - [ ] also will help with the worry about runnning a server in the first place
 - [ ] remove env from git and add a password to the server test
 
 ## Admin

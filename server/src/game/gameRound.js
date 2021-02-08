@@ -56,12 +56,13 @@ const RoundChooseRoomHandlers = {
   }
 }
 
-// TODO: test this function, what if there is a tie?
-// should tie always favor spies
+// this function returns the most voted for, and alphabetically last code
 function mostCommonCode(codeResponses) {
+  // order by most common responses and return
+  // the first element in that array
   return codeResponses.sort((a, b) =>
-    codeResponses.filter(r => r.code === a).length
-    - codeResponses.filter(r => r.code === b).length
+    codeResponses.filter(r => r.code === a.code).length
+    - codeResponses.filter(r => r.code === b.code).length
   ).pop();
 }
 
@@ -99,5 +100,9 @@ const RoundEnterCodeHandlers = {
 export {
   RoundLobbyHandlers,
   RoundChooseRoomHandlers,
-  RoundEnterCodeHandlers
+  RoundEnterCodeHandlers,
+
+  // export for test
+  mostCommonCode,
+  stringDiff
 }

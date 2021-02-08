@@ -16,6 +16,7 @@ body {
   font-family: 'Abel', 'Roboto', 'Ubuntu', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #1c1c1c;
 }
 
 code {

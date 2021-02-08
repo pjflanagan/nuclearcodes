@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
+import { Scroller, ScrollPadding } from '../elements';
 import { ErrorWidget } from '../widgets';
 
 import Style from './style.module.css';
@@ -9,6 +10,7 @@ const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService,
   const socketID = socketService.getID();
   return (
     <div className={Style.gameContainer}>
+      <ScrollPadding />
       <div className={Style.slidesHolder}>
         {
           slides.map((slide, i) => (
@@ -30,6 +32,7 @@ const GameComponent = ({ slides, gameState, dispatchDoneCallback, socketService,
         }
         <ErrorWidget errors={errors} />
       </div>
+      <Scroller slideCount={slides.length} />
     </div >
   );
 }

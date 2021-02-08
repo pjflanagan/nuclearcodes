@@ -5,7 +5,7 @@
 
 # Nuclear Codes
 
-### [Play Nuclear Codes!](https://nuclear-codes.netlify.app)
+### [Play Nuclear Codes!](https://nuclear-codes.com)
 
 This is a React based Socket.io game that can be played by 5 to 10 friends. Agents
 try to recover a code while Spies try and stop them. Hosted on Netlify and Heroku.
