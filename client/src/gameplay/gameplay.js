@@ -29,7 +29,7 @@ const GAMEPLAY = [
     id: 'welcome',
     widget: MessageWidget,
     data: { text: 'Welcome to' },
-    next: () => 'credits'
+    next: () => 'logo'
   },
   {
     id: 'logo',
