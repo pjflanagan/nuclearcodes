@@ -7,10 +7,6 @@ import reportWebVitals from './reportWebVitals';
 
 import { App } from './app';
 
-// TODO: would this disable Redux dev tools
-// if (process.env.NODE_ENV === "development") {
-//   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-// }
 
 ReactDOM.render(
   <React.StrictMode>

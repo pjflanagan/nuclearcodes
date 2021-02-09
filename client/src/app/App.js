@@ -12,7 +12,8 @@ import Style from './style.module.css';
 import { Game } from './game';
 import { Cover } from './elements';
 
-const composeEnhancers = (process.env.ENV === 'PRD') ? compose : composeWithDevTools;
+const { REACT_APP_ENV } = process.env;
+const composeEnhancers = (REACT_APP_ENV === 'PRD') ? compose : composeWithDevTools;
 
 class App extends React.Component {
   constructor() {
