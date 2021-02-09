@@ -54,7 +54,7 @@ class MessageWidgetLetterReveal extends GameWidget {
           <Pill color="red">{data.fakeLetter}</Pill>
           <Text>{' in room '}</Text>
           <Pill>{data.roomID + 1}</Pill>
-          <Text>{'. You may choose to lie, accuse your roommate of being a spy. In the next round your code entry will be fake.'}</Text>
+          <Text>{'. You may choose to lie and possibly accuse your roommate of being a spy. In the next round your code entry will be fake, be sure to pretend to enter a code.'}</Text>
         </Typeable>
       )
     } else {

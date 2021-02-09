@@ -5,7 +5,6 @@ import {
   TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,
-  makeRandomArray
 } from './gameHelpers.js';
 import {
   RoundLobbyHandlers,
@@ -36,6 +35,10 @@ class GameRoom {
 
   joinRoom(socket) {
     this.players.addPlayer(socket);
+    this.updateGameState();
+    this.socketServer.nextSlide(socket.id, {
+      slideID: 'name-prompt'
+    });
   }
 
   disconnect(socket) {
@@ -44,50 +47,45 @@ class GameRoom {
     // else to take over it's body
     const player = this.players.removePlayer(socket);
     // update the game state so people know they left
-    this.socketServer.updateGameState(this.name, this.getState());
+    this.updateGameState();
     // we won't move the gamestate if a player leaves, we need them to rejoin
     return player;
   }
 
   setPlayerName(socket, playerName) {
-    return this.players.setPlayerName(socket, playerName);
+    const playerSetName = this.players.setPlayerName(socket, playerName);
+    // this is why gamestate and slide need to be separate
+    // players waiting for other people to update just need gamestate updates
+    this.updateGameState();
+    this.socketServer.nextSlide(socket.id, {
+      slideID: 'welcome-agent',
+      data: {
+        playerName: playerSetName,
+        roomName: this.name
+      }
+    });
   }
 
   // GAMEPLAY
 
   // make a game with spies, agents
   setupGame() {
-    const playerCount = this.players.count();
-    this.spyCount = Math.floor((playerCount - 1) / 2);
+    // set a new group of players to be spies
+    this.players.setSpies();
 
     // reset the rounds and round data
     this.round = 0;
     this.setupRound();
-    // 5 or 6 players 2 spies
-    // 7 or 8 players 3 spies
-    // 9 o 10 players 4 spies
-
-    // reset the players
-    this.players.resetSpies();
-    const arr = makeRandomArray(this.spyCount, playerCount);
-    arr.forEach(i => {
-      const player = this.players.get(i);
-      if (!!player) {
-        player.setIsSpy(true);
-      }
-    });
-
-    this.socketServer.updateGameState(this.name, this.getState());
   }
 
   setupRound() {
     // change the code length if someone drops
-    this.codeLength = this.players.count() - this.spyCount;
+    this.codeLength = this.players.getAgentCount();
     // make a code and a fake code that share no letters
     this.code = makeCode(this.codeLength);
     this.fakeCode = makeFakeCode(this.code);
 
-    this.socketServer.updateGameState(this.name, this.getState());
+    this.updateGameState();
   }
 
   // players respond to polls and the data gets recorded here
@@ -114,7 +112,7 @@ class GameRoom {
         return;
     }
 
-    this.socketServer.updateGameState(this.name, this.getState());
+    this.updateGameState();
     this.moveIfPollOver();
   }
 
@@ -160,7 +158,7 @@ class GameRoom {
         this.socketServer.nextSlide(this.name, {
           slideID: 'introduction' // leads to vote
         });
-        this.socketServer.updateGameState(this.name, this.getState());
+        this.updateGameState();
         break;
 
       // if we have all picked rooms
@@ -173,7 +171,7 @@ class GameRoom {
           code: this.code,
           fakeCode: this.fakeCode
         });
-        this.socketServer.updateGameState(this.name, this.getState());
+        this.updateGameState();
         break;
 
       // if we just entered codes
@@ -198,7 +196,7 @@ class GameRoom {
               spies: this.players.getSpies()
             }
           });
-          this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
+          this.updateGameState(); // increment the rounds and clear responses
           return;
         }
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
@@ -212,7 +210,7 @@ class GameRoom {
               spies: this.players.getSpies()
             }
           });
-          this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
+          this.updateGameState(); // increment the rounds and clear responses
           return;
         }
         // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
@@ -225,7 +223,7 @@ class GameRoom {
             charsCorrect
           }
         });
-        this.socketServer.updateGameState(this.name, this.getState()); // increment the rounds and clear responses
+        this.updateGameState(); // increment the rounds and clear responses
         break;
 
       default:
@@ -235,6 +233,10 @@ class GameRoom {
   }
 
   // HELPERS
+
+  updateGameState() {
+    this.socketServer.updateGameState(this.name, this.getState());
+  }
 
   getState() {
     const gameState = {

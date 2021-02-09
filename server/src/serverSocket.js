@@ -47,8 +47,7 @@ class ServerSocket {
       // if the room is empty, delete the room
       this.gameRooms = this.gameRooms.filter(gr => gr.name !== gameRoom.name);
     } else {
-      // otherwise alert the room
-      this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
+      // otherwise alert the room in the form of an error
       this.sendError(gameRoom.name, {
         type: 'ServerSocket.disconnect',
         errors: [`${player.name} has left the game.`]
@@ -67,6 +66,11 @@ class ServerSocket {
     const { roomName } = data;
 
     let gameRoom = this.getRoomByName(roomName);
+    // TODO: I might like the way the switch reads more
+    // switch (true) {
+    // case !gameRoom:
+
+    // }
     if (!gameRoom) {
       console.info('open room:', roomName);
       // if this room does not exist then create it
@@ -82,7 +86,9 @@ class ServerSocket {
       return;
     } else if (gameRoom.isStarted()) {
       // TODO: remove this error, allow join started game if it is not full
-      // replace isConnected=false player
+      // replace isConnected=false player if they are rejoining
+      // otherwise just allow them in, the code length should change the following round
+      // just be sure to send them the slide they are currently on?
       console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
       this.sendError(socket.id, {
         type: 'ServerSocket.joinRoom',
@@ -90,16 +96,12 @@ class ServerSocket {
       });
       return;
     }
+    socket.join(roomName);
     this.roomAssignments.push({
       socketID: socket.id,
       roomName
     });
     gameRoom.joinRoom(socket);
-    socket.join(roomName);
-    this.io.to(roomName).emit('GAME_STATE', gameRoom.getState());
-    this.nextSlide(socket.id, {
-      slideID: 'name-prompt'
-    })
   }
 
   shareName(socket, { playerName }) {
@@ -108,19 +110,10 @@ class ServerSocket {
       console.error(`serverSocket.shareName: No gameroom for socket ${socket.id}.`);
       return;
     }
-
-    const playerSetName = gameRoom.setPlayerName(socket, playerName);
-    this.io.to(gameRoom.name).emit('GAME_STATE', gameRoom.getState());
-    this.nextSlide(socket.id, {
-      slideID: 'welcome-agent',
-      data: {
-        playerName: playerSetName,
-        roomName: gameRoom.name
-      }
-    })
+    gameRoom.setPlayerName(socket, playerName);
   }
 
-  // Gameplay
+  // GAMEPLAY
 
   pollResponse(socket, response) {
     const gameRoom = this.getUserRoom(socket);
@@ -144,7 +137,7 @@ class ServerSocket {
     this.io.to(receiver).emit('SET_ERRORS', { type, errors });
   }
 
-  // Helpers
+  // HELPERS
 
   getRoomAssignment(socket) {
     const roomAssignment = this.roomAssignments.find(ra => socket.id === ra.socketID);

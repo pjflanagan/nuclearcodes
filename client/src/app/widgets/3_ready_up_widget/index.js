@@ -69,6 +69,7 @@ class ReadyUpWidget extends GameWidget {
           <Button
             onClick={() => this.readyUp()}
             disabled={ready}
+            ref={(input) => { this.input = input; }}
           >
             {this.getPrompt()}
           </Button>

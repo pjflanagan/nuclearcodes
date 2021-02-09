@@ -1,4 +1,7 @@
 
+import {
+  makeRandomArray
+} from './gameHelpers.js';
 
 // a player object that represents a player
 class Player {
@@ -9,9 +12,13 @@ class Player {
     this.name = '';
   }
 
+  // NAME
+
   setName(name) {
     this.name = name;
   }
+
+  // SPY
 
   setIsSpy(isSpy) {
     this.isSpy = isSpy;
@@ -21,7 +28,11 @@ class Player {
     return this.isSpy;
   }
 
-  // TODO: better response handling (getting)
+  // RESPONSE
+
+  hasResponse() {
+    return !!this.response;
+  }
 
   recordResponse(data) {
     this.response = data;
@@ -41,11 +52,22 @@ class Player {
   }
 }
 
+function calcSpyCount(playerCount) {
+  // 5 or 6 players 2 spies
+  // 7 or 8 players 3 spies
+  // 9 o 10 players 4 spies
+  return Math.floor((playerCount - 1) / 2);
+}
+
+
+// Player list is an array wrapper that
 // contains functions to help with the management of multiple players
 class PlayerList {
   constructor() {
     this.players = [];
   }
+
+  // ADMIN
 
   addPlayer(socket) {
     this.players.push(new Player({
@@ -74,26 +96,49 @@ class PlayerList {
     return playerSetName;
   }
 
-  findPlayer(socket) {
-    return this.players.find(p => p.id === socket.id);
+  // SPY LOGIC
+
+  resetSpies() {
+    this.players.forEach(p => p.setIsSpy(false));
   }
 
-  get(i) {
-    if (i >= this.players.length) {
-      return false;
-    }
-    return this.players[i];
+  setSpies() {
+    // reset the spies
+    this.resetSpies();
+
+    // calculate how many spies we should have and make a random array
+    const spyCount = calcSpyCount(this.count());
+    const arr = makeRandomArray(spyCount, this.count());
+
+    // for each in the array, set those players to be spies
+    arr.forEach(i => {
+      const player = this.players[i];
+      if (!!player) {
+        player.setIsSpy(true);
+      }
+    });
   }
 
   getSpies() {
     return this.players.filter(p => p.getIsSpy());
   }
 
+  getSpyCount() {
+    return this.getSpies().length
+  }
+
+  getAgentCount() {
+    // agents = players - spies
+    return this.count() - this.getSpyCount();
+  }
+
+  // ROOM LOGIC
+
   createRoomArray(roomCount) {
     const rooms = Array(roomCount).fill(new Array());
     this.players.forEach(player => {
       if (
-        player.response !== false &&
+        player.hasResponse() &&
         player.response.roomID !== undefined &&
         player.response.roomID < rooms.length
       ) {
@@ -103,9 +148,11 @@ class PlayerList {
     return rooms;
   }
 
-  getPlayersAsData() {
-    return this.players.map(p => p.asData());
+  sameRoomPlayers(roomID) {
+    return this.players.filter(p => p.response !== false && p.response.roomID === roomID);
   }
+
+  // RESPONSE LOGIC
 
   getResponses() {
     return this.players.map(p => p.response).filter(r => r !== false);
@@ -119,17 +166,27 @@ class PlayerList {
     this.players.forEach(p => p.response = false);
   }
 
-  sameRoomPlayers(roomID) {
-    return this.players.filter(p => p.response !== false && p.response.roomID === roomID);
+  // ARRAY LOGIC
+
+  findPlayer(socket) {
+    return this.players.find(p => p.id === socket.id);
   }
 
   count() {
     return this.players.length;
   }
 
-  resetSpies() {
-    this.players.forEach(p => p.setIsSpy(false));
+  // DATA
+
+  getPlayersAsData() {
+    return this.players.map(p => p.asData());
   }
 }
 
-export { Player, PlayerList }
+export {
+  Player,
+  PlayerList,
+
+  // export for test
+  calcSpyCount
+}
