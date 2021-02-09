@@ -1,3 +1,5 @@
 {
-    "extends": "@istanbuljs/nyc-config-babel"
+  "extends": "@istanbuljs/nyc-config-babel",
+  "all": true,
+  "check-coverage": true
 }

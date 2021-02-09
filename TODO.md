@@ -1,58 +1,41 @@
 
 # Client
 
-- [ ] redux production flag, to prevent cheating / probably performance improving
-- [x] people want to be able to scroll up
-- [x] react router fix favicon
 - [ ] make own icon, the clock, and remove them from credits
 
 ## Gameplay
 
 ## Admin
-- [x] sanitize name by removing spaces (not just leading and trailing)
-- [ ] share slide
 - [~] social media cards
 
 ## Visual
 - [ ] make mobile ready so people can play on phone (IMPORTANT)
 - [ ] ICONS: pill has copy on click with icons, whole pill is a link, also icons
+  - copy
+  - check for successful copy
+  - external link
+  - social icons
 
 
 # Server
 
-- [x] setup a mocha test
-  - [ ] all the server functions
-  - [ ] this can help make the code more functional and clear
-  - [ ] also will help with the worry about runnning a server in the first place
-- [ ] remove env from git and add a password to the server test
+- [ ] remove env from git
+- [ ] add a password to the server test, in the .env file
 
 ## Admin
 - [ ] TODO: PRIORITY handle log back in
 
 ## Test
+- [ ] make test coverage work
+- [ ] test all the server functions
 - [x] an auto tester that responds automatically
 - [ ] auto test randomly drops and re-adds players
 - [ ] an auto test for many different rooms
 
 
-
 # Both
-- [ ] make the gameRules.json file be the source of truth for Server and Client?
+- [ ] make the gameRules.json file be the source of truth for Server and Client
+  - [ ] Can be returned to the frontend from a route or served as a file?
 - [ ] also have some game decision logic like player models in a shared place
 
 
-
-# NEW GAME RULES IDEAS
-
-- Spies see both letters
-- Agents only see true letter
-
-This way the spy can choose to lie, and accuse the agent of being a spy, this will make it more a who is who kind of game, rather than a which is which. By the end of the game, the agents should know who to trust so that way they send one agent into each room.
-
-- The code changes every round
-  - could be too hard for agents (needs rooms=agents for this to work)
-  - if we do it this way, say which percentage was correct:
-
-Determine code logic:
-  - select the most voted for code amongst agents
-  - return the code that was voted for and what percent it was correct

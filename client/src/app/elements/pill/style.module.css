@@ -11,18 +11,39 @@
 }
 
 .pill.red {
-  color: #dbdbdb;
+  color: #dbdbdb !important;
   background: #a71111;
 }
 
-a .pill {
-  color: #165ac3;
+/* share buttons */
+
+.pill.facebook {
+  color: #dbdbdb;
+  background: #4065ad;
+}
+
+.pill.twitter {
+  color: #dbdbdb;
+  background: #1ea2f1;
+}
+
+/* links */
+
+.pill.paypal {
+  color: #dbdbdb !important;
+  background: #013088;
+}
+
+a.linkPill {
   text-decoration: none;
+}
+
+a.linkPill .pill {
+  color: #165ac3;
 }
 
 a:hover .pill {
   color: #073a86;
-  text-decoration: underline;
 }
 
 .pill.actionable {
@@ -32,6 +53,7 @@ a:hover .pill {
 .pill.actionable:hover {
   background: #b5b5b5;
 }
+
 .responded {
   filter: opacity(0.6);
 }

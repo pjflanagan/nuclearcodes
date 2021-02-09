@@ -1,5 +1,12 @@
 import React from 'react'
-import { Slide, Title, Typeable, Text, PillLink } from '../../elements'; // TextBreak
+import {
+  // EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+} from "react-share";
+
+
+import { Slide, Title, Typeable, Text, PillLink, TextBreak, Pill } from '../../elements';
 
 const CreditsWidget = ({
   doneCallback
@@ -8,21 +15,26 @@ const CreditsWidget = ({
     <Title>{'Credits'}</Title>
     <Typeable doneTypingCallback={doneCallback}>
       <Text>{'Game by '}</Text>
-      <PillLink href="https://pjflanagan.me">{`Peter James Flanagan`}</PillLink>
-      <Text>{`. If you enjoyed, please share this game with more friends! If you REALLY enjoyed, please `}</Text>
-      <PillLink href="https://paypal.me/pjflanagan1">{'Make A Donation!'}</PillLink>
-      <Text>{` The cost of hosting this game isn't much, but it isn't zero, and every donation encourages me to take on more projects like this. Thank you!`}</Text>
-      {/* <TextBreak />
+      <PillLink color="red" href="https://pjflanagan.me">{`Peter James Flanagan`}</PillLink>
+      <Text>{`.`}</Text>
       <TextBreak />
-      <Text>{'Icons by '}</Text>
-      <PillLink href="https://www.flaticon.com/authors/kiranshastry">{'Kiranshastry'}</PillLink>
-      <Text>{'.'}</Text> */}
+      <Text>{`If you enjoyed, please share this game with more friends! `}</Text>
+      <Pill color="facebook">
+        <FacebookShareButton url="https://nuclear-codes.com">
+          {`Facebook`}
+        </FacebookShareButton>
+      </Pill>
+      <Pill color="twitter">
+        <TwitterShareButton url="https://nuclear-codes.com" hashtags={["NuclearCodes"]} >
+          {`Twitter`}
+        </TwitterShareButton>
+      </Pill>
+      <TextBreak />
+      <Text>{`If you REALLY enjoyed, please consider making a donation on`}</Text>
+      <PillLink color="paypal" href="https://paypal.me/pjflanagan1">{'PayPal'}</PillLink>
+      <Text>{`! The cost of hosting this game isn't much, but it isn't zero, and every donation encourages me to take on more projects like this. Thank you!`}</Text>
     </Typeable>
   </Slide>
 );
 
-const ShareWidget = () => {
-  // TODO: after credits, point to share icons here
-}
-
-export { CreditsWidget, ShareWidget }
+export { CreditsWidget }

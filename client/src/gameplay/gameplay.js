@@ -29,7 +29,7 @@ const GAMEPLAY = [
     id: 'welcome',
     widget: MessageWidget,
     data: { text: 'Welcome to' },
-    next: () => 'logo'
+    next: () => 'credits'
   },
   {
     id: 'logo',
@@ -145,9 +145,9 @@ const GAMEPLAY = [
   },
   {
     id: 'credits',
-    widget: CreditsWidget, // TODO: share widget after then play again
+    widget: CreditsWidget,
     next: () => 'play-again-prompt',
-    delay: 400
+    delay: 600
   },
   {
     id: 'play-again-prompt',

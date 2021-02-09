@@ -23,9 +23,8 @@ class GameRoom {
     this.gameState = GAME_STATES.LOBBY;
     this.round = 0;
     this.codeLength = 0;
-    this.code = [];
-    this.fakeCode = [];
-    this.spyCount = 0;
+    this.code = "";
+    this.fakeCode = "";
 
     this.setupGame = this.setupGame.bind(this);
     this.moveGameState = this.moveGameState.bind(this);
@@ -58,8 +57,7 @@ class GameRoom {
     // players waiting for other people to update just need gamestate updates
     this.updateGameState();
     this.socketServer.nextSlide(socket.id, {
-      slideID: 'welcome-agent',
-      data: {
+      slideID: 'welcome-agent', data: {
         playerName: playerSetName,
         roomName: this.name
       }
@@ -101,10 +99,8 @@ class GameRoom {
     switch (response.type) {
       case GAME_STATES.LOBBY:
       case GAME_STATES.ROUND_CHOOSE_ROOM:
-        // just record the response they give here
-        player.recordResponse(response.data);
-        break;
       case GAME_STATES.ROUND_ENTER_CODE:
+        // just record the response they give here
         player.recordResponse(response.data);
         break;
       default:
@@ -177,10 +173,7 @@ class GameRoom {
       // if we just entered codes
       case GAME_STATES.ROUND_ENTER_CODE:
         this.round += 1;
-        const {
-          guessedCode,
-          charsCorrect
-        } = RoundEnterCodeHandlers.moveGameState({
+        const { guessedCode, charsCorrect } = RoundEnterCodeHandlers.moveGameState({
           codeResponses: data.codeResponses,
           code: this.code
         });
@@ -189,8 +182,7 @@ class GameRoom {
         if (charsCorrect === this.code.length) {
           this.gameState = GAME_STATES.LOBBY;
           this.socketServer.nextSlide(this.name, {
-            slideID: 'gameover',
-            data: {
+            slideID: 'gameover', data: {
               result: 'victory',
               code: this.code,
               spies: this.players.getSpies()
@@ -203,8 +195,7 @@ class GameRoom {
         if (this.round === TOTAL_ROUNDS) {
           this.gameState = GAME_STATES.LOBBY;
           this.socketServer.nextSlide(this.name, {
-            slideID: 'gameover',
-            data: {
+            slideID: 'gameover', data: {
               result: 'defeat',
               code: this.code,
               spies: this.players.getSpies()
@@ -217,11 +208,7 @@ class GameRoom {
         this.setupRound();
         this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
         this.socketServer.nextSlide(this.name, {
-          slideID: 'start-next-round',
-          data: {
-            guessedCode,
-            charsCorrect
-          }
+          slideID: 'start-next-round', data: { guessedCode, charsCorrect }
         });
         this.updateGameState(); // increment the rounds and clear responses
         break;

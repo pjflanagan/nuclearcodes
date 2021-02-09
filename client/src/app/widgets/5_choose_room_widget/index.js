@@ -5,8 +5,6 @@ import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
-// TODO: a place to click to leave all rooms
-
 class ChooseRoomWidget extends GameWidget {
   constructor(props) {
     super(props);

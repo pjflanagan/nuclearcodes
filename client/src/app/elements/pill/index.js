@@ -50,6 +50,7 @@ class PillLink extends Pill {
           rel="noreferrer"
           target="_blank"
           title={children}
+          className={Style.linkPill}
         >
           <span className={`${Style.pill} ${Style[color]}`}>
             {children}
