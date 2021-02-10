@@ -6,10 +6,6 @@
   - external link icon
   - door?
   - icons for slide titles
-- [!3] TODO: preload fonts so it doesn't flash on the title
-
-https://stackoverflow.com/questions/49783921/using-preload-with-create-react-app 
-
 
 # Server
 

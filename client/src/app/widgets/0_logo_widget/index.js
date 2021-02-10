@@ -3,6 +3,7 @@ import React from 'react'
 import { Slide } from '../../elements';
 
 import Style from './style.module.css';
+import Logo from './logo.png';
 
 const { REACT_APP_SOCKET_ENDPOINT } = process.env;
 
@@ -15,6 +16,9 @@ class LogoWidget extends React.Component {
 
   componentDidMount() {
     this.wakeServer();
+    this.lodingMessageTimeout = setTimeout(() => {
+      this.props.setErrors({ errors: ['Loading...'] });
+    }, 2000)
   }
 
   wakeServer() {
@@ -22,11 +26,15 @@ class LogoWidget extends React.Component {
     fetch(REACT_APP_SOCKET_ENDPOINT)
       .then(() => {
         console.info('Server is awake.');
+        clearTimeout(this.lodingMessageTimeout);
         this.props.doneCallback({ success: true });
       }
       ).catch(() => {
         console.error('Failed to wake server.');
-        // this.props.doneCallback({ success: false });
+        clearTimeout(this.lodingMessageTimeout);
+        setTimeout(() => {
+          this.props.setErrors({ errors: ['Game server failed to start, please refresh page.'] });
+        }, 2000);
       });
   }
 
@@ -34,7 +42,7 @@ class LogoWidget extends React.Component {
     return (
       <Slide>
         <div className={Style.logoHolder}>
-          <div className={Style.logo}>Nuclear Codes</div>
+          <img className={Style.logo} src={Logo} alt="Nuclear Codes Logo" />
         </div>
       </Slide>
     );

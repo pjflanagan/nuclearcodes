@@ -1,9 +1,4 @@
 @font-face {
-  font-family: 'Portia';
-  src: url(./assets/fonts/Portia-Oblique.otf);
-}
-
-@font-face {
   font-family: 'Abel';
   src: url(./assets/fonts/Abel-Regular.ttf);
 }
@@ -17,9 +12,4 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #1c1c1c;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }

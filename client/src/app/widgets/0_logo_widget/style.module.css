@@ -9,19 +9,11 @@
 }
 
 .logoHolder {
-  max-height: 160px;
-  height: 160px;
   width: 1%;
   animation: swipe 2s forwards;
   overflow: hidden;
-  padding: 16px 0 32px 0;
 }
 
-.logo {
-  font-family: 'Portia';
-  font-size: 92px;
-  white-space: nowrap;
-  width: 100%;
-  transform: skew(-5deg, -5deg);
-  text-shadow: 10px 10px #0004;
+.logoHolder img.logo {
+  width: 432px;
 }
