@@ -2,7 +2,6 @@
 import { RoomModel, PLAYER_NAMES } from './room.js';
 import { AutoPlayerModel } from '../player/autoPlayer.js';
 
-// TODO: this should extend room
 class AutoRoomModel extends RoomModel {
   makePlayers(playerCount) {
     for (let i = 0; i < playerCount; ++i) {
@@ -16,10 +15,6 @@ class AutoRoomModel extends RoomModel {
       );
     }
   }
-
-  // getRoomIDThisRound(round, playerIndex) {
-  //   return ROUND_ROOMS[round][playerIndex];
-  // }
 }
 
 export { AutoRoomModel };

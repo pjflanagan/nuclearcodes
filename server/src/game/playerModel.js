@@ -1,6 +1,7 @@
 
 import {
-  makeRandomArray
+  makeRandomArray,
+  calcSpyCount
 } from './gameHelpers.js';
 
 // a player object that represents a player
@@ -51,14 +52,6 @@ class Player {
     };
   }
 }
-
-function calcSpyCount(playerCount) {
-  // 5 or 6 players 2 spies
-  // 7 or 8 players 3 spies
-  // 9 o 10 players 4 spies
-  return Math.floor((playerCount - 1) / 2);
-}
-
 
 // Player list is an array wrapper that
 // contains functions to help with the management of multiple players
@@ -167,6 +160,10 @@ class PlayerList {
   }
 
   // ARRAY LOGIC
+
+  get(i) {
+    return this.players[i];
+  }
 
   findPlayer(socket) {
     return this.players.find(p => p.id === socket.id);

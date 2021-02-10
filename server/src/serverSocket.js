@@ -52,7 +52,7 @@ class ServerSocket {
         type: 'ServerSocket.disconnect',
         errors: [`${player.name} has left the game.`]
       });
-      // TODO: TODO: TODO: if the game is going while they are in the room
+      // TODO: if the game is going while they are in the room
       // prepare the room for them to come back, player.setIsConnected(false)
       // every time we set slide, set the room's lastSlide = slideID
       // the next player to show up replaces that player, replaces their name and id but take the role

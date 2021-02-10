@@ -76,15 +76,6 @@ class AutoPlayerModel extends PlayerModel {
     });
   }
 
-  sendKeyChoice() {
-    this.socket.emit('POLL_RESPONSE', {
-      type: 'ROUND_TURN_KEY',
-      data: {
-        isSpyKey: Math.random() > 0.5
-      }
-    });
-  }
-
   recvLetterReveal(data) {
     this.lastSawLetter = `Real: ${data.realLetter} Fake: ${data.fakeLetter}`;
     this.$scope.$apply();

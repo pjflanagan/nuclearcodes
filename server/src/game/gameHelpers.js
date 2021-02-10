@@ -34,6 +34,35 @@ const makeFakeCode = (realCode) => {
   return makeCode(realCode.length, fakeCharset);
 }
 
+
+const calcSpyCount = (playerCount) => {
+  // 5 or 6 players 2 spies
+  // 7 or 8 players 3 spies
+  // 9 o 10 players 4 spies
+  return Math.floor((playerCount - 1) / 2);
+}
+
+
+// this function returns the most voted for, and alphabetically last code
+const mostCommonCode = (codeResponses) => {
+  // order by most common responses and return
+  // the first element in that array
+  return codeResponses.sort((a, b) =>
+    codeResponses.filter(r => r.code === a.code).length
+    - codeResponses.filter(r => r.code === b.code).length
+  ).pop();
+}
+
+const stringDiff = (str1, str2) => {
+  let diff = "";
+  str2.split('').forEach(function (val, i) {
+    if (val != str1.charAt(i))
+      diff += val;
+  });
+  return diff;
+}
+
+
 export {
   GAME_STATES,
   MIN_PLAYERS_PER_GAME,
@@ -41,5 +70,8 @@ export {
   TOTAL_ROUNDS,
   makeCode,
   makeFakeCode,
-  makeRandomArray
+  makeRandomArray,
+  calcSpyCount,
+  mostCommonCode,
+  stringDiff
 };

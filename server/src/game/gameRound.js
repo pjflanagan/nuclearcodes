@@ -1,5 +1,8 @@
-import { MIN_PLAYERS_PER_GAME } from './gameHelpers.js';
-
+import {
+  MIN_PLAYERS_PER_GAME,
+  stringDiff,
+  mostCommonCode
+} from './gameHelpers.js';
 
 const RoundLobbyHandlers = {
   // if they are readying up in the lobby
@@ -17,7 +20,7 @@ const RoundLobbyHandlers = {
     }
     return [true];
   },
-}
+};
 
 const RoundChooseRoomHandlers = {
   isPollOver: (roomCount, players) => {
@@ -30,9 +33,7 @@ const RoundChooseRoomHandlers = {
       { rooms }
     ];
   },
-  moveGameState: ({
-    rooms, code, fakeCode, socketServer
-  }) => {
+  moveGameState: ({ rooms, code, fakeCode, socketServer }) => {
     // for each room
     rooms.forEach((room, i) => {
       // if it has no people in it, return
@@ -54,26 +55,7 @@ const RoundChooseRoomHandlers = {
       });
     });
   }
-}
-
-// this function returns the most voted for, and alphabetically last code
-function mostCommonCode(codeResponses) {
-  // order by most common responses and return
-  // the first element in that array
-  return codeResponses.sort((a, b) =>
-    codeResponses.filter(r => r.code === a.code).length
-    - codeResponses.filter(r => r.code === b.code).length
-  ).pop();
-}
-
-function stringDiff(str1, str2) {
-  let diff = "";
-  str2.split('').forEach(function (val, i) {
-    if (val != str1.charAt(i))
-      diff += val;
-  });
-  return diff;
-}
+};
 
 const RoundEnterCodeHandlers = {
   isPollOver: (players) => {
@@ -86,23 +68,19 @@ const RoundEnterCodeHandlers = {
   },
   moveGameState: ({ codeResponses, code }) => {
     const { code: guessedCode } = mostCommonCode(codeResponses);
-    const d = stringDiff(code, guessedCode);
-    const charsCorrect = code.length - d.length;
+    // TODO: if the code is not the right length (which it shouldn't be), then there should be an error
+    const codeDiff = stringDiff(code, guessedCode);
+    const charsCorrect = code.length - codeDiff.length;
 
     return {
       guessedCode,
       charsCorrect
     }
   }
-}
-
+};
 
 export {
   RoundLobbyHandlers,
   RoundChooseRoomHandlers,
   RoundEnterCodeHandlers,
-
-  // export for test
-  mostCommonCode,
-  stringDiff
 }
