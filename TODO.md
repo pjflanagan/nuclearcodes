@@ -6,11 +6,13 @@
   - external link icon
   - door?
   - icons for slide titles
+- Should spies be told the whole code so they can know if thier counterparts lied?
 
 # Server
 
 ## Admin
-- [!1] TODO: handle log back in
+- [!1] TODO: handle log back in (okay for now)
+- [!1] Handle join late and watch game (will require client flags)
 
 ## Test
 - [!4] TODO: make test coverage work

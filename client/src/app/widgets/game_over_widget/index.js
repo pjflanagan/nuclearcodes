@@ -34,7 +34,7 @@ class MessageGameOver extends GameWidget {
         message2 = ' and put an end to the terrorist and/or communist scheme spearheaded by '
       } else {
         pill = (<Pill color="red"><GiNuclearBomb />{'DEFEAT'}</Pill>);
-        message1 = " It's over, the great American experiment has crumbled before our eyes. All because we couldn't guess the right code: "
+        message1 = " It's over, the great American experiment has crumbled before our eyes. All because we couldn't guess the final code correctly: "
         message2 = ". You've let your nation down. We now bow to our new leaders: "
       }
     }

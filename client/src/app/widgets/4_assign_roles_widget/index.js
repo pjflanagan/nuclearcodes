@@ -11,7 +11,8 @@ import {
 
 class AssignRolesWidget extends GameWidget {
   spyContent(me) {
-    const spyPlayers = this.props.gameState.players.filter(p => p.isSpy && p.id !== me.id);
+    const { gameState: { players } } = this.props;
+    const spyPlayers = players.filter(p => p.isSpy && p.id !== me.id);
     return (
       <Typeable doneTypingCallback={this.props.doneCallback}>
         <Text>{'I guess you hate America. You are a'}</Text>
@@ -31,11 +32,15 @@ class AssignRolesWidget extends GameWidget {
   }
 
   agentContent() {
+    const { gameState: { players } } = this.props;
+    const spyPlayers = players.filter(p => p.isSpy);
     return (
       <Typeable doneTypingCallback={this.props.doneCallback}>
         <Text>{'You are an'}</Text>
         <Pill><FaIdBadge />{'AGENT'}</Pill>
-        <Text>{', try and guess the correct code and be on the lookout for spies.'}</Text>
+        <Text>{', try and guess the correct code and be on the lookout for'}</Text>
+        <Pill color="red">{spyPlayers.length}</Pill>
+        <Text>{' spies.'}</Text>
       </Typeable>
     );
   }
