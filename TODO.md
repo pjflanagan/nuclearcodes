@@ -1,34 +1,30 @@
 
 # Client
 
-
-## Visual
-- [ ] make mobile ready so people can play on phone (IMPORTANT)
+- [!2] TODO: make mobile ready so people can play on phone (IMPORTANT)
 - [ ] icons
   - external link icon
   - door?
   - icons for slide titles
+- [!3] TODO: preload fonts so it doesn't flash on the title
+
+https://stackoverflow.com/questions/49783921/using-preload-with-create-react-app 
 
 
 # Server
 
-- [ ] remove env from git
-- [ ] add a password to the server test, in the .env file
-
 ## Admin
-- [ ] TODO: PRIORITY handle log back in
+- [!1] TODO: handle log back in
 
 ## Test
-- [ ] make test coverage work
-- [ ] test all the server functions
-- [x] an auto tester that responds automatically
-- [ ] full auto test randomly drops and re-adds players, plays 100 games in a row
-- [ ] an auto test for many different rooms
+- [!4] TODO: make test coverage work
+  - test all the server functions
+- [ ] full auto test 
+  - randomly drops and re-adds players
+  - makes multiple rooms, sometimes removes all players from a room then tries to rejoin room ensuring the room was deleted
 
 
 # Both
-- [ ] make the gameRules.json file be the source of truth for Server and Client
-  - [ ] Can be returned to the frontend from a route or served as a file?
-- [ ] also have some game decision logic like player models in a shared place
+- [?] make the gameRules route be the source of truth for Server and Client
 
 
