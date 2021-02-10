@@ -63,7 +63,7 @@ class LobbyWidgetComponent extends React.Component {
     const { roomName } = this.state; // createNewRoom
     const { isCurrent } = this.props;
     return (
-      <Slide isPrompt={true}>
+      <Slide>
         <Input
           type="text"
           value={roomName}

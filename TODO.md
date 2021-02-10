@@ -1,20 +1,13 @@
 
 # Client
 
-- [ ] make own icon, the clock, and remove them from credits
-
-## Gameplay
-
-## Admin
-- [~] social media cards
 
 ## Visual
 - [ ] make mobile ready so people can play on phone (IMPORTANT)
-- [ ] ICONS: pill has copy on click with icons, whole pill is a link, also icons
-  - copy
-  - check for successful copy
-  - external link
-  - social icons
+- [ ] icons
+  - external link icon
+  - door?
+  - icons for slide titles
 
 
 # Server
@@ -29,7 +22,7 @@
 - [ ] make test coverage work
 - [ ] test all the server functions
 - [x] an auto tester that responds automatically
-- [ ] auto test randomly drops and re-adds players
+- [ ] full auto test randomly drops and re-adds players, plays 100 games in a row
 - [ ] an auto test for many different rooms
 
 

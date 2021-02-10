@@ -2,6 +2,12 @@ import React from 'react';
 
 import { Slide, Typeable, Text, Pill, Player } from '../../elements';
 import { GameWidget } from '../../game/';
+import {
+  RiSpyFill,
+} from 'react-icons/ri'
+import {
+  FaIdBadge
+} from 'react-icons/fa'
 
 class AssignRolesWidget extends GameWidget {
   spyContent(me) {
@@ -9,7 +15,7 @@ class AssignRolesWidget extends GameWidget {
     return (
       <Typeable doneTypingCallback={this.props.doneCallback}>
         <Text>{'I guess you hate America. You are a'}</Text>
-        <Pill color="red">{'SPY'}</Pill>
+        <Pill color="red"><RiSpyFill />{'SPY'}</Pill>
         <Text>{'along with:'}</Text>
         {
           spyPlayers.map((p, i) => (
@@ -28,8 +34,8 @@ class AssignRolesWidget extends GameWidget {
     return (
       <Typeable doneTypingCallback={this.props.doneCallback}>
         <Text>{'You are an'}</Text>
-        <Pill>{'AGENT'}</Pill>
-        <Text>{', be on the lookout for spies.'}</Text>
+        <Pill><FaIdBadge />{'AGENT'}</Pill>
+        <Text>{', try and guess the correct code and be on the lookout for spies.'}</Text>
       </Typeable>
     );
   }

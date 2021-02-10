@@ -1,5 +1,9 @@
 import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {
+  IoCopySharp,
+  IoCheckmarkCircleSharp
+} from 'react-icons/io5'
 
 import Style from './style.module.css';
 
@@ -77,7 +81,7 @@ class PillCopy extends Pill {
 
   render() {
     const { children, color, doNotType } = this.props;
-    const { isTyped } = this.state;
+    const { isTyped, copied } = this.state;
 
     if (isTyped || !!doNotType) {
       return (
@@ -86,6 +90,9 @@ class PillCopy extends Pill {
           onCopy={() => this.setState({ copied: true })}
         >
           <span className={`${Style.pill} ${Style[color]} ${Style.actionable}`}>
+            {
+              copied ? <IoCheckmarkCircleSharp /> : <IoCopySharp />
+            }
             {children}
           </span>
         </CopyToClipboard>

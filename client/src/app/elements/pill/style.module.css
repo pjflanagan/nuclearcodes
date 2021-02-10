@@ -8,11 +8,17 @@
   font-weight: bold;
   font-family: monospace;
   transition: 0.3s;
+  white-space: pre;
 }
 
 .pill.red {
   color: #dbdbdb !important;
   background: #a71111;
+}
+
+.pill svg {
+  margin: 0px 8px 0px 0px;
+  height: 14px;
 }
 
 /* share buttons */

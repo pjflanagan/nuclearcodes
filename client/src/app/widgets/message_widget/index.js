@@ -6,7 +6,7 @@ import { GameWidget } from '../../game';
 class MessageWidget extends React.Component {
   render() {
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         {!!this.props.data.title && <Title>{this.props.data.title}</Title>}
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>
@@ -22,7 +22,7 @@ class MessageWidgetWelcome extends React.Component {
   render() {
     const { playerName, roomName } = this.props.data;
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         <Title>{'Begin Transmission'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'Welcome to Briefing Room '}</Text>
@@ -53,7 +53,7 @@ class MessageWidgetLetterReveal extends GameWidget {
           <Text>{' and '}</Text>
           <Pill color="red">{data.fakeLetter}</Pill>
           <Text>{' in room '}</Text>
-          <Pill>{data.roomID + 1}</Pill>
+          <Pill>{`${data.roomID + 1}`}</Pill>
           <Text>{'. You may choose to lie and possibly accuse your roommate of being a spy. In the next round your code entry will be fake, be sure to pretend to enter a code.'}</Text>
         </Typeable>
       )
@@ -63,13 +63,13 @@ class MessageWidgetLetterReveal extends GameWidget {
           <Text>{'You saw '}</Text>
           <Pill>{data.realLetter}</Pill>
           <Text>{' in room '}</Text>
-          <Pill>{data.roomID + 1}</Pill>
+          <Pill>{`${data.roomID + 1}`}</Pill>
           <Text>{`. Talk it over and vote on a code to enter. Remember, the code changes every round.`}</Text>
         </Typeable>
       );
     }
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         <Title>{'Code Entry'}</Title>
         {content}
       </Slide>
@@ -98,7 +98,7 @@ class MessageWidgetDefcon extends React.Component {
         break;
     }
     return (
-      <Slide>
+      <Slide isPrompt={true}>
         <Title>{'Code Entry Result'}</Title>
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{"The majority voted for "}</Text>
