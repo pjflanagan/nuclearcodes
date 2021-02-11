@@ -15,5 +15,18 @@
 }
 
 .logoHolder img.logo {
-  width: 432px;
+  width: 216px;
 }
+
+
+/* md */
+@media only screen and (min-width: 576px) {
+  .logoHolder img.logo {
+    width: 432px;
+  }
+}
+
+/* lg */
+@media only screen and (min-width: 768px) {}
+
+/* xl: 960px */

@@ -80,13 +80,15 @@ class PillCopy extends Pill {
   }
 
   render() {
-    const { children, color, doNotType } = this.props;
+    const { children, color, doNotType, copyText } = this.props;
     const { isTyped, copied } = this.state;
+
+    const copyToClipboardText = (!!copyText) ? copyText : children;
 
     if (isTyped || !!doNotType) {
       return (
         <CopyToClipboard
-          text={children}
+          text={copyToClipboardText}
           onCopy={() => this.setState({ copied: true })}
         >
           <span className={`${Style.pill} ${Style[color]} ${Style.actionable}`}>

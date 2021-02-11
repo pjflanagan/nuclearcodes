@@ -17,10 +17,22 @@
   animation: slide-in 1.2s forwards;
   min-width: 100%;
   height: auto;
-  /* padding: 20px 0; */
-  margin: 20px 0 20px 0;
+  margin: 12px 0;
 }
 
 .slide.prompt {
-  margin: 20px 0 0 0;
+  margin: 12px 0 0 0;
+}
+
+
+/* md */
+@media only screen and (min-width: 576px) {
+  .slide {
+    margin: 20px 0 20px 0;
+  }
+
+  .slide.prompt {
+    margin: 20px 0 0 0;
+  }
+
 }
