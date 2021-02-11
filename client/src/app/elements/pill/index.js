@@ -2,7 +2,7 @@ import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   IoCopySharp,
-  IoCheckmarkCircleSharp
+  IoCheckbox
 } from 'react-icons/io5'
 
 import Style from './style.module.css';
@@ -93,7 +93,7 @@ class PillCopy extends Pill {
         >
           <span className={`${Style.pill} ${Style[color]} ${Style.actionable}`}>
             {
-              copied ? <IoCheckmarkCircleSharp /> : <IoCopySharp />
+              copied ? <IoCheckbox /> : <IoCopySharp />
             }
             {children}
           </span>

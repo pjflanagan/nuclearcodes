@@ -59,6 +59,10 @@
 
 /* md */
 @media only screen and (min-width: 576px) {
+  .inputRow {
+    flex-direction: row;
+  }
+
   .inputHolder {
     width: calc(100% - 180px);
     padding: 10px;
