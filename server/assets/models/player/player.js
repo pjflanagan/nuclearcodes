@@ -83,7 +83,7 @@ class PlayerModel {
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
       data: {
-        code: (this.isSpy() || !isCorrect) ? 'RANDO' : this.gameState.code
+        code: (this.isSpy() || !isCorrect) ? this.gameState.fakeCode : this.gameState.code
       }
     });
   }

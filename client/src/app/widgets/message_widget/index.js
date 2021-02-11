@@ -30,7 +30,7 @@ class MessageWidgetWelcome extends React.Component {
           <Text>{' agent '}</Text>
           <Pill>{playerName}</Pill>
           <Text>{'. You can invite friends to this game by sharing the url: '}</Text>
-          <PillCopy>{window.location.href}</PillCopy>
+          <PillCopy copyText={window.location.href}>{`${window.location.host}${window.location.pathname}`}</PillCopy>
         </Typeable>
       </Slide>
     );

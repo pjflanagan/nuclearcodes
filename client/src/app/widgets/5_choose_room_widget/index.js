@@ -61,20 +61,12 @@ class ChooseRoomWidget extends GameWidget {
         </div>
         <div className={Style.roomRow}>
           {[...Array(codeLength)].map((a, i) => (
-            <div
-              className={Style.roomHolder}
-              key={i}
-              style={{
-                width: `${100 / codeLength}%`
-              }}
-            >
+            <div className={`${Style.roomHolder} ${Style[`r${codeLength}`]}`} key={i}>
               <div
                 className={`${Style.room} ${!isCurrent ? Style.disabled : ''}`}
                 onClick={e => this.sendRoomChoice(i)}
               >
-                <div className={Style.roomNumber}>
-                  {i + 1}
-                </div>
+                <div className={Style.roomNumber}>{i + 1}</div>
                 <div className={Style.players}>
                   {
                     playersInRooms.filter(p => p.response.roomID === i).map((p) => (

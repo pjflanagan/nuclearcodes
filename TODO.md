@@ -8,6 +8,13 @@
   - icons for slide titles
 - Should spies be told the whole code so they can know if thier counterparts lied?
 
+## Netlify
+
+- [ ] Can probably remove some settings on Netlify
+
+11:50:43 PM: Different build dir detected, going to use the one specified in the Netlify configuration file: 'client' versus '/client' in the Netlify UI
+11:50:43 PM: Different publish path detected, going to use the one specified in the Netlify configuration file: 'client/build' versus 'build' in the Netlify UI
+
 # Server
 
 ## Admin

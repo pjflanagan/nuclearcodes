@@ -9,12 +9,29 @@
 .roomRow {
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
-  min-height: 169px;
+  min-height: 127px;
+  width: calc(100% + 8px);
+  margin-left: -4px;
 }
 
 .roomHolder {
-  padding: 8px;
+  padding: 4px;
+}
+
+.roomHolder.r3 {
+  width: 33.333333%;
+}
+
+.roomHolder.r4 {
+  width: 25%;
+}
+
+.roomHolder.r5 {
+  width: 33.333333%;
+}
+
+.roomHolder.r6 {
+  width: 33.333333%;
 }
 
 .room {
@@ -43,4 +60,26 @@
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
+}
+
+/* md */
+@media only screen and (min-width: 576px) {
+  .roomRow {
+    min-height: 169px;
+    width: calc(100% + 16px);
+    margin-left: -8px;
+  }
+
+  .roomHolder {
+    padding: 8px;
+    width: 20% !important;
+  }
+
+  .roomHolder.r5 {
+    width: 20%;
+  }
+
+  .roomHolder.r6 {
+    width: 16.6666667%;
+  }
 }

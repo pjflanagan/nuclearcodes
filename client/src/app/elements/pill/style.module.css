@@ -1,14 +1,13 @@
 .pill {
   padding: 3px 8px;
   border-radius: 2px;
-  font-size: 18px;
+  font-size: 12px;
   color: #1c1c1c;
   background: #dbdbdb;
   margin: 4px;
   font-weight: bold;
   font-family: monospace;
   transition: 0.3s;
-  white-space: pre;
 }
 
 .pill.red {
@@ -19,6 +18,7 @@
 .pill svg {
   margin: 0px 8px 0px 0px;
   height: 14px;
+  display: none;
 }
 
 /* share buttons */
@@ -64,4 +64,15 @@ a:hover .pill {
   filter: opacity(0.6);
 }
 
-/* .pill .icon {} */
+
+/* md */
+@media only screen and (min-width: 576px) {
+  .pill {
+    font-size: 18px;
+    white-space: pre;
+  }
+
+  .pill svg {
+    display: inline;
+  }
+}

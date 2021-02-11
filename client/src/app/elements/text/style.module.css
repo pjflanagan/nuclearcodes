@@ -1,9 +1,9 @@
 .typeable {
-  line-height: 32px;
+  line-height: 24px;
 }
 
 .text {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: normal;
   color: #FFF;
 }
@@ -11,4 +11,15 @@
 h1.title {
   font-size: 24px;
   margin: 12px 0;
+}
+
+/* md */
+@media only screen and (min-width: 576px) {
+  .typeable {
+    line-height: 32px;
+  }
+
+  .text {
+    font-size: 18px;
+  }
 }
