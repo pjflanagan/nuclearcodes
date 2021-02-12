@@ -6,6 +6,8 @@
   position: relative;
 }
 
+/* TODO: smaller version on mobile, maybe just scale it down? */
+
 .dotsHolder {
   width: 120px;
   height: 120px;

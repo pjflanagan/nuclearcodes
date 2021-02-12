@@ -39,7 +39,7 @@ class RoomModel {
   sendRoomChoices() {
     this.players.forEach((p, i) => {
       p.response.roomID = Math.floor(i / 2);
-      p.sendRoomChoice();
+      p.sendRandomRoom();
     });
   }
 

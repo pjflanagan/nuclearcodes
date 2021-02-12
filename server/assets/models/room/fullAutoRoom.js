@@ -15,6 +15,9 @@ class FullAutoRoomModel extends RoomModel {
       );
     }
   }
+
+  // TODO: function for if the count drops add a new player
+  // function to remove all players at the end of the test to ensure room deletion
 }
 
 export { FullAutoRoomModel };

@@ -108,7 +108,7 @@ class MessageWidgetDefcon extends React.Component {
           <Text>{`
             correct characters, and failed to unlock the nuclear football, the code has now changed. 
             We've moved up to defcon `}</Text>
-          <Pill>{this.props.gameState.round}</Pill>
+          <Pill color="red">{this.props.gameState.round}</Pill>
           <Text>{` ${message}`}</Text>
         </Typeable>
       </Slide>

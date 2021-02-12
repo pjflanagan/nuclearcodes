@@ -6,6 +6,7 @@ class FullAutoPlayerModel extends AutoPlayerModel {
   makeListeners() {
     this.gamesPlayed = 0;
     this.socket.on('NEXT_SLIDE', (data) => {
+      // TODO: set a timeout here before moving on?
       this.lastSlideID = data.slideID;
       switch (data.slideID) {
         case 'name-prompt':

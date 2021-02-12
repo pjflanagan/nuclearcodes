@@ -2,6 +2,7 @@
 # Client
 
 - [!2] TODO: make mobile ready so people can play on phone (IMPORTANT)
+- [ ] Setup switch for frontend to be accessible on local network, that way we can test on a phone more easily
 - [ ] icons
   - external link icon
   - door?

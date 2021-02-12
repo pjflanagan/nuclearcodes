@@ -21,14 +21,13 @@ class PlayerModel {
     };
     this.errors = [];
 
-    // this.isConnected = true;
-
     // login
     this.login();
+    this.makeDefaultListeners();
     this.makeListeners();
   }
 
-  makeListeners() {
+  makeDefaultListeners() {
     this.socket.on('NEXT_SLIDE', (data) => {
       this.slide = data;
       this.$scope.$apply();
@@ -37,6 +36,13 @@ class PlayerModel {
       this.gameState = data;
       this.$scope.$apply();
     });
+    this.socket.on('SET_ERRORS', data => {
+      this.errors = data.errors;
+      this.$scope.$apply();
+    });
+  }
+
+  makeListeners() {
   }
 
   // socket
@@ -56,7 +62,6 @@ class PlayerModel {
 
   disconnectPlayer() {
     this.socket.disconnect();
-    this.isConnected = false;
   }
 
   sendReadyUp() {
@@ -71,8 +76,17 @@ class PlayerModel {
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_CHOOSE_ROOM',
       data: {
-        roomID,
-        timestamp: Date.now()
+        roomID
+      }
+    });
+  }
+
+  sendRandomRoom() {
+    this.response.roomID = Math.floor(Math.random() * this.gameState.codeLength);
+    this.socket.emit('POLL_RESPONSE', {
+      type: 'ROUND_CHOOSE_ROOM',
+      data: {
+        roomID: this.response.roomID
       }
     });
   }
@@ -95,7 +109,6 @@ class PlayerModel {
         code: code
       }
     });
-
   }
 
 
@@ -113,6 +126,10 @@ class PlayerModel {
       return false;
     }
     return !!playerInfo.isSpy;
+  }
+
+  isConnected() {
+    return this.socket.connected;
   }
 }
 

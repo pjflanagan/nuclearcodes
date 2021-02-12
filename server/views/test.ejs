@@ -12,76 +12,108 @@
     <div class="header">
       <h1>nuclear-codes-test</h1>
       <div class="form-row">
-        <label>Game Room Name:</label>
+        <label>Game Room Name</label>
         <input type="text" ng-model="state.roomName" />
-        <label>Players:</label>
+        <label>Players</label>
         <input type="number" ng-model="state.playerCount" />
-        <button ng-click="addRoom()">Start Test Room</button>
-        <button ng-click="addAutoRoom()">Start Auto Test Room</button>
-        <button ng-click="addFullAutoRoom()">Start Full Auto Test Room</button>
+        <button ng-click="addRoom()">Test Room</button>
+        <button ng-click="addAutoRoom()">Auto Test Room</button>
+        <button ng-click="addFullAutoRoom()">Full Auto Test Room</button>
       </div>
     </div>
 
     <!-- CONTAINER -->
     <div class="container">
-      <div id="gamerooms">
 
-        <!-- GAMEROOM -->
-        <div class="room" ng-repeat="(i, room) in state.rooms">
+      <div class="boxes">
+        <div class="box">
+          <div class="box-label">Players</div>
+          <div class="box-content">12</div>
+        </div>
+        <div class="box">
+          <div class="box-label">Games</div>
+          <div class="box-content">2</div>
+        </div>
+      </div>
 
-          <!-- ROOM INFO -->
-          <a href="{{room.roomURL}}" target="_blank">
-            <h2>{{ room.roomName }}</h2>
-          </a>
-          <div class="form-row">
-            <!-- TODO: make this work -->
-            <label>Add Player Name</label>
+      <!-- GAMEROOM -->
+      <div class="room" ng-repeat="(i, room) in state.rooms">
+        <!-- ROOM INFO -->
+
+        <div class="room-info">
+          <div class="room-name">
+            <a href="{{room.roomURL}}" target="_blank">
+              <h2>{{ room.roomName }}</h2>
+            </a>
+          </div>
+          <div class="room-actions form-row">
+            <label>Player Name</label>
             <input type="text" />
-            <button>Add Player To Game</button>
-          </div>
-          <div class="form-row">
-            <button ng-click="room.sendReadyUp()">Send Ready Up All</button>
-            <button ng-click="room.sendRoomChoices()">Send Room Choice All</button>
-            <button ng-click="room.sendCode(true)">Send Correct Code</button>
-            <button ng-click="room.sendCode(false)">Send Incorrect Code</button>
-            <input type="text" ng-model="room.allCode" />
-            <button ng-click="room.sendManualCode(false)">Send Manual Code</button>
-          </div>
-
-          <!-- PLAYERS -->
-          <div class="players">
-            <div class="player" ng-class="player.isSpy() ? 'spy' : ''" ng-repeat="(j, player) in room.players">
-              <h3>{{ player.playerName }}</h3>
-              <p class="data">{{ player.slide }}</p>
-
-              <!-- Ready Up -->
-              <div class="form-row">
-                <button ng-click="player.sendReadyUp()">Send Ready Up</button>
-              </div>
-
-              <!-- Room Choice -->
-              <div class="form-row">
-                <label>Room Number:</label>
-                <input type="number" min="0" max="4" val="0" ng-model="player.response.roomID" />
-                <button ng-click="player.sendRoomChoice()">Send Room Choice</button>
-              </div>
-
-              <!-- Enter Code -->
-              <div class="form-row">
-                <label>Code:</label>
-                <button ng-click="player.sendEnterCode(true)">Send Correct Code</button>
-                <button ng-click="player.sendEnterCode(false)">Send Incorrect Code</button>
-              </div>
-
-              <!-- Disconnect -->
-              <div class="form-row">
-                <button ng-click="player.disconnectPlayer()">Disconnect</button>
-              </div>
-
-              <!-- TODO: Reconnect -->
-            </div>
+            <button>Add Player</button>
           </div>
         </div>
+
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th class="slide">Slide</th>
+              <th>
+                Ready
+              </th>
+              <th>
+                Room
+              </th>
+              <th>
+                Code
+              </th>
+              <th>Connection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th></th>
+              <th class="slide"></th>
+              <th>
+                <button ng-click="room.sendReadyUp()">Ready Up</button>
+              </th>
+              <th>
+                <button ng-click="room.sendRoomChoices()">Random</button>
+              </th>
+              <th>
+                <button class="green" ng-click="room.sendCode(true)">Correct</button>
+                <button class="red" ng-click="room.sendCode(false)">Incorrect</button>
+                <input class="code" type="text" ng-model="room.allCode" />
+                <button ng-click="room.sendManualCode(false)">Manual</button>
+              </th>
+              <th>
+                <!-- Disconnect -->
+              </th>
+            </tr>
+
+            <!-- PLAYERS -->
+            <tr ng-class="player.isSpy() ? 'spy' : !player.isConnected() ? 'disconnected' : ''"
+              ng-repeat="(j, player) in room.players">
+              <td>{{ player.playerName }}</td>
+              <td class="slide">{{ player.slide.slideID }}</td>
+              <td>
+                <button ng-click="player.sendReadyUp()">Ready Up</button>
+              </td>
+              <td>
+                <input type="number" min="0" max="4" val="0" ng-model="player.response.roomID" />
+                <button ng-click="player.sendRoomChoice()">Choose</button>
+              </td>
+              <td>
+                <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
+                <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
+              </td>
+              <td>
+                <button class="red" ng-click="player.disconnectPlayer()">Disconnect</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
