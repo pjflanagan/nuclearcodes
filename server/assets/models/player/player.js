@@ -94,19 +94,21 @@ class PlayerModel {
   sendEnterCode(isCorrect) {
     // spies send an incorrect code
     // agents send what the user enters
+    this.response.code = (this.isSpy() || !isCorrect) ? this.gameState.fakeCode : this.gameState.code;
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
       data: {
-        code: (this.isSpy() || !isCorrect) ? this.gameState.fakeCode : this.gameState.code
+        code: this.response.code
       }
     });
   }
 
-  sendManualCode(code) {
+  sendManualCode(code = '') {
+    this.response.code = code !== '' ? code : this.response.code;
     this.socket.emit('POLL_RESPONSE', {
       type: 'ROUND_ENTER_CODE',
       data: {
-        code: code
+        code: this.response.code
       }
     });
   }

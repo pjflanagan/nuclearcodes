@@ -52,7 +52,13 @@ class RoomModel {
   sendManualCode() {
     this.players.forEach(p => {
       p.sendManualCode(this.allCode);
-    })
+    });
+  }
+
+  disconnectAll() {
+    this.players.forEach(p => {
+      p.disconnectPlayer();
+    });
   }
 }
 

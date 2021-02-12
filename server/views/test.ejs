@@ -16,9 +16,9 @@
         <input type="text" ng-model="state.roomName" />
         <label>Players</label>
         <input type="number" ng-model="state.playerCount" />
-        <button ng-click="addRoom()">Test Room</button>
-        <button ng-click="addAutoRoom()">Auto Test Room</button>
-        <button ng-click="addFullAutoRoom()">Full Auto Test Room</button>
+        <button ng-click="addRoom('default')">Test Room</button>
+        <button ng-click="addRoom('auto')">Auto Test Room</button>
+        <button ng-click="addRoom('full-auto')">Full Auto Test Room</button>
       </div>
     </div>
 
@@ -27,12 +27,12 @@
 
       <div class="boxes">
         <div class="box">
-          <div class="box-label">Players</div>
-          <div class="box-content">12</div>
+          <div class="box-label">Games</div>
+          <div class="box-content">{{serverStatus.games}}</div>
         </div>
         <div class="box">
-          <div class="box-label">Games</div>
-          <div class="box-content">2</div>
+          <div class="box-label">Players</div>
+          <div class="box-content">{{serverStatus.players}}</div>
         </div>
       </div>
 
@@ -46,6 +46,10 @@
               <h2>{{ room.roomName }}</h2>
             </a>
           </div>
+          <!-- TODO: 
+            here get one of the connected players and from gamestate 
+            get the current round number and the real and fake codes
+          -->
           <div class="room-actions form-row">
             <label>Player Name</label>
             <input type="text" />
@@ -88,7 +92,7 @@
                 <button ng-click="room.sendManualCode(false)">Manual</button>
               </th>
               <th>
-                <!-- Disconnect -->
+                <button class="red" ng-click="room.disconnectAll()">Disconnect</button>
               </th>
             </tr>
 
@@ -96,6 +100,7 @@
             <tr ng-class="player.isSpy() ? 'spy' : !player.isConnected() ? 'disconnected' : ''"
               ng-repeat="(j, player) in room.players">
               <td>{{ player.playerName }}</td>
+              <!-- TODO: on slide show if the player has responded -->
               <td class="slide">{{ player.slide.slideID }}</td>
               <td>
                 <button ng-click="player.sendReadyUp()">Ready Up</button>
@@ -107,6 +112,8 @@
               <td>
                 <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
                 <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
+                <input class="code" type="text" ng-model="player.response.code" />
+                <button ng-click="player.sendManualCode()">Manual</button>
               </td>
               <td>
                 <button class="red" ng-click="player.disconnectPlayer()">Disconnect</button>
