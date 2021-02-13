@@ -10,36 +10,39 @@
 
     <!-- HEADER -->
     <div class="header">
-      <h1>nuclear-codes-test</h1>
-      <div class="form-row">
-        <label>Game Room Name</label>
-        <input type="text" ng-model="state.roomName" />
-        <label>Players</label>
-        <input type="number" ng-model="state.playerCount" />
-        <button ng-click="addRoom('default')">Test Room</button>
-        <button ng-click="addRoom('auto')">Auto Test Room</button>
-        <button ng-click="addRoom('full-auto')">Full Auto Test Room</button>
+      <div class="box">
+        <div class="box-label">Test</div>
+        <div class="box-content">Nuclear Codes</div>
+      </div>
+      <div class="box">
+        <div class="box-label">Games</div>
+        <div class="box-content">{{serverStatus.games}}</div>
+      </div>
+      <div class="box">
+        <div class="box-label">Players</div>
+        <div class="box-content">{{serverStatus.players}}</div>
       </div>
     </div>
 
     <!-- CONTAINER -->
     <div class="container">
 
-      <div class="boxes">
-        <div class="box">
-          <div class="box-label">Games</div>
-          <div class="box-content">{{serverStatus.games}}</div>
-        </div>
-        <div class="box">
-          <div class="box-label">Players</div>
-          <div class="box-content">{{serverStatus.players}}</div>
+      <!-- ACTIONS -->
+      <div class="action-box">
+        <div class="form-row">
+          <label>Game Room Name</label>
+          <input type="text" ng-model="state.roomName" />
+          <label>Players</label>
+          <input type="number" ng-model="state.playerCount" />
+          <button ng-click="addRoom('default')">Test Room</button>
+          <button ng-click="addRoom('auto')">Auto Test Room</button>
+          <button ng-click="addRoom('full-auto')">Full Auto Test Room</button>
         </div>
       </div>
 
       <!-- GAMEROOM -->
       <div class="room" ng-repeat="(i, room) in state.rooms">
         <!-- ROOM INFO -->
-
         <div class="room-info">
           <div class="room-name">
             <a href="{{room.roomURL}}" target="_blank">
@@ -57,19 +60,18 @@
           </div>
         </div>
 
-
         <table>
           <thead>
             <tr>
               <th>Name</th>
               <th class="slide">Slide</th>
-              <th>
+              <th ng-class="room.getGameState().poll === 'LOBBY' ? 'current-poll' : ''">
                 Ready
               </th>
-              <th>
+              <th ng-class="room.getGameState().poll === 'ROUND_CHOOSE_ROOM' ? 'current-poll' : ''">
                 Room
               </th>
-              <th>
+              <th ng-class="room.getGameState().poll === 'ROUND_ENTER_CODE' ? 'current-poll' : ''">
                 Code
               </th>
               <th>Connection</th>
@@ -88,7 +90,8 @@
               <th>
                 <button class="green" ng-click="room.sendCode(true)">Correct</button>
                 <button class="red" ng-click="room.sendCode(false)">Incorrect</button>
-                <input class="code" type="text" ng-model="room.allCode" />
+                <input class="code" type="text" ng-model="room.allCode"
+                  ng-class="room.getGameState().code === room.allCode ? 'correct' : 'spy'" />
                 <button ng-click="room.sendManualCode(false)">Manual</button>
               </th>
               <th>
@@ -97,9 +100,8 @@
             </tr>
 
             <!-- PLAYERS -->
-            <tr ng-class="player.isSpy() ? 'spy' : !player.isConnected() ? 'disconnected' : ''"
-              ng-repeat="(j, player) in room.players">
-              <td>{{ player.playerName }}</td>
+            <tr ng-repeat="(j, player) in room.players" ng-class="player.getClass()">
+              <td>{{ player.playerName}}</td>
               <!-- TODO: on slide show if the player has responded -->
               <td class="slide">{{ player.slide.slideID }}</td>
               <td>
@@ -112,7 +114,8 @@
               <td>
                 <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
                 <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
-                <input class="code" type="text" ng-model="player.response.code" />
+                <input class="code" type="text" ng-model="player.response.code"
+                  ng-class="room.getGameState().code === player.response.code ? 'correct' : 'spy'" />
                 <button ng-click="player.sendManualCode()">Manual</button>
               </td>
               <td>

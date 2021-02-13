@@ -30,8 +30,7 @@ class ChooseRoomWidget extends GameWidget {
     this.props.socketService.pollResponse({
       type: 'ROUND_CHOOSE_ROOM',
       data: {
-        roomID,
-        timestamp: Date.now()
+        roomID
       }
     });
   }

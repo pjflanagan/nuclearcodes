@@ -19,8 +19,8 @@
 # Server
 
 ## Admin
-- [!1] TODO: handle log back in (okay for now)
-- [!1] Handle join late and watch game (will require client flags)
+- [!1] TODO: handle log back in when a player drops (current behavior is okay)
+- [!1] Handle join late and watch game (will require client flags for frontend behavior?)
 
 ## Test
 - [!4] TODO: make test coverage work

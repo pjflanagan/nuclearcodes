@@ -1,6 +1,6 @@
 
 import {
-  GAME_STATES,
+  POLL,
   MAX_PLAYERS_PER_GAME,
   TOTAL_ROUNDS,
   makeCode,
@@ -18,9 +18,9 @@ class GameRoom {
     this.socketServer = socketServer;
     this.name = roomName;
 
-    // game state
+    // game state TODO: should be in an object?
     this.players = new PlayerList();
-    this.gameState = GAME_STATES.LOBBY;
+    this.poll = POLL.LOBBY;
     this.round = 0;
     this.codeLength = 0;
     this.code = "";
@@ -91,15 +91,15 @@ class GameRoom {
     const player = this.players.findPlayer(socket);
 
     // if a player responds to a poll we are not polling, then ignore
-    if (response.type !== this.gameState) {
-      console.error(`GameRoom.pollResponse: Not currently polling for '${response.type}', gameState is ${this.gameState}.`);
+    if (response.type !== this.poll) {
+      console.error(`GameRoom.pollResponse: Not currently polling for '${response.type}', poll is ${this.poll}.`);
       return;
     }
 
     switch (response.type) {
-      case GAME_STATES.LOBBY:
-      case GAME_STATES.ROUND_CHOOSE_ROOM:
-      case GAME_STATES.ROUND_ENTER_CODE:
+      case POLL.LOBBY:
+      case POLL.ROUND_CHOOSE_ROOM:
+      case POLL.ROUND_ENTER_CODE:
         // just record the response they give here
         player.recordResponse(response.data);
         break;
@@ -123,21 +123,21 @@ class GameRoom {
 
   // check if the poll is over
   isPollOver() {
-    switch (this.gameState) {
-      case GAME_STATES.LOBBY:
+    switch (this.poll) {
+      case POLL.LOBBY:
         return RoundLobbyHandlers.isPollOver(this.players)
 
       // if they are voting for rooms
-      case GAME_STATES.ROUND_CHOOSE_ROOM:
+      case POLL.ROUND_CHOOSE_ROOM:
         return RoundChooseRoomHandlers.isPollOver(this.codeLength, this.players);
 
       // if they are entering codes, make sure they all have responded
-      case GAME_STATES.ROUND_ENTER_CODE:
+      case POLL.ROUND_ENTER_CODE:
         return RoundEnterCodeHandlers.isPollOver(this.players);
 
       // otherwise something is wrong with the gamestate
       default:
-        console.error(`gameRoom.isPollOver: gameState '${this.gameState}' not accounted for in isPollOver.`);
+        console.error(`gameRoom.isPollOver: poll '${this.poll}' not accounted for in isPollOver.`);
         return false
     }
   }
@@ -145,10 +145,10 @@ class GameRoom {
   // move the gamestate forward, this happens when we are done a poll
   moveGameState(data) {
     this.clearResponses();
-    switch (this.gameState) {
+    switch (this.poll) {
       // if we are all ready
-      case GAME_STATES.LOBBY:
-        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
+      case POLL.LOBBY:
+        this.poll = POLL.ROUND_CHOOSE_ROOM;
         this.setupGame();
         // update the game state, it will name the spies
         this.socketServer.nextSlide(this.name, {
@@ -158,8 +158,8 @@ class GameRoom {
         break;
 
       // if we have all picked rooms
-      case GAME_STATES.ROUND_CHOOSE_ROOM:
-        this.gameState = GAME_STATES.ROUND_ENTER_CODE;
+      case POLL.ROUND_CHOOSE_ROOM:
+        this.poll = POLL.ROUND_ENTER_CODE;
         const { rooms } = data;
         RoundChooseRoomHandlers.moveGameState({
           rooms,
@@ -171,7 +171,7 @@ class GameRoom {
         break;
 
       // if we just entered codes
-      case GAME_STATES.ROUND_ENTER_CODE:
+      case POLL.ROUND_ENTER_CODE:
         this.round += 1;
         const { guessedCode, charsCorrect } = RoundEnterCodeHandlers.moveGameState({
           codeResponses: data.codeResponses,
@@ -180,7 +180,7 @@ class GameRoom {
 
         // if they are correct: ROUND_LOBBY, 'victory'
         if (charsCorrect === this.code.length) {
-          this.gameState = GAME_STATES.LOBBY;
+          this.poll = POLL.LOBBY;
           this.socketServer.nextSlide(this.name, {
             slideID: 'gameover', data: {
               result: 'victory',
@@ -193,7 +193,7 @@ class GameRoom {
         }
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
         if (this.round === TOTAL_ROUNDS) {
-          this.gameState = GAME_STATES.LOBBY;
+          this.poll = POLL.LOBBY;
           this.socketServer.nextSlide(this.name, {
             slideID: 'gameover', data: {
               result: 'defeat',
@@ -206,7 +206,7 @@ class GameRoom {
         }
         // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
         this.setupRound();
-        this.gameState = GAME_STATES.ROUND_CHOOSE_ROOM;
+        this.poll = POLL.ROUND_CHOOSE_ROOM;
         this.socketServer.nextSlide(this.name, {
           slideID: 'start-next-round', data: { guessedCode, charsCorrect }
         });
@@ -214,7 +214,7 @@ class GameRoom {
         break;
 
       default:
-        console.error(`gameRoom.moveGameState: gameState '${this.gameState}' not accounted for in moveGameState.`);
+        console.error(`gameRoom.moveGameState: poll '${this.poll}' not accounted for in moveGameState.`);
         break;
     }
   }
@@ -226,14 +226,14 @@ class GameRoom {
   }
 
   getState() {
-    const gameState = {
+    return {
       codeLength: this.codeLength,
       players: this.players.getPlayersAsData(),
       code: this.code,
       fakeCode: this.fakeCode,
-      round: this.round
+      round: this.round,
+      poll: this.poll
     };
-    return gameState;
   }
 
   clearResponses() {
@@ -241,7 +241,7 @@ class GameRoom {
   }
 
   isStarted() {
-    return this.gameState !== GAME_STATES.LOBBY;
+    return this.poll !== POLL.LOBBY;
   }
 
   isFull() {

@@ -5,7 +5,6 @@ class AutoPlayerModel extends PlayerModel {
 
   makeListeners() {
     this.socket.on('NEXT_SLIDE', (data) => {
-      this.lastSlideID = data.slideID;
       switch (data.slideID) {
         case 'name-prompt':
           // submit name
@@ -20,8 +19,7 @@ class AutoPlayerModel extends PlayerModel {
           this.sendRandomRoom();
           break;
         case 'letter-reveal':
-          // display revealed letter
-          this.recvLetterReveal(data);
+          // TODO: display letter revealed? should be on top level player class
           break;
         case 'start-next-round':
           // choose room
@@ -42,11 +40,6 @@ class AutoPlayerModel extends PlayerModel {
     this.socket.emit('JOIN_ROOM', {
       roomName: this.room.roomName
     });
-  }
-
-  recvLetterReveal(data) {
-    this.lastSawLetter = `Real: ${data.realLetter} Fake: ${data.fakeLetter}`;
-    this.$scope.$apply();
   }
 
 }

@@ -60,6 +60,26 @@ class RoomModel {
       p.disconnectPlayer();
     });
   }
+
+  // helpers
+
+  getAnyActivePlayer() {
+    for (let i = 0; i < this.players.length; ++i) {
+      if (this.players[i].isConnected()) {
+        return this.players[i];
+      }
+    }
+    return false;
+  }
+
+  getGameState() {
+    const player = this.getAnyActivePlayer();
+    console.log({ player });
+    if (!player) {
+      return {}
+    }
+    return player.gameState;
+  }
 }
 
 export { RoomModel, PLAYER_NAMES };

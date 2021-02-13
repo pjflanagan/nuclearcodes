@@ -10,10 +10,6 @@ class PlayerModel {
       withCredentials: true,
     });
 
-    this.lastSlideID = '';
-    this.lastRoomID = -1;
-    this.lastSawLetter = '';
-
     this.slide = '';
     this.gameState = {
       players: [],
@@ -132,6 +128,15 @@ class PlayerModel {
 
   isConnected() {
     return this.socket.connected;
+  }
+
+  getClass() {
+    if (!this.isConnected()) {
+      return 'disconnected';
+    } else if (this.isSpy()) {
+      return 'spy';
+    }
+    return '';
   }
 }
 
