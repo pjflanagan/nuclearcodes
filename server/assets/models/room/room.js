@@ -74,7 +74,6 @@ class RoomModel {
 
   getGameState() {
     const player = this.getAnyActivePlayer();
-    console.log({ player });
     if (!player) {
       return {}
     }

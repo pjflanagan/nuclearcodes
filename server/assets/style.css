@@ -21,6 +21,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .box {
@@ -210,8 +211,12 @@ tr.disconnected {
   color: #575757;
 }
 
+.incorrect {
+  color: #fd4661;
+}
+
 .correct {
-  color: #02e776
+  color: #02e776;
 }
 
 button.green {

@@ -1,8 +1,0 @@
-
-const STANDARD_GAME = [
-  [
-    {
-
-    }
-  ]
-];

@@ -115,7 +115,7 @@
                 <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
                 <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
                 <input class="code" type="text" ng-model="player.response.code"
-                  ng-class="room.getGameState().code === player.response.code ? 'correct' : 'spy'" />
+                  ng-class="room.getGameState().code === player.response.code ? 'correct' : 'incorrect'" />
                 <button ng-click="player.sendManualCode()">Manual</button>
               </td>
               <td>
