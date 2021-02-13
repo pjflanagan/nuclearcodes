@@ -10,21 +10,44 @@ body {
   color: #f4f4f4;
 }
 
+/* header */
+
 .header {
-  padding: 14px 28px 20px;
-  width: calc(100% - 56px);
+  padding: 14px;
+  width: calc(100% - 28px);
   height: auto;
   background: #141c22;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
-h1 {
+.box {
+  background: #202831;
+  height: 80px;
+  min-width: 80px;
+  margin: 12px;
+  padding: 8px;
+  border-radius: 2px;
+}
+
+.box .box-label {
+  text-transform: uppercase;
+  color: #48535c;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.box .box-content {
+  width: auto;
+  margin: 12px 12px 0 12px;
+  font-size: 32px;
+  text-align: center;
   color: #f2a33b;
-  margin: 0 0 24px;
 }
 
-h2 {
-  margin: 4px 0 14px;
-}
 
 /* links */
 
@@ -90,35 +113,23 @@ button:active {
   box-shadow: none;
 }
 
-/* boxes */
+/* container */
 
-.boxes {
-  display: flex;
+.container {
+  margin-top: 160px;
 }
 
-.boxes .box {
-  background: #202831;
-  height: 80px;
-  width: 80px;
+/* action-box */
+
+.action-box {
   margin: 12px;
-  padding: 8px;
-}
-
-.boxes .box .box-label {
-  text-transform: uppercase;
-  color: #48535c;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.boxes .box .box-content {
-  font-size: 32px;
-  text-align: center;
-  width: 100%;
-  margin-top: 12px;
+  background: #202831;
+  padding: 32px 14px 14px;
+  border-radius: 2px;
 }
 
 /* room */
+
 
 .room {
   margin: 12px;
@@ -133,6 +144,10 @@ button:active {
 
 .room-name {
   width: 50%;
+}
+
+h2 {
+  margin: 4px 0 14px;
 }
 
 .room-actions {
@@ -151,6 +166,14 @@ table tr {
   height: 55px;
 }
 
+tr:nth-child(even) {
+  background: #19242788
+}
+
+tr:nth-child(odd) {
+  background: none
+}
+
 table tr th {
   text-align: left;
   text-transform: uppercase;
@@ -159,8 +182,19 @@ table tr th {
   height: 22px;
 }
 
-table tr th.slide {
+table thead tr th.slide {
   min-width: 140px;
+}
+
+table tbody tr th.slide {
+  min-width: 140px;
+  font-family: monospace;
+  color: #fff;
+  font-size: 16px;
+}
+
+table tr th.current-poll {
+  color: #f2a33b;
 }
 
 table tr td.slide {
@@ -169,25 +203,34 @@ table tr td.slide {
   font-family: monospace;
 }
 
-
 table tr td {
-  padding: 4px;
+  padding: 4px 8px;
 }
 
+/* colors */
 
-.spy {
-  background: #fd466163;
+tr.spy {
+  background: #fd466144;
 }
 
-.disconnected {
-  background: #57575755;
+tr.disconnected {
+  background: #57575744;
+  color: #575757;
 }
 
-.green {
-  background: #02e776;
+.incorrect {
+  color: #fd4661;
 }
 
-.red {
+.correct {
+  color: #0bc267;
+}
+
+button.green {
+  background: #0bc267;
+}
+
+button.red {
   background: #fd4661;
   color: #FFF;
 }

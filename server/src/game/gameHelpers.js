@@ -1,5 +1,5 @@
 
-const GAME_STATES = {
+const POLL = {
   LOBBY: 'LOBBY', // after here we will set spies and game code, introduce the rules
   ROUND_CHOOSE_ROOM: 'ROUND_CHOOSE_ROOM', // vote on which room to go into
   ROUND_ENTER_CODE: 'ROUND_ENTER_CODE', // enter a code into the game
@@ -64,7 +64,7 @@ const stringDiff = (str1, str2) => {
 
 
 export {
-  GAME_STATES,
+  POLL,
   MIN_PLAYERS_PER_GAME,
   MAX_PLAYERS_PER_GAME,
   TOTAL_ROUNDS,

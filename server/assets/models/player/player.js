@@ -5,20 +5,15 @@ class PlayerModel {
     this.$scope = $scope;
     this.room = room;
     this.playerName = playerName;
-    this.response = {};
+    this.response = {
+      hasResponded: false
+    };
     this.socket = io('/', {
       withCredentials: true,
     });
 
-    this.lastSlideID = '';
-    this.lastRoomID = -1;
-    this.lastSawLetter = '';
-
     this.slide = '';
-    this.gameState = {
-      players: [],
-      round: 0
-    };
+    this.gameState = {};
     this.errors = [];
 
     // login
@@ -30,6 +25,7 @@ class PlayerModel {
   makeDefaultListeners() {
     this.socket.on('NEXT_SLIDE', (data) => {
       this.slide = data;
+      this.response.hasResponded = false;
       this.$scope.$apply();
     });
     this.socket.on('GAME_STATE', data => {
@@ -62,6 +58,8 @@ class PlayerModel {
 
   disconnectPlayer() {
     this.socket.disconnect();
+    // this.gameState = {};
+    // this.$scope.$apply();
   }
 
   sendReadyUp() {
@@ -69,6 +67,7 @@ class PlayerModel {
       type: 'LOBBY',
       data: true
     });
+    this.response.hasResponded = true;
   }
 
   sendRoomChoice() {
@@ -79,6 +78,7 @@ class PlayerModel {
         roomID
       }
     });
+    this.response.hasResponded = true;
   }
 
   sendRandomRoom() {
@@ -89,6 +89,7 @@ class PlayerModel {
         roomID: this.response.roomID
       }
     });
+    this.response.hasResponded = true;
   }
 
   sendEnterCode(isCorrect) {
@@ -101,6 +102,7 @@ class PlayerModel {
         code: this.response.code
       }
     });
+    this.response.hasResponded = true;
   }
 
   sendManualCode(code = '') {
@@ -111,6 +113,7 @@ class PlayerModel {
         code: this.response.code
       }
     });
+    this.response.hasResponded = true;
   }
 
 
@@ -132,6 +135,15 @@ class PlayerModel {
 
   isConnected() {
     return this.socket.connected;
+  }
+
+  getClass() {
+    if (!this.isConnected()) {
+      return 'disconnected';
+    } else if (this.isSpy()) {
+      return 'spy';
+    }
+    return '';
   }
 }
 
