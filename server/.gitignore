@@ -1,5 +1,8 @@
 **/node_modules
 .DS_Store
 .env
-.nyc_output
 .testToken
+
+# test
+.nyc_output
+coverage

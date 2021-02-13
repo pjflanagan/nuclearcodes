@@ -18,6 +18,13 @@ class GameRoom {
     this.socketServer = socketServer;
     this.name = roomName;
 
+    // pass in handlers here, these can be replaced in a test
+    this.handlers = {
+      lobby: RoundLobbyHandlers,
+      room: RoundChooseRoomHandlers,
+      code: RoundEnterCodeHandlers
+    };
+
     // game state
     this.players = new PlayerList();
     this.poll = POLL.LOBBY;
@@ -101,8 +108,10 @@ class GameRoom {
       case POLL.ROUND_CHOOSE_ROOM:
       case POLL.ROUND_ENTER_CODE:
         // just record the response they give here
+        // this would be a good place for some error checking about response shape
         player.recordResponse(response.data);
         break;
+      // if we ever have a response that might need prevention, like room limitations used to, would go here ina handler
       default:
         console.error(`gameRoom.pollResponse: Response for poll '${response.type}' not recoginzed.`);
         return;
@@ -125,15 +134,15 @@ class GameRoom {
   isPollOver() {
     switch (this.poll) {
       case POLL.LOBBY:
-        return RoundLobbyHandlers.isPollOver(this.players)
+        return this.handlers.lobby.isPollOver(this.players)
 
       // if they are voting for rooms
       case POLL.ROUND_CHOOSE_ROOM:
-        return RoundChooseRoomHandlers.isPollOver(this.codeLength, this.players);
+        return this.handlers.room.isPollOver(this.codeLength, this.players);
 
       // if they are entering codes, make sure they all have responded
       case POLL.ROUND_ENTER_CODE:
-        return RoundEnterCodeHandlers.isPollOver(this.players);
+        return this.handlers.code.isPollOver(this.players);
 
       // otherwise something is wrong with the gamestate
       default:
@@ -161,7 +170,7 @@ class GameRoom {
       case POLL.ROUND_CHOOSE_ROOM:
         this.poll = POLL.ROUND_ENTER_CODE;
         const { rooms } = data;
-        RoundChooseRoomHandlers.moveGameState({
+        this.handlers.room.moveGameState({
           rooms,
           socketServer: this.socketServer,
           code: this.code,
@@ -173,7 +182,7 @@ class GameRoom {
       // if we just entered codes
       case POLL.ROUND_ENTER_CODE:
         this.round += 1;
-        const { guessedCode, charsCorrect } = RoundEnterCodeHandlers.moveGameState({
+        const { guessedCode, charsCorrect } = this.handlers.code.moveGameState({
           codeResponses: data.codeResponses,
           code: this.code
         });
