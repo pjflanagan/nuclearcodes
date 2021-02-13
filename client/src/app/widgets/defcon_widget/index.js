@@ -5,7 +5,7 @@ import { Slide } from '../../elements';
 import Style from './style.module.css';
 
 const MOVE_HAND_DELAY = 800;
-const TOTAL_ROUNDS = 5; // TODO: pass this in from server?
+const TOTAL_ROUNDS = 5;
 
 class DefconWidget extends React.Component {
   constructor(props) {

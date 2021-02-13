@@ -5,7 +5,7 @@ import { GameWidget } from '../../game';
 
 import Style from './style.module.css';
 
-const MIN_PLAYERS_PER_GAME = 5; // TODO: global game rules for server and client?
+const MIN_PLAYERS_PER_GAME = 5;
 
 class ReadyUpWidget extends GameWidget {
   constructor(props) {

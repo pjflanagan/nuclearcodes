@@ -18,7 +18,7 @@ class GameRoom {
     this.socketServer = socketServer;
     this.name = roomName;
 
-    // game state TODO: should be in an object?
+    // game state
     this.players = new PlayerList();
     this.poll = POLL.LOBBY;
     this.round = 0;

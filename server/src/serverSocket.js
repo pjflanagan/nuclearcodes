@@ -66,36 +66,34 @@ class ServerSocket {
     const { roomName } = data;
 
     let gameRoom = this.getRoomByName(roomName);
-    // TODO: I might like the way the switch reads more
-    // switch (true) {
-    // case !gameRoom:
-
-    // }
-    if (!gameRoom) {
-      console.info('open room:', roomName);
-      // if this room does not exist then create it
-      // and send a new room state to the user
-      gameRoom = new GameRoom(this, roomName);
-      this.gameRooms.push(gameRoom);
-    } else if (gameRoom.isFull()) {
-      console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
-      this.sendError(socket.id, {
-        type: 'ServerSocket.joinRoom',
-        errors: [`Game room '${roomName}' is full.`]
-      });
-      return;
-    } else if (gameRoom.isStarted()) {
-      // TODO: remove this error, allow join started game if it is not full
-      // replace isConnected=false player if they are rejoining
-      // otherwise just allow them in, the code length should change the following round
-      // just be sure to send them the slide they are currently on?
-      console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
-      this.sendError(socket.id, {
-        type: 'ServerSocket.joinRoom',
-        errors: [`Game room '${roomName}' has started, you may join next round.`]
-      });
-      return;
+    switch (true) {
+      case !gameRoom:
+        console.info('open room:', roomName);
+        // if this room does not exist then create it
+        // and send a new room state to the user
+        gameRoom = new GameRoom(this, roomName);
+        this.gameRooms.push(gameRoom);
+        break;
+      case gameRoom.isFull():
+        console.error(`serverSocket.joinRoom: gameroom '${roomName}' is full.`);
+        this.sendError(socket.id, {
+          type: 'ServerSocket.joinRoom',
+          errors: [`Game room '${roomName}' is full.`]
+        });
+        return;
+      case gameRoom.isStarted():
+        // TODO: remove this error, allow join started game if it is not full
+        // replace isConnected=false player if they are rejoining
+        // otherwise just allow them in, the code length should change the following round
+        // just be sure to send them the slide they are currently on?
+        console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
+        this.sendError(socket.id, {
+          type: 'ServerSocket.joinRoom',
+          errors: [`Game room '${roomName}' has started, you may join next round.`]
+        });
+        return;
     }
+
     socket.join(roomName);
     this.roomAssignments.push({
       socketID: socket.id,

@@ -182,8 +182,15 @@ table tr th {
   height: 22px;
 }
 
-table tr th.slide {
+table thead tr th.slide {
   min-width: 140px;
+}
+
+table tbody tr th.slide {
+  min-width: 140px;
+  font-family: monospace;
+  color: #fff;
+  font-size: 16px;
 }
 
 table tr th.current-poll {
@@ -216,11 +223,11 @@ tr.disconnected {
 }
 
 .correct {
-  color: #02e776;
+  color: #0bc267;
 }
 
 button.green {
-  background: #02e776;
+  background: #0bc267;
 }
 
 button.red {

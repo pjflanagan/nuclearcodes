@@ -49,10 +49,6 @@
               <h2>{{ room.roomName }}</h2>
             </a>
           </div>
-          <!-- TODO: 
-            here get one of the connected players and from gamestate 
-            get the current round number and the real and fake codes
-          -->
           <div class="room-actions form-row">
             <label>Player Name</label>
             <input type="text" />
@@ -64,7 +60,7 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th class="slide">Slide</th>
+              <th class="slide">Round / Slide</th>
               <th ng-class="room.getGameState().poll === 'LOBBY' ? 'current-poll' : ''">
                 Ready
               </th>
@@ -80,7 +76,9 @@
           <tbody>
             <tr>
               <th></th>
-              <th class="slide"></th>
+              <th class="slide">
+                {{ room.getGameState().round }}
+              </th>
               <th>
                 <button ng-click="room.sendReadyUp()">Ready Up</button>
               </th>
@@ -88,11 +86,11 @@
                 <button ng-click="room.sendRoomChoices()">Random</button>
               </th>
               <th>
-                <button class="green" ng-click="room.sendCode(true)">Correct</button>
-                <button class="red" ng-click="room.sendCode(false)">Incorrect</button>
                 <input class="code" type="text" ng-model="room.allCode"
                   ng-class="room.getGameState().code === room.allCode ? 'correct' : 'spy'" />
                 <button ng-click="room.sendManualCode(false)">Manual</button>
+                <button class="red" ng-click="room.sendCode(false)">Incorrect</button>
+                <button class="green" ng-click="room.sendCode(true)">Correct</button>
               </th>
               <th>
                 <button class="red" ng-click="room.disconnectAll()">Disconnect</button>
@@ -102,8 +100,11 @@
             <!-- PLAYERS -->
             <tr ng-repeat="(j, player) in room.players" ng-class="player.getClass()">
               <td>{{ player.playerName}}</td>
-              <!-- TODO: on slide show if the player has responded -->
-              <td class="slide">{{ player.slide.slideID }}</td>
+              <td class="slide">
+                <span ng-class="player.response.hasResponded ? 'correct' : 'incorrect'">
+                  {{ player.slide.slideID }}
+                </span>
+              </td>
               <td>
                 <button ng-click="player.sendReadyUp()">Ready Up</button>
               </td>
@@ -112,14 +113,17 @@
                 <button ng-click="player.sendRoomChoice()">Choose</button>
               </td>
               <td>
-                <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
-                <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
                 <input class="code" type="text" ng-model="player.response.code"
                   ng-class="room.getGameState().code === player.response.code ? 'correct' : 'incorrect'" />
                 <button ng-click="player.sendManualCode()">Manual</button>
+                <button class="red" ng-click="player.sendEnterCode(false)">Incorrect</button>
+                <button class="green" ng-click="player.sendEnterCode(true)">Correct</button>
               </td>
               <td>
-                <button class="red" ng-click="player.disconnectPlayer()">Disconnect</button>
+                <button ng-if="player.isConnected()" class="red"
+                  ng-click="player.disconnectPlayer()">Disconnect</button>
+                <button ng-if="!player.isConnected()" class="green"
+                  ng-click="player.reconnectPlayer()">Reconnect</button>
               </td>
             </tr>
           </tbody>

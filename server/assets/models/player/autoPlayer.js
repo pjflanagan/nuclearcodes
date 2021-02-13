@@ -19,7 +19,8 @@ class AutoPlayerModel extends PlayerModel {
           this.sendRandomRoom();
           break;
         case 'letter-reveal':
-          // TODO: display letter revealed? should be on top level player class
+          // do nothing here, wait for player response
+          // player should decide if the game will continue
           break;
         case 'start-next-round':
           // choose room

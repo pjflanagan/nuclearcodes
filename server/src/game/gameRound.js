@@ -69,6 +69,8 @@ const RoundEnterCodeHandlers = {
   moveGameState: ({ codeResponses, code }) => {
     const { code: guessedCode } = mostCommonCode(codeResponses);
     // TODO: if the code is not the right length (which it shouldn't be), then there should be an error
+    // if players manage to enter a code of length 0 the codeDiff is of length 0.
+    // maybe do stringDiff() of both directions and take whichever is longer?
     const codeDiff = stringDiff(code, guessedCode);
     const charsCorrect = code.length - codeDiff.length;
 
