@@ -1,21 +1,24 @@
 
 import { GAMEPLAY } from './gameplay';
 
-const getNextPlay = (nextPlayID, prevData = {}) => {
-  const play = GAMEPLAY.find(play => play.id === nextPlayID);
+const getNextSlide = (nextSlideID, applyData = {}) => {
+  const gameplaySlide = GAMEPLAY.find(slide => slide.id === nextSlideID);
 
-  if (!play) {
-    console.error(`Cannot find '${nextPlayID}' in GAMEPLAY`);
-    return GAMEPLAY.find(play => play.id === 'error')
+  // make a copy so data points to new object
+  const slide = Object.assign({}, gameplaySlide);
+
+  if (!slide) {
+    console.error(`Cannot find slideID '${nextSlideID}' in GAMEPLAY`);
+    return GAMEPLAY.find(slide => slide.id === 'error')
   }
 
-  if (!!play.data) {
-    Object.assign(play.data, prevData);
+  if (!!slide.data) {
+    Object.assign(slide.data, applyData);
   } else {
-    play.data = prevData;
+    slide.data = applyData;
   }
 
-  return play;
+  return slide;
 };
 
-export { GAMEPLAY, getNextPlay };
+export { GAMEPLAY, getNextSlide };

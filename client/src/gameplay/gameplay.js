@@ -7,6 +7,7 @@ import {
   MessageWidgetLetterReveal,
   MessageWidgetDefcon,
   MessageGameOver,
+  MessageRoundTitle,
 
   LogoWidget,
   LobbyWidget,
@@ -92,8 +93,13 @@ const GAMEPLAY = [
   {
     id: 'assign-roles',
     widget: AssignRolesWidget,
-    next: () => 'room-picker-prompt',
+    next: () => 'round-title',
     delay: 1600
+  },
+  {
+    id: 'round-title',
+    widget: MessageRoundTitle,
+    next: () => 'room-picker-prompt',
   },
   {
     id: 'room-picker-prompt',
@@ -128,7 +134,7 @@ const GAMEPLAY = [
   {
     id: 'defcon',
     widget: DefconWidget,
-    next: () => 'room-picker-prompt',
+    next: () => 'round-title',
     delay: 1600
   },
   {

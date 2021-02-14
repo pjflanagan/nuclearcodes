@@ -130,13 +130,16 @@ class TextBreak extends React.Component {
 
 
 const Title = ({ children }) => (
-  <h1 className={Style.title}>{children}</h1>
-)
+  <h2 className={Style.title}>{children}</h2>
+);
 
-
+const TitleLarge = ({ children }) => (
+  <h1 className={Style.titleLarge}>{children}</h1>
+);
 
 export {
   Typeable,
+  TitleLarge,
   Title,
   Text,
   TextBreak

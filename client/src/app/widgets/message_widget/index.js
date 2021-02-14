@@ -1,16 +1,42 @@
 import React from 'react';
 
-import { Slide, Title, Typeable, Text, Pill, PillCopy } from '../../elements';
+import { Slide, TitleLarge, Title, Typeable, Text, Pill, PillCopy } from '../../elements';
 import { GameWidget } from '../../game';
+
+const TITLE_DELAY = 100;
+
+class MessageRoundTitle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { round: 1 }
+  }
+  componentDidMount() {
+    setTimeout(this.props.doneCallback, TITLE_DELAY);
+    this.setState({
+      round: this.props.gameState.round + 1 // display round starts at 1
+    })
+  }
+  render() {
+    const { round } = this.state;
+    return (
+      <Slide>
+        <TitleLarge>
+          {`Round ${round}`}
+        </TitleLarge>
+      </Slide>
+    );
+  }
+}
 
 class MessageWidget extends React.Component {
   render() {
+    const { data: { title, text } } = this.props;
     return (
       <Slide isPrompt={true}>
-        {!!this.props.data.title && <Title>{this.props.data.title}</Title>}
+        {!!title && <Title>{title}</Title>}
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>
-            {this.props.data.text}
+            {text}
           </Text>
         </Typeable>
       </Slide>
@@ -20,7 +46,7 @@ class MessageWidget extends React.Component {
 
 class MessageWidgetWelcome extends React.Component {
   render() {
-    const { playerName, roomName } = this.props.data;
+    const { data: { playerName, roomName } } = this.props;
     return (
       <Slide isPrompt={true}>
         <Title>{'Begin Transmission'}</Title>
@@ -39,8 +65,7 @@ class MessageWidgetWelcome extends React.Component {
 
 class MessageWidgetLetterReveal extends GameWidget {
   render() {
-    // data: {"data":{"roomID":0,"realLetter":"","fakeLetter":""}
-    const { data } = this.props;
+    const { data: { roomID, realLetter, fakeLetter } } = this.props;
     const me = this.getMe();
     // if a spy, highlight the letter with color,
     // if not a spy, present the letter truthfully
@@ -49,11 +74,11 @@ class MessageWidgetLetterReveal extends GameWidget {
       content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
-          <Pill>{data.realLetter}</Pill>
+          <Pill>{realLetter}</Pill>
           <Text>{' and '}</Text>
-          <Pill color="red">{data.fakeLetter}</Pill>
+          <Pill color="red">{fakeLetter}</Pill>
           <Text>{' in room '}</Text>
-          <Pill>{`${data.roomID + 1}`}</Pill>
+          <Pill>{`${roomID + 1}`}</Pill>
           <Text>{'. You may choose to lie and possibly accuse your roommate of being a spy. In the next round your code entry will be fake, be sure to pretend to enter a code.'}</Text>
         </Typeable>
       )
@@ -61,9 +86,9 @@ class MessageWidgetLetterReveal extends GameWidget {
       content = (
         <Typeable doneTypingCallback={this.props.doneCallback}>
           <Text>{'You saw '}</Text>
-          <Pill>{data.realLetter}</Pill>
+          <Pill>{realLetter}</Pill>
           <Text>{' in room '}</Text>
-          <Pill>{`${data.roomID + 1}`}</Pill>
+          <Pill>{`${roomID + 1}`}</Pill>
           <Text>{`. Talk it over and vote on a code to enter. Remember, the code changes every round.`}</Text>
         </Typeable>
       );
@@ -77,7 +102,7 @@ class MessageWidgetLetterReveal extends GameWidget {
   }
 }
 
-class MessageWidgetDefcon extends React.Component {
+class MessageWidgetDefcon extends GameWidget {
   render() {
     const { data: { guessedCode, charsCorrect } } = this.props;
     let message = '';
@@ -118,6 +143,7 @@ class MessageWidgetDefcon extends React.Component {
 
 
 export {
+  MessageRoundTitle,
   MessageWidget,
   MessageWidgetWelcome,
   MessageWidgetLetterReveal,

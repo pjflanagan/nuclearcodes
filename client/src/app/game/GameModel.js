@@ -2,7 +2,7 @@
 import { connect } from 'react-redux'
 
 import { nextSlide, setErrors } from '../../actions';
-import { getNextPlay } from '../../gameplay';
+import { getNextSlide } from '../../gameplay';
 
 import { GameComponent } from './GameComponent';
 
@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
       if (nextPlayID !== 'WAIT') {
         setTimeout(() =>
           dispatch(
-            nextSlide(getNextPlay(nextPlayID), prevData)
+            nextSlide(getNextSlide(nextPlayID), prevData)
           ),
           NEXT_SLIDE_DELAY + delay);
       }

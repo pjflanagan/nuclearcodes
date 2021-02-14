@@ -69,12 +69,12 @@ label {
 input {
   border: 2px solid #0c97f4;
   border-radius: 2px;
-  padding: 0 10px;
+  padding: 0 7px;
   height: 32px;
   background: none;
   color: #f4f4f4;
   font-family: monospace;
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
 }
 
@@ -92,14 +92,14 @@ input.code {
 
 button {
   border: 2px solid #0004;
-  padding: 4px 10px;
+  padding: 4px;
   border-radius: 2px;
   background: #0c97f4;
   color: #fff;
   height: 35px;
   box-shadow: 0 2px 0 #0004;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 11px;
   outline: none;
 }
 
@@ -159,6 +159,7 @@ h2 {
 table {
   border-spacing: 0;
   width: 100%;
+  font-size: 12px;
 }
 
 table tr {
@@ -204,7 +205,7 @@ table tr td.slide {
 }
 
 table tr td {
-  padding: 4px 8px;
+  padding: 4px;
 }
 
 /* colors */

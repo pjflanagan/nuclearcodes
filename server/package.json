@@ -1,16 +1,15 @@
 {
-  "name": "nuclear-codes",
+  "name": "nuclear-codes-server",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --exec babel-node ./src/index.js -e html,js,css",
-    "test": "mocha",
-    "coverage": "nyc npm run test"
+    "start": "nodemon --exec babel-node ./src/index.js -e html,js,css,ejs",
+    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha ./test/*.js --exit"
   },
   "keywords": [],
-  "author": "",
+  "author": "Peter James Flanagan",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
@@ -27,13 +26,28 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@babel/register": "^7.12.13",
     "@istanbuljs/nyc-config-babel": "^3.0.0",
     "babel-plugin-istanbul": "^6.0.0",
+    "cross-env": "^7.0.3",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7",
+    "pre-commit": "^1.2.2",
     "nyc": "^15.1.0"
   },
   "engines": {
     "node": "12.x"
-  }
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "include": "./src",
+    "exclude": "./test",
+    "sourceMap": false,
+    "instrument": false
+  },
+  "pre-commit": [
+    "test"
+  ]
 }
