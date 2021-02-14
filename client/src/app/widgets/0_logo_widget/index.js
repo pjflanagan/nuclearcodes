@@ -57,7 +57,7 @@ class LogoWidget extends React.Component {
           clearTimeout(this.wakeServerInterval);
           this.props.setErrors({ errors: ['Sorry, the game server has gone down, please refresh page.'] });
         });
-    }, 1000)//* 60 * 8);
+    }, 1000 * 60 * 8);
   }
 
 
