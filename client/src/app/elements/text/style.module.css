@@ -8,7 +8,13 @@
   color: #FFF;
 }
 
-h1.title {
+h1.titleLarge {
+  font-size: 38px;
+  padding: 12px;
+  border-bottom: 1px solid #fff3;
+}
+
+h2.title {
   font-size: 24px;
   margin: 12px 0;
 }

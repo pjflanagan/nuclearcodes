@@ -1,5 +1,6 @@
 {
-  "name": "client",
+  "name": "nuclear-codes-client",
+  "author": "Peter James Flanagan",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -6,7 +6,7 @@ import {
   updateGameState,
   setErrors
 } from '../actions';
-import { getNextPlay } from "../gameplay";
+import { getNextSlide } from "../gameplay";
 
 const { REACT_APP_SOCKET_ENDPOINT } = process.env;
 const socket = io(REACT_APP_SOCKET_ENDPOINT, {
@@ -19,8 +19,8 @@ class SocketServiceClass {
 
   startService() {
     return (dispatch) => {
-      socket.on('NEXT_SLIDE', (data) => {
-        const slide = getNextPlay(data.slideID, data.data)
+      socket.on('NEXT_SLIDE', ({ slideID, data }) => {
+        const slide = getNextSlide(slideID, data);
         dispatch(nextSlide(slide));
       });
       socket.on('GAME_STATE', data => {

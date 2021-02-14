@@ -1,16 +1,25 @@
 
+# FEEDBACK
+
+- [ ] pay for the hobby dyno (I should really, really try AWS)
+- [x] defcon message widget save state
+- [x] BIG ROUND # TITLE
+
 # Client
 
+- [ ] users pick the number of spies, show recommended
+- [ ] redirect .netlify.app to .com
 - [!1] make mobile ready so people can play on phone
 - [ ] Setup switch for frontend to be accessible on local network, that way we can test on a phone more easily
 - [ ] icons
   - external link icon
   - door?
   - icons for slide titles
+  - show an icon instead of question marks when a person is joining the room
 - [?] use `/rules` route be the source of truth for gamerules
   - MIN_PLAYERS_PER_GAME
   - TOTAL_ROUNDS
-- Should spies be told the whole code so they can know if thier counterparts lied?
+- Should spies be told the whole code so they can know if thier counterparts lied? no for now
 
 ## Netlify
 
@@ -20,6 +29,10 @@
 11:50:43 PM: Different publish path detected, going to use the one specified in the Netlify configuration file: 'client/build' versus 'build' in the Netlify UI
 
 # Server
+
+- [ ] code shorter to force more accusations?
+- [ ] room advance countdown
+- [ ] start paying for dynos
 
 ## Admin
 - [!] handle log back in when a player drops (current behavior is okay)
