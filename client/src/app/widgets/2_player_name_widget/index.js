@@ -35,7 +35,6 @@ class PlayerNameWidget extends React.Component {
   componentDidMount() {
     this.cookies = new Cookies();
     const playerNameFromCookie = this.cookies.get(COOKIE_NAME);
-    console.log(playerNameFromCookie);
     if (!!playerNameFromCookie) {
       this.setState({
         playerName: playerNameFromCookie
