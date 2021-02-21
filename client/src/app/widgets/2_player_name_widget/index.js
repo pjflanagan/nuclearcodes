@@ -1,7 +1,9 @@
 import React from 'react';
+import Cookies from 'universal-cookie';
 
 import { Slide, Input } from '../../elements';
 
+const COOKIE_NAME = 'NUCLEAR_CODES_PLAYER_NAME';
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9\-_]*$/;
 
 const validate = (playerName) => {
@@ -30,6 +32,17 @@ class PlayerNameWidget extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.cookies = new Cookies();
+    const playerNameFromCookie = this.cookies.get(COOKIE_NAME);
+    console.log(playerNameFromCookie);
+    if (!!playerNameFromCookie) {
+      this.setState({
+        playerName: playerNameFromCookie
+      });
+    }
+  }
+
   onChange(e) {
     this.setState({
       playerName: e.target.value,
@@ -43,18 +56,22 @@ class PlayerNameWidget extends React.Component {
     if (errors.length === 0) {
       this.props.socketService.setPlayerName({ playerName: playerNameSanitized });
       this.props.doneCallback({ playerName: playerNameSanitized });
+
+      this.cookies.set(COOKIE_NAME, playerNameSanitized, { path: '/' });
     }
     this.props.setErrors({ errors });
   }
 
 
   render() {
+    const { playerName } = this.state;
     const { isCurrent } = this.props;
     return (
       <Slide>
         <Input
           placeholder="Your Secret Agent Name"
           tabIndex={0}
+          value={playerName}
           onChange={e => this.onChange(e)}
           onSubmit={e => this.onSubmit(e)}
           disabled={!isCurrent}
