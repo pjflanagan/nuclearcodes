@@ -16,11 +16,16 @@ router.get("/", (req, res) => {
   }).status(200);
 });
 
-// return the game rules
+// return the game rules and event types
+// this will make shared data for server and client
+// TODO: import CONSTANTS from CONSTANTS
 router.get("/rules", (req, res) => {
   res.send({
     MIN_PLAYERS_PER_GAME: 5,
-    TOTAL_ROUNDS: 5
+    TOTAL_ROUNDS: 5,
+    // EVENTS: {
+    //   POLL_RESPONSE: 1
+    // }
   }).status(200);
 });
 

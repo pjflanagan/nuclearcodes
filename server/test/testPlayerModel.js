@@ -2,18 +2,16 @@
 import assert from 'assert';
 
 import {
+  Player,
   PlayerList
 } from '../src/game/playerModel.js';
 
-function makePlayerList(count) {
-  const playerList = new PlayerList();
-  for (let i = 0; i < count; ++i) {
-    playerList.addPlayer({ id: `p${i}` });
-  }
-  return playerList;
-};
+import { makePlayerList, mSocket } from './mocks/mockPlayerList.js';
 
 describe('playerModel.js', function () {
+
+  // TODO: describe the login behavior by acutally logging
+  // users in and out
 
   describe('PlayerList', function () {
     describe('addPlayer', function () {
@@ -23,8 +21,6 @@ describe('playerModel.js', function () {
       });
     });
     describe('removePlayer', function () {
-      // TODO: this behavior needs to change
-      // removed players need to become ghosts
       let count = 6;
       const playerList = makePlayerList(count);
       it('should remove front player', function () {
@@ -50,7 +46,10 @@ describe('playerModel.js', function () {
     });
 
     describe('setPlayerName', function () {
-      const playerList = makePlayerList(3);
+      const playerList = new PlayerList();
+      playerList.addPlayer(new Player(mSocket(0)));
+      playerList.addPlayer(new Player(mSocket(1)));
+      playerList.addPlayer(new Player(mSocket(2)));
       it('should set player name to JasonBourne', function () {
         const returnedPlayerName = playerList.setPlayerName({ id: 'p0' }, 'JasonBourne');
         assert.strictEqual(returnedPlayerName, 'JasonBourne');
@@ -73,6 +72,7 @@ describe('playerModel.js', function () {
       });
       it('should add a player and make 4 spies and 5 agents', function () {
         playerList.addPlayer({ id: `new-1` });
+        playerList.setPlayerName({ id: 'new-1' }, 'NewPlayer');
         playerList.setSpies();
         assert.strictEqual(playerList.getSpyCount(), 4);
         assert.strictEqual(playerList.getAgentCount(), 5);
@@ -89,8 +89,3 @@ describe('playerModel.js', function () {
 
   });
 });
-
-
-export {
-  makePlayerList
-}

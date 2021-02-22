@@ -8,7 +8,7 @@ import {
 
 import { MockServerSocket } from './mocks/mockServerSocket.js';
 
-import { makePlayerList } from './testPlayerModel.js';
+import { makePlayerList } from './mocks/mockPlayerList.js';
 
 describe('gameRoom.js', function () {
   describe('GameRoom', function () {
