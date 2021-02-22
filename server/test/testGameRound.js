@@ -128,7 +128,7 @@ describe('gameRound.js', function () {
           assert.strictEqual(ledger[i].data.realLetter, code[playerMessagedIndex % 3]);
         }
 
-      })
+      });
     });
   });
   // end RoundChooseRoomHandlers

@@ -55,7 +55,8 @@ class GameRoom {
     const player = this.players.removePlayer(socket);
     // update the game state so people know they left
     this.updateGameState();
-    // we won't move the gamestate if a player leaves, we need them to rejoin
+    // move the gamestate if the poll is over now
+    this.moveIfPollOver();
     return player;
   }
 
