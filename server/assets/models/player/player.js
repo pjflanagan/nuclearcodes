@@ -62,6 +62,11 @@ class PlayerModel {
     // this.$scope.$apply();
   }
 
+  // TODO: TODO:
+  reconnectPlayer() {
+    this.login();
+  }
+
   sendReadyUp() {
     this.socket.emit('POLL_RESPONSE', {
       type: 'LOBBY',

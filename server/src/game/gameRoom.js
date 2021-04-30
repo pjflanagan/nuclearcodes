@@ -287,7 +287,9 @@ class GameRoom {
   }
 
   isFull() {
-    return this.players.count() >= MAX_PLAYERS_PER_GAME;
+    // prevent joins when we have too many connections
+    // not just players
+    return this.players.connectionCount() >= MAX_PLAYERS_PER_GAME;
   }
 
   isEmpty() {

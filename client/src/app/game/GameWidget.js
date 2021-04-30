@@ -8,7 +8,7 @@ class GameWidget extends React.Component {
     super(props);
 
     this.state = {
-      players: []
+      players: [],
     };
 
     this.updateGameState = this.updateGameState.bind(this);

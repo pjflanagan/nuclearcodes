@@ -206,7 +206,11 @@ class PlayerList {
 
   count() {
     // count is the size of the player and potential connections
-    return this.players.length + this.connections.length;
+    return this.players.length;
+  }
+
+  connectionCount() {
+    return this.player.length + this.connections.length;
   }
 
   // DATA
