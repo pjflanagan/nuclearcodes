@@ -73,8 +73,8 @@ class EnterCodeWidget extends GameWidget {
   }
 
   render() {
-    const { submitted, players } = this.state;
-    const { isCurrent, gameState: { codeLength } } = this.props;
+    const { submitted, players, values } = this.state;
+    const { isCurrent } = this.props;
     const me = this.getMe();
 
     const submitCallback = (!!me && me.isSpy) ? this.spySubmit : this.onSubmit;
@@ -87,7 +87,7 @@ class EnterCodeWidget extends GameWidget {
           disabled={!isCurrent || submitted}
           onChange={this.onChange}
           onSubmit={submitCallback}
-          segments={codeLength}
+          segments={values.length}
         />
       </Slide>
     );

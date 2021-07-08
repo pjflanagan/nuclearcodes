@@ -11,11 +11,20 @@ class ChooseRoomWidget extends GameWidget {
 
     this.state = {
       playersInRooms: [],
-      players: []
+      players: [],
+      codeLength: 0
     }
 
     this.sendRoomChoice = this.sendRoomChoice.bind(this);
     this.deselectRoom = this.deselectRoom.bind(this);
+  }
+
+  componentDidMount() {
+    const { gameState: { codeLength, players } } = this.props;
+    this.setState({
+      players,
+      codeLength
+    });
   }
 
   updateGameState() {
@@ -43,8 +52,8 @@ class ChooseRoomWidget extends GameWidget {
   }
 
   render() {
-    const { gameState: { codeLength }, isCurrent } = this.props;
-    const { playersInRooms, players } = this.state;
+    const { isCurrent } = this.props;
+    const { playersInRooms, players, codeLength } = this.state;
     const me = this.getMe();
     return (
       <Slide>

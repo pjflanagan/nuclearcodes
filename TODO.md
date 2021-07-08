@@ -7,6 +7,7 @@
 
 # Client
 
+- [ ] Google Analytics number of games played, track rounds even
 - [ ] users pick the number of spies, show recommended
 - [ ] redirect .netlify.app to .com
 - [!1] make mobile ready so people can play on phone
@@ -19,6 +20,7 @@
 - [?] use `/rules` route be the source of truth for gamerules
   - MIN_PLAYERS_PER_GAME
   - TOTAL_ROUNDS
+  - EVENTS
 - Should spies be told the whole code so they can know if thier counterparts lied? no for now
 
 ## Netlify

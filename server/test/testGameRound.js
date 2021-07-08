@@ -7,9 +7,8 @@ import {
   RoundEnterCodeHandlers
 } from '../src/game/gameRound.js';
 
-import { MockServerSocket } from './mocks/mockServerSocket.js';
+import { makePlayerList, mPlayerID } from './mocks/mockPlayerList.js';
 
-import { makePlayerList } from './testPlayerModel.js';
 
 describe('gameRound.js', function () {
 
@@ -88,48 +87,48 @@ describe('gameRound.js', function () {
       // what about incorrectly formatted responses?
     });
 
+
+    function mockNextSlidePlayer(ledger) {
+      return function (player, slideID, data) {
+        ledger.push({ player, slideID, data });
+      }
+    }
+
     describe('moveGameState', function () {
       it('should emit to all players the same letters', function () {
-        const socketServer = new MockServerSocket();
+        const ledger = [];
+        const nextSlidePlayer = mockNextSlidePlayer(ledger);
         const code = "ABC";
         const fakeCode = "DEF";
         RoundChooseRoomHandlers.moveGameState({
           rooms: allInSameRoomRooms,
-          code, fakeCode, socketServer
+          code, fakeCode, nextSlidePlayer
         });
-        for (let i = 0; i < 6; ++i) {
-          socketServer.checkEmits({
-            emitIndex: i,
-            toID: `p${i}`,
-            dataKey: 'slideID',
-            dataValue: 'letter-reveal',
-            slideDataKey: 'realLetter',
-            slideDataValue: 'B'
-          });
+        for (let i = 0; i < ledger.length; ++i) {
+          assert.strictEqual(ledger[i].player.id, mPlayerID(i));
+          assert.strictEqual(ledger[i].data.roomID, 1);
+          assert.strictEqual(ledger[i].data.realLetter, 'B');
         }
       });
 
       it('should emit letters to players in pairs', function () {
-        const socketServer = new MockServerSocket();
+        const ledger = [];
+        const nextSlidePlayer = mockNextSlidePlayer(ledger);
         const code = "ABC";
         const fakeCode = "DEF";
         RoundChooseRoomHandlers.moveGameState({
           rooms: twoPerEachRoomRooms,
-          code, fakeCode, socketServer
+          code, fakeCode, nextSlidePlayer
         });
         const playerMessagedOrder = [0, 3, 1, 4, 2, 5];
-        for (let i = 0; i < 6; ++i) {
-          const playerMessaged = playerMessagedOrder[i]
-          socketServer.checkEmits({
-            emitIndex: i,
-            toID: `p${playerMessaged}`,
-            dataKey: 'slideID',
-            dataValue: 'letter-reveal',
-            slideDataKey: 'realLetter',
-            slideDataValue: code[playerMessaged % 3]
-          });
+        for (let i = 0; i < ledger.length; ++i) {
+          const playerMessagedIndex = playerMessagedOrder[i];
+          assert.strictEqual(ledger[i].player.id, mPlayerID(playerMessagedIndex));
+          assert.strictEqual(ledger[i].slideID, 'letter-reveal');
+          assert.strictEqual(ledger[i].data.realLetter, code[playerMessagedIndex % 3]);
         }
-      })
+
+      });
     });
   });
   // end RoundChooseRoomHandlers

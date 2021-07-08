@@ -32,43 +32,52 @@ class GameRoom {
     this.codeLength = 0;
     this.code = "";
     this.fakeCode = "";
+    this.lastSlideID = '';
 
     this.setupGame = this.setupGame.bind(this);
     this.moveGameState = this.moveGameState.bind(this);
+    this.nextSlide = this.nextSlide.bind(this);
+    this.nextSlidePlayer = this.nextSlidePlayer.bind(this);
   }
 
   // ADMIN
 
   joinRoom(socket) {
     this.players.addPlayer(socket);
-    this.updateGameState();
+    // no gamestate update becase a player is not fully added until
+    // they set thier name
     this.socketServer.nextSlide(socket.id, {
       slideID: 'name-prompt'
     });
   }
 
   disconnect(socket) {
-    // TODO: removing a player should not mean removing them from the list
-    // it needs to instead make the player a ghost and wait for someone
-    // else to take over it's body
     const player = this.players.removePlayer(socket);
     // update the game state so people know they left
     this.updateGameState();
-    // we won't move the gamestate if a player leaves, we need them to rejoin
+    // move the gamestate if the poll is over now
+    this.moveIfPollOver();
     return player;
   }
 
   setPlayerName(socket, playerName) {
     const playerSetName = this.players.setPlayerName(socket, playerName);
-    // this is why gamestate and slide need to be separate
-    // players waiting for other people to update just need gamestate updates
     this.updateGameState();
-    this.socketServer.nextSlide(socket.id, {
-      slideID: 'welcome-agent', data: {
-        playerName: playerSetName,
-        roomName: this.name
-      }
-    });
+
+    // if the game has started then send the last slide
+    if (this.isStarted()) {
+      this.socketServer.nextSlide(socket.id, {
+        slideID: this.lastSlideID
+      });
+    } else {
+      this.socketServer.nextSlide(socket.id, {
+        slideID: 'welcome-agent',
+        data: {
+          playerName: playerSetName,
+          roomName: this.name
+        }
+      });
+    }
   }
 
   // GAMEPLAY
@@ -76,6 +85,7 @@ class GameRoom {
   // make a game with spies, agents
   setupGame() {
     // set a new group of players to be spies
+    this.players.clearDisconnects();
     this.players.setSpies();
 
     // reset the rounds and round data
@@ -160,9 +170,7 @@ class GameRoom {
         this.poll = POLL.ROUND_CHOOSE_ROOM;
         this.setupGame();
         // update the game state, it will name the spies
-        this.socketServer.nextSlide(this.name, {
-          slideID: 'introduction' // leads to vote
-        });
+        this.nextSlide('introduction');// leads to vote
         this.updateGameState();
         break;
 
@@ -172,7 +180,7 @@ class GameRoom {
         const { rooms } = data;
         this.handlers.room.moveGameState({
           rooms,
-          socketServer: this.socketServer,
+          nextSlidePlayer: this.nextSlidePlayer,
           code: this.code,
           fakeCode: this.fakeCode
         });
@@ -190,12 +198,10 @@ class GameRoom {
         // if they are correct: ROUND_LOBBY, 'victory'
         if (charsCorrect === this.code.length) {
           this.poll = POLL.LOBBY;
-          this.socketServer.nextSlide(this.name, {
-            slideID: 'gameover', data: {
-              result: 'victory',
-              code: this.code,
-              spies: this.players.getSpies()
-            }
+          this.nextSlide('gameover', {
+            result: 'victory',
+            code: this.code,
+            spies: this.players.getSpies()
           });
           this.updateGameState(); // increment the rounds and clear responses
           return;
@@ -203,12 +209,10 @@ class GameRoom {
         // if they are wrong and it is round 5: ROUND_LOBBY, 'gameover'
         if (this.round === TOTAL_ROUNDS) {
           this.poll = POLL.LOBBY;
-          this.socketServer.nextSlide(this.name, {
-            slideID: 'gameover', data: {
-              result: 'defeat',
-              code: this.code,
-              spies: this.players.getSpies()
-            }
+          this.nextSlide('gameover', {
+            result: 'defeat',
+            code: this.code,
+            spies: this.players.getSpies()
           });
           this.updateGameState(); // increment the rounds and clear responses
           return;
@@ -216,9 +220,7 @@ class GameRoom {
         // otherwise: ROUND_CHOOSE_ROOM, 'start-next-round'
         this.setupRound();
         this.poll = POLL.ROUND_CHOOSE_ROOM;
-        this.socketServer.nextSlide(this.name, {
-          slideID: 'start-next-round', data: { guessedCode, charsCorrect }
-        });
+        this.nextSlide('start-next-round', { guessedCode, charsCorrect });
         this.updateGameState(); // increment the rounds and clear responses
         break;
 
@@ -249,12 +251,45 @@ class GameRoom {
     this.players.clearResponses();
   }
 
+  nextSlidePlayer(player, slideID, data) {
+    // when we use this everyone will be updating to the same slide
+    // but all of them will be getting unique data
+    this.setLastSlide(slideID);
+    this.socketServer.nextSlide(player.id, { slideID, data });
+  }
+
+  nextSlide(slideID, data = {}) {
+    this.setLastSlide(slideID);
+    this.socketServer.nextSlide(this.name, { slideID, data });
+  }
+
+  setLastSlide(slideID) {
+    switch (slideID) {
+      case 'introduction':
+        this.lastSlideID = 'assign-roles';
+        break;
+      case 'gameover':
+        this.lastSlideID = 'play-again-prompt';
+        break;
+      case 'start-next-round':
+        this.lastSlideID = 'room-picker-prompt';
+        break;
+      case 'letter-reveal':
+        this.lastSlideID = 'enter-code';
+        break;
+      default:
+        console.error(`setLastSlide slide id ${slideID} not accounted for`);
+    }
+  }
+
   isStarted() {
     return this.poll !== POLL.LOBBY;
   }
 
   isFull() {
-    return this.players.count() >= MAX_PLAYERS_PER_GAME;
+    // prevent joins when we have too many connections
+    // not just players
+    return this.players.connectionCount() >= MAX_PLAYERS_PER_GAME;
   }
 
   isEmpty() {

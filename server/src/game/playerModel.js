@@ -43,6 +43,8 @@ class Player {
     this.response = false;
   }
 
+  // DATA
+
   asData() {
     return {
       isSpy: this.isSpy,
@@ -57,36 +59,54 @@ class Player {
 // contains functions to help with the management of multiple players
 class PlayerList {
   constructor() {
+    this.connections = [];
     this.players = [];
+    this.disconnects = [];
   }
 
   // ADMIN
 
   addPlayer(socket) {
-    this.players.push(new Player({
+    this.connections.push(new Player({
       id: socket.id
     }));
   }
 
   removePlayer(socket) {
-    // TODO: this should just set them as a ghost
-    // in the event that they rejoin?, must rejoin with same name
-    // move them into a ghosts array
     const player = this.findPlayer(socket);
+    this.disconnects.push(player);
     this.players = this.players.filter(p => p.id !== socket.id);
     return player;
   }
 
   setPlayerName(socket, playerName, num = 0) {
     let playerSetName = (num > 0) ? `${playerName}${num}` : playerName;
-    const player = this.findPlayer(socket);
+    const player = this.findConnection(socket);
     const existingPlayer = this.players.find(p => p.name === playerSetName);
     if (!!existingPlayer) {
       // if this player exists tack a number on
       return this.setPlayerName(socket, playerName, num + 1);
     }
     player.setName(playerSetName);
+    // after the player has set thier name, add them to the players list
+    this.moveConnection(player);
     return playerSetName;
+  }
+
+  moveConnection(player) {
+    this.connections = this.connections.filter(p => p.id !== player.id);
+
+    // if this player was a disconnected player
+    const disconnectedPlayer = this.findDisconectByName(player.name);
+    if (!!disconnectedPlayer) {
+      // remove them from the disconnected player list
+      this.disconnects.filter(p => p.id !== disconnectedPlayer.id);
+      // set them to be a spy if they were a spy
+      player.setIsSpy(disconnectedPlayer.getIsSpy());
+    }
+
+    // add them to the players list
+    this.players.push(player);
   }
 
   // SPY LOGIC
@@ -145,6 +165,13 @@ class PlayerList {
     return this.players.filter(p => p.response !== false && p.response.roomID === roomID);
   }
 
+  // ROUND LOGIC
+
+  clearDisconnects() {
+    // at the end of a round we will clear the disconnects
+    this.disconnects = [];
+  }
+
   // RESPONSE LOGIC
 
   getResponses() {
@@ -165,12 +192,25 @@ class PlayerList {
     return this.players[i];
   }
 
+  findDisconectByName(playerName) {
+    return this.disconnects.find(p => p.name === playerName);
+  }
+
+  findConnection(socket) {
+    return this.connections.find(p => p.id === socket.id);
+  }
+
   findPlayer(socket) {
     return this.players.find(p => p.id === socket.id);
   }
 
   count() {
+    // count is the size of the player and potential connections
     return this.players.length;
+  }
+
+  connectionCount() {
+    return this.player.length + this.connections.length;
   }
 
   // DATA

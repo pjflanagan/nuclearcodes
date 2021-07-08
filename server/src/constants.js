@@ -1,0 +1,10 @@
+
+const CONSTANTS = {
+  MIN_PLAYERS_PER_GAME: 5,
+  TOTAL_ROUNDS: 5,
+  EVENTS: {
+    POLL_RESPONSE: 1
+  }
+}
+
+export { CONSTANTS };

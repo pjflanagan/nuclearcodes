@@ -52,11 +52,6 @@ class ServerSocket {
         type: 'ServerSocket.disconnect',
         errors: [`${player.name} has left the game.`]
       });
-      // TODO: if the game is going while they are in the room
-      // prepare the room for them to come back, player.setIsConnected(false)
-      // every time we set slide, set the room's lastSlide = slideID
-      // the next player to show up replaces that player, replaces their name and id but take the role
-      // send that new player this room's lastSlide
     }
   }
 
@@ -79,17 +74,6 @@ class ServerSocket {
         this.sendError(socket.id, {
           type: 'ServerSocket.joinRoom',
           errors: [`Game room '${roomName}' is full.`]
-        });
-        return;
-      case gameRoom.isStarted():
-        // TODO: remove this error, allow join started game if it is not full
-        // replace isConnected=false player if they are rejoining
-        // otherwise just allow them in, the code length should change the following round
-        // just be sure to send them the slide they are currently on?
-        console.error(`serverSocket.joinRoom: gameroom '${roomName}' has started.`);
-        this.sendError(socket.id, {
-          type: 'ServerSocket.joinRoom',
-          errors: [`Game room '${roomName}' has started, you may join next round.`]
         });
         return;
     }
