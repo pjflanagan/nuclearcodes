@@ -30,12 +30,12 @@ const CreditsWidget = ({
       <TextBreak />
       <Text>{`If you enjoyed, please share this game with more friends! `}</Text>
       <Pill color="facebook">
-        <FacebookShareButton url="https://nuclear-codes.com">
+        <FacebookShareButton url="https://nuclearcodes.flanny.app">
           <GrFacebook />{`Facebook`}
         </FacebookShareButton>
       </Pill>
       <Pill color="twitter">
-        <TwitterShareButton url="https://nuclear-codes.com" hashtags={["NuclearCodes"]} >
+        <TwitterShareButton url="https://nuclearcodes.flanny.app" hashtags={["NuclearCodes"]} >
           <GrTwitter />{`Twitter`}
         </TwitterShareButton>
       </Pill>
